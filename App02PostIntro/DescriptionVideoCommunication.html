@@ -1,0 +1,81 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Description of Part 1{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    <br/>
+     <p class="card-text text-center"> In this part, you will have the chance to get to know the other group members. You will participate in a video meeting that lasts 15 minutes. <br/>
+     </p>
+
+<div class="container">
+  <div class="row justify-content-center">
+
+
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-5" style="background-color: #f8f9fa;">
+        <div class="card-body">
+           <p class="card-text text-center">
+              <b>Before you start the video meeting please answer the following questions. <br/>
+                  </b>
+<table class="table" style="text-align: center;  vertical-align: middle;">
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">Not at all</td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;">Totally</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">- - -</td>
+        <td style="width: 10%;">- -</td>
+        <td style="width: 10%;">-</td>
+        <td style="width: 10%;">o</td>
+        <td style="width: 10%;">+</td>
+        <td style="width: 10%;">+ +</td>
+        <td style="width: 10%;">+ + +</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            <td style="text-align: left;">{{ field.label }}</td>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+</table>
+          <br>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+</div>
+<br/>
+     <p class="card-text text-center" style="color: blue;"><b>During the video meeting you can discuss the different types of holidays with other team members.
+     </b>  <br/>
+     </p>
+
+
+<br/>
+
+{{ next_button }}
+
+{{ endblock }}

@@ -1,0 +1,29 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Weakest Link (Result){{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+Round {{subsession.round_number}}: <br/> <br/>
+
+You have reported {{self.roundChoice}}. <br/><br/>
+
+The minimum choice was {{self.minChoice}}.<br/><br/>
+
+Your payoff in round 1 is {{self.payoff}}.<br/><br/>
+
+
+<br/><br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

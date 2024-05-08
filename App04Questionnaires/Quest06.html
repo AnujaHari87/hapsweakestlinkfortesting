@@ -1,0 +1,49 @@
+{{ block content }}
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+          <p class="card-text text-center">
+              <b>Imagine the following situation:</b><br>
+<table class="table" style="text-align: center; vertical-align: middle;">
+    <tr>
+        <p>You are out shopping in an unfamiliar city and realize you're lost. You ask a stranger for directions. The person offers to drive you to your destination.</p>
+        <p>The ride costs the stranger approximately <strong>20 euros</strong> in total. However, the stranger refuses to accept any money. You have 6 gifts with you. The cheapest gift costs <strong>5 euros</strong>, and the most expensive costs <strong>30 euros</strong>. You decide to give the stranger a gift as a thank you.</p>
+        <p>Which gift do you give? The gift for <strong>5, 10, 15, 20, 25, or 30 euros?</strong></p>
+
+
+    </tr>
+    <tr>
+        <td style="width: 6%;">5</td>
+        <td style="width: 6%;">10</td>
+        <td style="width: 6%;">15</td>
+        <td style="width: 6%;">20</td>
+        <td style="width: 6%;">25</td>
+        <td style="width: 6%;">30</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+{{next_button}}
+
+
+{{ endblock }}

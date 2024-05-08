@@ -1,0 +1,65 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Study Introduction (3/3){{ endblock }}
+
+{{ block content }}
+
+    <style>
+        .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+
+    <div class="my-box"> Playing a round: <br/><br/>
+
+    In each round, you decide how many hours you allocate to Project A. The other three virtual team members will make the same decision. Note that the payoff structure is the same for all of you – but not the amount. Note that, when making your decision, you will not know how the other team members decide in this round. We will not reveal the choices of individual team members. At the end of each round, we will inform you about your payoff and the lowest number of hours allocated to Project A by any of your team members. We will also show you all your past payoffs from previous rounds.
+    <br/><br/>
+    Payment: At the end of the 5 rounds, the computer will randomly select one round. This round will determine the payment you will receive from Part 2 of this study.  <br/><br/>
+
+    <div class="container">
+      <h2 class="card-title text-center">Comprehension Questions</h2>
+      <p class="card-text text-center">Before the task begins, we ask you to answer the following comprehension questions.</p>
+      <br>
+                {{ include_sibling 'PayoffTable.html'}}
+                {{ formfield 'comprehension1' }}
+                {{ formfield 'comprehension2' }}
+                {{ formfield 'comprehension3' }}
+
+
+                <br>
+                <p><strong>What does your compensation depend on? Please select <u>all</u> applicable options.</strong></p>
+                <label><input type="checkbox" name="comprehension4a" class="form-check-input"/>&nbsp; &nbsp; Number of hours you work on Project A.</label>
+                <br>
+                <label><input type="checkbox" name="comprehension4b" class="form-check-input"/>&nbsp; &nbsp; Total number of hours worked by the team on Project A.</label>
+                <br>
+                <label><input type="checkbox" name="comprehension4c" class="form-check-input"/>&nbsp; &nbsp; Fewest number of hours worked by a member of your team on Project A.</label>
+                <br>
+                <br>
+
+              {{ if form.comprehension4a.errors }}
+                <div class="alert alert-danger">
+                    {{ form.comprehension4a.errors.0 }}
+                </div>
+                {{ else }}
+                {{ if form.comprehension4b.errors }}
+                <div class="alert alert-danger">
+                    {{ form.comprehension4b.errors.0 }}
+                {{ else }}
+                {{ if form.comprehension4c.errors }}
+                <div class="alert alert-danger">
+                    {{ form.comprehension4c.errors.0 }}
+                {{ endif }}
+                {{ endif }}
+                {{ endif }}
+
+    </div>
+
+    <br>
+    </div>
+
+
+  <br/>
+{{next_button }}
+
+{{ endblock }}

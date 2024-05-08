@@ -1,0 +1,14 @@
+{{ block title }}
+    Result - Round {{ round_num }}
+{{ endblock }}
+
+{{ block content }}
+
+<p style="font-size: 20px;">
+    In this round, the minimum number of hours worked by your team on Project A was <strong>{{ group.groupMin }} hours</strong>.
+    <br><br>
+    You have decided to work <strong>{{ player.ownDecision }} hours</strong> on Project A. Therefore, your compensation for this round amounts to <strong>{{ player.payoff_hypo }} ECU</strong>.
+</p>
+
+    {{ next_button }}
+{{ endblock }}

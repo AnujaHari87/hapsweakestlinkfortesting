@@ -1,0 +1,21 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Enter Prolific Id{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+    
+    {{ formfields }}
+    <br/><br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

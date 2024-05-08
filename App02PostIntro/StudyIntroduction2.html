@@ -1,0 +1,52 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Study Introduction (2/3){{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+<br/>
+In each round, you will receive an individual payoff which is consists of a fixed Wage, a commission, and cost which occur in case you allocate working hours to Project A.<br/><br/>
+    
+We will multiply the minimum amount of budget allocated to Project A by 6. Below we show you the formula we use to calculate your payoff. You do not need to memorize this formula – the computer program will give you payoff tables at any point where you need to make a decision. 
+
+In each round, you will receive an individual payoff which is consists of a fixed Wage, a commission, and cost which occur in case you allocate working hours to Project A, <br/><br/>
+
+<b>Fixed Wage</b> <br/><br/>
+
+The Fixed Wage is 200 ECU you receive each time you start a new round.<br/><br/>
+
+<b>Commission </b><br/><br/>
+
+The commission increases your Fixed Wage and depends on the “success” of Project A. The success is calculated by the minimum number of hours spent on Project A by any of your team members (denoted by h_min). In other words, the project's success is determined by the team member who contributes the least amount of time to the project. To calculate your commission, we will multiply the minimum number of hours allocated to Project A by 6 ECU, i.e., Commission=6 ECU *h_min  (and is the same for all team members) <br/><br/>
+
+<b>Costs for working on Project A </b><br/><br/>
+
+We will deduct 5 ECU for each hour you allocate to Project A from your payoff, i.e., Cost=5 ECU*h_A.<br/><br/>
+
+Below you find the formula we use to calculate your individual payoff consisting of the fixed wage plus the commission minus the costs from working on Project A. You do not need to memorize this formula – the computer program will give you payoff tables at any point in the rounds where you need to make a decision. <br/><br/>
+
+Payoff: 200-(5*h_A)+(6*h_min) <br/><br/>
+
+This yields the following payoff table: <br/><br/>
+
+{{ include_sibling 'PayoffTable.html'}}
+
+<br/><br/>
+
+
+*ECU = Experimental Currency Unit; 1ECU = 1€cent
+</div>
+<br/>
+
+{{ next_button }}
+
+{{ endblock }}

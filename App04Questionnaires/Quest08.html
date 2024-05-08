@@ -1,0 +1,51 @@
+{{ block content }}
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+          <p class="card-text text-center">
+              <b>Please indicate your level of agreement with the following statements.</b><br>
+<table class="table" style="text-align: center;  vertical-align: middle;">
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">strongly disagree</td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;">neither agree nor disagree</td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;">strongly agree</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">--</td>
+        <td style="width: 10%;">-</td>
+        <td style="width: 10%;">o</td>
+        <td style="width: 10%;">+</td>
+        <td style="width: 10%;">++</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            <td style="text-align: left;">{{ field.label }}</td>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+{{next_button}}
+
+
+{{ endblock }}

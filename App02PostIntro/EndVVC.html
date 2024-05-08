@@ -1,0 +1,58 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}End of Video Collaboration{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+      .image-container {
+        display: flex;                /* Enables Flexbox */
+        justify-content: center;     /* Centers items horizontally */
+        align-items: center;         /* Centers items vertically */
+        width: 100%;                 /* Sets the container's width to full screen */
+      }
+
+      .image-label {
+        flex: 1;                     /* Allows each label to grow equally */
+        text-align: center;          /* Centers the content of the label */
+        margin: 10px;                /* Adds some space around each label */
+      }
+
+      img {
+        width: 100%;                 /* Makes images responsive to their container's size */
+      }
+</style>
+
+<div class="my-box">
+
+    The video meeting is now terminated. <br/>
+    Please answer the following question before proceeding to the next part.<br/>
+
+
+     <p><strong>Please select the image that best describes the relationship between you and your team.</strong></p>
+    <div class="image-container">
+     {{ for image in image_data }}
+        <label>
+            <br>
+            <img src="{{ static image.path }}">
+            <br>
+            <input type="radio" name="team_cohesion" value="{{ image.name }}" class="persist">
+        </label>
+    {{ endfor }}
+    </div>
+    {{ formfield_errors 'team_cohesion' }}
+
+<script>
+    const errorDiv = document.querySelector('.form-control-errors');
+
+    if (errorDiv) {
+        errorDiv.textContent = 'Please select an image to proceed.'
+    }
+</script>
+</div>
+<br/> <br/>
+{{ next_button }}
+{{ endblock }}
