@@ -3,6 +3,14 @@
 <link rel="stylesheet" type="text/css" >
 {% endblock %}
 
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
@@ -10,50 +18,52 @@
         <div class="card-body">
           <h2 class="card-title text-center"></h2>
           <p class="card-text text-center">
-              <b>Please indicate your willingness to behave in a certain way. Please use a scale from 0 to 10. You can use the values in between to grade your assessment.</b><br>
-<table class="table" style="text-align: center;  vertical-align: middle;">
-    <tr>
-        <td style="width: 30%;"></td>
-        <td style="width: 6%;">not willing at all</td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;">very willing</td>
-    </tr>
-    <tr>
-        <td style="width: 30%;"></td>
-        <td style="width: 6%;">0</td>
-        <td style="width: 6%;">1</td>
-        <td style="width: 6%;">2</td>
-        <td style="width: 6%;">3</td>
-        <td style="width: 6%;">4</td>
-        <td style="width: 6%;">5</td>
-        <td style="width: 6%;">6</td>
-        <td style="width: 6%;">7</td>
-        <td style="width: 6%;">8</td>
-        <td style="width: 6%;">9</td>
-        <td style="width: 6%;">10</td>
-    </tr>
-    {{ for field in form }}
+              <b>We now ask you for your willingness to act in a certain way. <br/>Please again indicate your answer on a scale from 0 to 10. <br/>
+                  A 0 means "completely unwilling to do so," and a 10 means "very willing to do so." <br/></b><br>
+                <table class="table" style="text-align: center;  vertical-align: middle;">
+                        <tr>
+                            <td style="width: 29%;"></td>
+                            <td style="width: 9%;">completely <br/>unwilling to do so</td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 5.88%;"></td>
+                            <td style="width: 9%;">very <br/> willing to do so</td>
+                        </tr>
+                <tr>
+                    <td style="width: 29%;"></td>
+                    <td style="width: 9%;">0</td>
+                    <td style="width: 5.88%;">1</td>
+                    <td style="width: 5.88%;">2</td>
+                    <td style="width: 5.88%;">3</td>
+                    <td style="width: 5.88%;">4</td>
+                    <td style="width: 5.88%;">5</td>
+                    <td style="width: 5.88%;">6</td>
+                    <td style="width: 5.88%;">7</td>
+                    <td style="width: 5.88%;">8</td>
+                    <td style="width: 5.88%;">9</td>
+                    <td style="width: 9%;">10</td>
+                </tr>
+                {{ for field in form }}
 
-    <tr>
-            <td style="text-align: left;">{{ field.label }}</td>
-            {{ for choice in field }}
-                <td>{{ choice }}</td>
-            {{ endfor }}
-        </tr>
-    {{ endfor }}
-</table>
+                <tr>
+                        <td style="text-align: left;">{{ field.label }}</td>
+                        {{ for choice in field }}
+                            <td>{{ choice }}</td>
+                        {{ endfor }}
+                    </tr>
+                {{ endfor }}
+            </table>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>
 <br>
 

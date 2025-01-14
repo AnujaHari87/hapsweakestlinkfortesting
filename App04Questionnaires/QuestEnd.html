@@ -4,12 +4,21 @@
 Result
 {% endblock %}
 {% block content %}
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
 
-<p> Your compensation from Part 1 is 200.00 ECU.</p>
-<p> Your compensation from Part 2 is xxx ECU.</p>
-<p> Your compensation from Part 3 is {{ player.payoff_quests }}.00 ECU.</p>
-<p> <strong>This amounts to a total payout of {{ total_payoff }} euros.</strong></p>
-
-
+<div class="my-box">
+<p> In Part 1, your fixed payment is <b>200.00 ECU.</b> <br/><br/>
+In Part 2, Round {{participant.payoff_round}} was chosen at random for payoff. <br/>Thus, your bonus payment for Part 2 is <b>{{participant.payoff_ppg}} ECU.</b><br/> <br/>
+Your total payoff for this study is <b>{{total_payoff_ecu}} ECU.</b> <br/><br/>
+This corresponds to a total payment amount of <b>GBP {{ total_payoff }}.</b> <br/>
+</div>
+<br/>
+{{next_button}}
 
 {% endblock %}

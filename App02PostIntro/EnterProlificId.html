@@ -1,0 +1,32 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Enter Prolific ID{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+
+   <p> Please enter your Prolific ID here. <br/><br/>We need the ID to send you the payment.</p>
+    <br/>
+    {{ formfields }}
+    <br/><br/>
+</div>
+<br/>
+{{ next_button }}
+
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+{{ endblock }}

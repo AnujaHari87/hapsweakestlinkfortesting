@@ -1,0 +1,23 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Enter Prolific ID{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+
+   <p> Please enter your Prolific ID here. <br/><br/>We need the ID to send you the payment.</p>
+    <br/>
+    {{ formfields }}
+    <br/><br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

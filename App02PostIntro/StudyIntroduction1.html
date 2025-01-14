@@ -1,5 +1,5 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}Study Introduction (2/3){{ endblock }}
+{{ block title }}Description of Part 2{{ endblock }}
 
 {{ block content }}
 
@@ -13,23 +13,31 @@
 
 <div class="my-box">
 
-<b>Description of Part 2:</b> <br/><br/>
-    
+
 This part consists of 5 rounds. 
 <br/><br/>
-Imagine that you and the other three members of your group belong to a virtual team of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends 40 hours working for the firm. You must choose how to allocate your time between two projects, Project A and Project B.
+Imagine that you and the other three members of your group belong to a <b>virtual team </b>of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends <b>40 hours </b>working for the firm. You must choose how to allocate your time between two projects, <b>Project A</b> and <b>Project B</b>.
 <br/><br/>
-Project A: This project is a team project. The success of this project depends on all members in your virtual team and is calculated by the contribution of team member who contributes the least.
+Project B: Think of this project as your <b>own</b> project. It has been assigned to you by the firm and you are solely responsible for the success.
 <br/><br/>
-Project B: Think of this project as your own project. It has been assigned to you by the firm and you are solely responsible for the success.
+    Project A: This project is a <b>team</b> project. The success of this project depends on all members in your virtual team and is calculated by the contribution of the team member who contributes the least.
 <br/><br/>
-We will ask you how many hours per round you allocate to Project A (denoted by h_A).
+<b>We will ask you how many hours per round you allocate to Project A (denoted by h<sub>A</sub>).</b>
 <br/><br/>
-The available choices are 0 hours, 10 hours, 20 hours, 30 hours, and 40 hours. Your remaining hours will be put towards Project B. For example, if you devote 30 hours to Project A, this means that 10 hours will be put towards Project B.
+The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. Your remaining hours will be put towards Project B. For example, if you devote 30 hours to Project A, this means that 10 hours will be put towards Project B.
 <br/><br/>
-For your decision you have to consider the following conditions: Working on the team Project A generates a higher effort for you than on your own Project B, i.e., working on Project A generates additional costs of 5 ECU per hour for you which will be deducted from your personal payoff in the respective round. Note further, that we will also ask the other three members of your virtual team how they allocate their time to your common Project A and their own individual Project B. <br/> <br/>
+For your decision you have to consider the following conditions:<br/><br/> Working on the team Project A generates a higher effort for you than on your own Project B, i.e., <b>working on Project A generates additional costs of 5 ECU per hour </b> for you which will be deducted from your personal payoff in the respective round. <br/><br/>Note further, that we will also ask the other three members of your virtual team how they allocate their time to your common Project A and their own individual Project B. <br/> <br/>
 </div>
 <br/>
 {{ next_button }}
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
 
 {{ endblock }}

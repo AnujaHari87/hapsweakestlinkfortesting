@@ -1,0 +1,275 @@
+{{ extends 'global/Page.html' }}
+{{ block title }} Virtual Video Call Test{{ endblock }}
+{{ block content }}
+
+<style>
+    .column {
+        float: left;
+        height: 80vh; /* Responsive height */
+        box-sizing: border-box;
+    }
+    .left {
+        width: 80%;
+    }
+    .right {
+        width: 20%;
+        vertical-align: middle;
+        border: 1px solid #000;
+    }
+    /* Row style with maximum width and responsive adjustments */
+    .row {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto; /* Center align the row */
+    }
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    #meet {
+        width: 100%;
+        height: 80vh; /* Set the height to 100% of the viewport height */
+    }
+    /* Table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+        position: relative;
+    }
+    th:not(:last-child), td:not(:last-child) {
+        border-right: 1px solid grey;
+    }
+    th, td {
+        border-bottom: 1px solid grey;
+    }
+    /* Center checkboxes */
+    input[type="checkbox"] {
+        display: block;
+        margin: 0 auto;
+    }
+    /* Responsive layout */
+    @media (max-width: 1200px) {
+        .row {
+            max-width: 1000px;
+        }
+    }
+    @media (max-width: 1000px) {
+        .row {
+            max-width: 800px;
+        }
+    }
+    @media (max-width: 800px) {
+        .row {
+            max-width: 600px;
+        }
+    }
+    @media (max-width: 600px) {
+        .row {
+            max-width: 100%;
+        }
+        .column {
+            float: none;
+            width: 100%;
+            height: auto; /* Adjust height to auto for small screens */
+        }
+        .left, .right {
+            width: 100%;
+        }
+        .right {
+            margin-top: 20px;
+            border: none;
+        }
+    }
+</style>
+
+<div id="message"></div>
+This is a test video call. <br/><br/>
+<p><b>1) Please select a video background which is identical for all group members. <br/>
+    Please note that choosing the background is mandatory to participate and get paid. </b> <br/> <br/>
+    On the popup window "Virtual backgrounds" you can choose any of the provided options as they are all the same images.
+        Finally, click "Apply" to close the window and return to the video call.</b>
+</p>
+<b>2) Please make sure your audio output, microphone and camera are functioning properly. If not, please choose the appropriate device
+    from the toolbar options at the bottom of the video call. <br/> <br/></b>
+      3) At the bottom of the page, please select the checkboxes if your own selected devices are working properly, and if you can see and hear other team members in the test video call.
+        Your team can participate only if all your devices are working properly.<br/>
+
+
+<!-- Checkboxes for user to confirm device checks -->
+
+<div class="row">
+    <div class="column left">
+        <div id="meet"></div>
+    </div>
+    <div id="container" class="column right">
+
+    </div>
+</div>
+<br/>
+   <table border="1">
+            <thead>
+                <tr>
+                    <th>Device Checks</th>
+                    <th>P1<div id="myselfP1"></div></th>
+                    <th>P2<div id="myselfP2"></div></th>
+                    <th>P3<div id="myselfP3"></div></th>
+                    <th>P4<div id="myselfP4"></div></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>I can hear</td>
+                    <td>{{ formfield 'micCheck' }}</td>
+                    <td>{{ formfield 'team1MicCheck' }}</td>
+                    <td>{{ formfield 'team2MicCheck' }}</td>
+                    <td>{{ formfield 'team3MicCheck' }}</td>
+                </tr>
+                <tr>
+                    <td>I can see</td>
+                    <td>{{ formfield 'cameraCheck' }}<span id="myselfP1Camera"></span></td>
+                    <td>{{ formfield 'team1CameraCheck' }}<span id="myselfP2Camera"></span></td>
+                    <td>{{ formfield 'team2CameraCheck' }}<span id="myselfP3Camera"></span></td>
+                    <td>{{ formfield 'team3CameraCheck' }}<span id="myselfP4Camera"></span></td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        {{ next_button }}
+
+<script src="https://haps-meeting.k8s.iism.kit.edu/external_api.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    const domain = "haps-meeting.k8s.iism.kit.edu"; // Here goes your domain where the meeting takes place.
+    const TN_name = "P" + {{ player.id_in_group }}; // Adjust information to display
+
+    const options = {
+        roomName: "Video Meeting" + {{ player.group_id }}, // This is the name of the room, with player's group ID
+        parentNode: document.querySelector('#meet'), // Now, you declare here which element should parent your stream.
+        configOverwrite: {
+            prejoinConfig: {
+                enabled: false
+            },
+            disableSelfView: false,
+            startWithAudioMuted: false,
+            startWithVideoMuted: false,
+            filmstrip: {
+                disableResizable: true,
+            },
+            participantsPane: {
+                hideModeratorSettingsTab: true,
+                hideMoreActionsButton: true,
+                hideMuteAllButton: true
+            },
+            resolution: 480,
+	    disableAEC: false, // Acoustic Echo Cancellation
+            disableNS: false,  // Noise Suppression
+            constraints: {
+                video: {
+                    height: {
+                        ideal: 480,
+                        max: 480,
+                        min: 240
+                    }
+                }
+            },
+            disableSimulcast: false,
+            enableLayerSuspension: true
+        }, // You can turn on or off config elements with this prop.
+        interfaceConfigOverwrite: {
+            TOOLBAR_BUTTONS: ['microphone', 'camera', 'fodeviceselection'],
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_MEETING_NAME: false,
+            SHOW_MEETING_TIMER: false,
+            TILE_VIEW_MAX_COLUMNS: 2,
+            TILE_VIEW_ENABLED: true,
+            PARTICIPANT_MENU_BUTTONS: []
+        },
+        userInfo: {
+            displayName: TN_name,
+        }
+    }
+     {% if is_dropout == False %}
+    const api = new JitsiMeetExternalAPI(domain, options); // This is where the iframe is actually constructed
+    // The function below turns on the Tile View every time a participant joins. Practically it makes Tile View the default mode
+    // Set the virtual background
+    api.addEventListener('videoConferenceJoined', () => {
+        api.executeCommand('setTileView', true);
+        setTimeout(() => {
+                   <!-- HTML content to display if participant is a dropout -->
+
+                    api.executeCommand('toggleVirtualBackgroundDialog');
+
+        }, 1000);
+    });
+      {% endif %}
+
+    // Insert 'myself' text in the correct column
+    const playerId = {{ player.id_in_group }};
+    console.debug (playerId);
+    console.debug(playerId === 1);
+    if (playerId === 1) {
+        document.getElementById('myselfP1').innerText = " (myself)";
+    } else if (playerId === 2) {
+        document.getElementById('myselfP2').innerText = " (myself)";
+    } else if (playerId === 3) {
+        document.getElementById('myselfP3').innerText = " (myself)";
+    } else if (playerId === 4) {
+        document.getElementById('myselfP4').innerText = " (myself)";
+    }
+
+      {% if is_dropout1 == True %}
+      hideColumnByDivId('myselfP1');
+     {% endif %}
+
+     {% if is_dropout2 == True %}
+      hideColumnByDivId('myselfP2');
+     {% endif %}
+
+     {% if is_dropout3 == True %}
+      hideColumnByDivId('myselfP3');
+     {% endif %}
+
+     {% if is_dropout4 == True %}
+      hideColumnByDivId('myselfP4');
+     {% endif %}
+
+       document.addEventListener('DOMContentLoaded', function() {
+                console.debug("Comes here 1")
+                   {% if is_dropout == True %}
+                    console.debug("Comes here 2")
+                    const nextBtn = document.querySelector(".otree-btn-next btn btn-primary");
+                     document.querySelector(".otree-form").submit();
+                  {% endif %}
+           });
+
+    function hideColumnByDivId(divId) {
+    // Find the div by ID
+    const div = document.getElementById(divId);
+
+    // Get the parent th element
+    const th = div.closest('th');
+
+    // Find the index of the th element
+    const thIndex = Array.from(th.parentNode.children).indexOf(th);
+
+    // Hide all cells in this column
+    document.querySelectorAll(`table tr`).forEach(row => {
+        row.children[thIndex].style.display = 'none';
+    });
+}
+
+</script>
+
+
+{{ endblock }}

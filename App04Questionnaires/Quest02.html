@@ -3,48 +3,58 @@
 <link rel="stylesheet" type="text/css">
 {% endblock %}
 
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
         <div class="card-body">
-          <h2 class="card-title text-center"></h2>
           <p class="card-text text-center">
-              <b>Please indicate your level of agreement with the following statements.</b><br>
-<table class="table" style="text-align: center; vertical-align: middle;">
-    <tr>
-        <td style="width: 30%;"></td>
-        <td style="width: 10%;">strongly disagree</td>
-        <td style="width: 10%;"></td>
-        <td style="width: 10%;">neither agree nor disagree</td>
-        <td style="width: 10%;"></td>
-        <td style="width: 10%;">strongly agree</td>
-    </tr>
-    <tr>
-        <td style="width: 30%;"></td>
-        <td style="width: 10%;">--</td>
-        <td style="width: 10%;">-</td>
-        <td style="width: 10%;">o</td>
-        <td style="width: 10%;">+</td>
-        <td style="width: 10%;">++</td>
-    </tr>
-    {{ for field in form }}
+              <b>Please, select the appropriate number below to indicate to what extent you would use the term “WE” to characterize you and your team.</b><br>
 
-    <tr>
-            <td style="text-align: left;">{{ field.label }}</td>
-            {{ for choice in field }}
-                <td>{{ choice }}</td>
-            {{ endfor }}
-        </tr>
-    {{ endfor }}
-</table>
+           <table class="table" style="text-align: center;  vertical-align: middle;">
+                <tr>
+                    <td style="width: 16%;">Not at all</td>
+                    <td style="width: 13.6%;"></td>
+                    <td style="width: 13.6%;"></td>
+                    <td style="width: 13.6%;"></td>
+                    <td style="width: 13.6%;"></td>
+                    <td style="width: 13.6%;"></td>
+                    <td style="width: 16%;">very much so</td>
+                </tr>
+                <tr>
+                    <td style="width: 16%;">1</td>
+                    <td style="width: 13.6%;">2</td>
+                    <td style="width: 13.6%;">3</td>
+                    <td style="width: 13.6%;">4</td>
+                    <td style="width: 13.6%;">5</td>
+                    <td style="width: 13.6%;">6</td>
+                    <td style="width: 16%;">7</td>
+                </tr>
+                {{ for field in form }}
+                <tr>
+                        {{ for choice in field }}
+                            <td>{{ choice }}</td>
+                        {{ endfor }}
+                    </tr>
+                {{ endfor }}
+           </table>
         </div>
       </div>
     </div>
   </div>
 </div>
 <br>
-
+</div>
+<br/>
 {{next_button}}
 
 

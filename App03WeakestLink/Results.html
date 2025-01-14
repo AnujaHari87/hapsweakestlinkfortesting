@@ -3,12 +3,30 @@
 {{ endblock }}
 
 {{ block content }}
+<style>
+    .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+</style>
+ <div class="my-box">
+<p>
+     {{  if dropout_count > 0}}
+      <p>  {{dropout_count}} team member(s) did not proceed to the next page or did not reach a decision in due time and, thus were tagged as a “dropout”. <br/>
+       <b>Decisions (especially number of hours contributed to Project A) of “dropout” team members are <u>no longer relevant for the calculation of your payoff. </u> </b> </p>
+     {{ else }}
 
-<p style="font-size: 20px;">
-    In this round, the minimum number of hours worked by your team on Project A was <strong>{{ group.groupMin }} hours</strong>.
+    {{ endif }}
+
+    In this round, the minimum number of hours allocated to Project A from any of your virtual team members was
+    <strong>{{ group.groupMin }} hours</strong>.
     <br><br>
-    You have decided to work <strong>{{ player.ownDecision }} hours</strong> on Project A. Therefore, your compensation for this round amounts to <strong>{{ player.payoff_hypo }} ECU</strong>.
-</p>
+    You have decided to work <strong>{{ player.ownDecision }} hours</strong> on Project A. <br/><br/>Therefore, your compensation for this round amounts to <strong>{{ player.payoff_hypo }} ECU</strong>.
 
-    {{ next_button }}
+
+</p>
+ </div>
+<br/>
+{{ next_button }}
 {{ endblock }}

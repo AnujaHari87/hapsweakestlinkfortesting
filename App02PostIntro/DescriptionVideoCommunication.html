@@ -14,20 +14,23 @@
 <div class="my-box">
 
     <br/>
-     <p class="card-text text-center"> In this part, you will have the chance to get to know the other group members. You will participate in a video meeting that lasts 15 minutes. <br/>
+     <p class="card-text text-center"> In this part, you will have the chance to get to know the other team members in a video meeting.<br/>
+         The video meeting will last 8 minutes and end automatically. <br/><br/>
+
+        To give you some input for starting the conversation, we ask each of you to evaluate different types of vacations before the meeting starts.
+         Please feel free to discuss your evaluation with the others during the meeting. <br/>You are of course welcome to chat about other topics as well.
+
      </p>
 
 <div class="container">
   <div class="row justify-content-center">
-
-
     <div class="col-md-12">
       <div class="card border-0 shadow-sm mt-5" style="background-color: #f8f9fa;">
         <div class="card-body">
            <p class="card-text text-center">
-              <b>Before you start the video meeting please answer the following questions. <br/>
+              <b>Please indicate how much you would like to take the following types of vacation. <br/>
                   </b>
-<table class="table" style="text-align: center;  vertical-align: middle;">
+    <table class="table" style="text-align: center;  vertical-align: middle;">
     <tr>
         <td style="width: 30%;"></td>
         <td style="width: 10%;">Not at all</td>
@@ -57,8 +60,9 @@
             {{ endfor }}
         </tr>
     {{ endfor }}
-</table>
+   </table>
           <br>
+
 
         </div>
       </div>
@@ -66,16 +70,24 @@
   </div>
 </div>
 <br>
+<br/>
+   <p> Once you have made your selection, please click “Next” to start the video meeting.</p>
 
 </div>
-<br/>
-     <p class="card-text text-center" style="color: blue;"><b>During the video meeting you can discuss the different types of holidays with other team members.
-     </b>  <br/>
-     </p>
-
 
 <br/>
 
 {{ next_button }}
+
+
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
 
 {{ endblock }}

@@ -1,5 +1,5 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}End of Video Collaboration{{ endblock }}
+{{ block title }}End of Video Meeting{{ endblock }}
 
 {{ block content }}
 
@@ -7,52 +7,23 @@
     .my-box {
         border: 1px solid #ccc;
         padding: 10px;
+        background-color: #f9f9f9;
     }
-      .image-container {
-        display: flex;                /* Enables Flexbox */
-        justify-content: center;     /* Centers items horizontally */
-        align-items: center;         /* Centers items vertically */
-        width: 100%;                 /* Sets the container's width to full screen */
-      }
 
-      .image-label {
-        flex: 1;                     /* Allows each label to grow equally */
-        text-align: center;          /* Centers the content of the label */
-        margin: 10px;                /* Adds some space around each label */
-      }
-
-      img {
-        width: 100%;                 /* Makes images responsive to their container's size */
-      }
 </style>
 
 <div class="my-box">
 
     The video meeting is now terminated. <br/>
-    Please answer the following question before proceeding to the next part.<br/>
+    We will now proceed to Part 2. <br/>
+
+     <b>Note: </b>
+    As this is a group experiment, and groups proceed at the pace of the slowest group member, on the following pages we have <b>on-screen timers</b> on the top of the pages.
+    <br/><br/>If you <b> don't proceed to the next page or reach a decision in due time</b>, you will be tagged as a dropout and not paid for this study.
+    <br/><br/>On <b>instructions</b> pages, the on-screen timers are <b><u>five minutes</u></b> and on decision pages, the on-screen timers are <b><u>three minutes</u></b>.
 
 
-     <p><strong>Please select the image that best describes the relationship between you and your team.</strong></p>
-    <div class="image-container">
-     {{ for image in image_data }}
-        <label>
-            <br>
-            <img src="{{ static image.path }}">
-            <br>
-            <input type="radio" name="team_cohesion" value="{{ image.name }}" class="persist">
-        </label>
-    {{ endfor }}
-    </div>
-    {{ formfield_errors 'team_cohesion' }}
-
-<script>
-    const errorDiv = document.querySelector('.form-control-errors');
-
-    if (errorDiv) {
-        errorDiv.textContent = 'Please select an image to proceed.'
-    }
-</script>
 </div>
-<br/> <br/>
+<br/>
 {{ next_button }}
 {{ endblock }}

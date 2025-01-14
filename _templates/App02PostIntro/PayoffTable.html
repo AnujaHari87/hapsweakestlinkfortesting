@@ -4,6 +4,7 @@
         writing-mode: vertical-rl;
         rotate: 180deg;
         text-align: center;
+        border-right: 3px solid black;
     }
 
     .center {
@@ -18,7 +19,15 @@
         border: 1px solid black;
         border-collapse: collapse;
     }
-
+    .bold-line {
+            border-bottom: 3px solid black; /* Adjust the thickness and color */
+        }
+     .bold-left {
+            border-left: 3px solid black; /* Adjust the thickness and color */
+        }
+     .bold-column {
+           border-right: 3px solid black; /* Adjust the thickness and color */
+        }
     .bold {
         font-weight: bolder;
     }
@@ -29,17 +38,17 @@
     <div class="card-body center">
         <table id="payoffTable" class="table table-striped">
             <thead>
-                <tr>
-                    <th>Payoff Table</th>
-                    <th colspan="6">
-                        Minimum number of hours your team members work on Project A (h_min)
+                <tr class ="bold-line">
+                    <th>Your Payoff</th>
+                    <th colspan="6" class ="bold-left">
+                        Minimum hours allocated to Project A from any of your virtual team members <br/>(h<sub>min</sub>)
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th rowspan="6" class="vertical"><br> <br>Your number of hours working on Project A (h_A)</th>
-                    <td>Bonus</td>
+                    <th rowspan="6" class="horizontal"><br> <br>Your hours allocated <br/>to Project A<br/>(h<sub>A</sub> )</th>
+                    <td class="bold"></td>
                     <td class="bold">0</td>
                     <td class="bold">10</td>
                     <td class="bold">20</td>

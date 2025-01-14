@@ -1,0 +1,34 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Description of Part 2{{ endblock }}
+
+{{ block content }}
+
+    <style>
+        .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+
+<div class="my-box">
+
+    <div class="container">
+      <h2 class="card-title text-center">Comprehension Questions (3/4)</h2>
+                {{ include_sibling 'PayoffTable.html'}}
+                {{ formfield 'comprehension3' }}
+   </div>
+    <br>
+    </div>
+<br/>
+{{next_button }}
+<script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+{{ endblock }}

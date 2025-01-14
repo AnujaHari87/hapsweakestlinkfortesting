@@ -1,0 +1,34 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Description of Part 1{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    <p> On the following screen, please give permission to start the recording of the video meeting. <br/>
+        To do this select the "Allow" button on the popup that appears, asking for your recording permission.
+        <br/>Once all members agree and join, the meeting will start.</p>
+</div>
+<br/>
+{{ next_button }}
+
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+
+
+{{ endblock }}

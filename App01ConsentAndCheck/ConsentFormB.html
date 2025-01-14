@@ -1,0 +1,77 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Consent Form{{ endblock }}
+
+{{ block content }}
+<style>
+    label {
+        display: inline-block;
+    }
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+    .checkbox-container {
+        display: flex;
+        align-items: flex-start;
+    }
+    .checkbox-container input {
+        margin-right: 10px;
+        align-self: center;
+    }
+    .checkbox-label {
+        display: inline-block;
+    }
+    .radio-container {
+        margin-top: 10px;
+    }
+    .radio-option {
+        display: flex;
+        align-items: center;
+        margin-right: 10px; /* 10px left margin for each option */
+    }
+    .radio-option input {
+        margin-right: 10px;
+    }
+</style>
+
+<div class="my-box">
+    <h4><b>Optional Opt-In</b></h4>
+    <div class="checkbox-container">
+        <input type="checkbox" id="opt_in_checkbox" onchange="updateConsent(this.checked)">
+        <label for="opt_in_checkbox" class="checkbox-label">I agree with the usage of my video and audio in research presentations with a scientific audience. I understand that therefore my video and audio data will be kept by researchers for an unlimited period of time. I understand that this opt-in is completely voluntary and is no prerequisite for study participation.</label>
+    </div>
+    <input id="hiddenOptIn" type="hidden" name="optInConsent" value="0"/>
+    <br/><br/>
+    <h4><b>Consent</b></h4>
+    <p>I have understood the instructions and wish to participate in the project. I understand that my Prolific ID and the individual participation code will be used to verify my participation and send my payment on Prolific. After you have clicked yes, the study will start.</p>
+
+    <form>
+        <p>Do you want to participate?</p>
+        <div class="radio-container">
+            <div class="radio-option">
+                <input type="radio" id="yes" name="participation" value="yes" onchange="updateParticipation(this.value)">
+                <label for="yes">Yes, I want to participate.</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="no" name="participation" value="no" onchange="updateParticipation(this.value)">
+                <label for="no">No, I do not want to participate.</label>
+            </div>
+            <input id="hiddenConsent" type="hidden" name="consent" value="0"/>
+        </div>
+    </form>
+    <script>
+        function updateConsent(isChecked) {
+            var hiddenOptIn = document.getElementById("hiddenOptIn");
+            hiddenOptIn.value = isChecked ? 1 : 0;
+        }
+
+        function updateParticipation(selectedValue) {
+            var consent = document.getElementById("hiddenConsent");
+            consent.value = selectedValue === 'yes' ? 1 : 0;
+        }
+    </script>
+</div>
+<br/><br/>
+{{next_button}}
+{{ endblock }}

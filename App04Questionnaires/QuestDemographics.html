@@ -4,7 +4,14 @@
 <link rel="stylesheet" type="text/css">
 {% endblock %}
 
-
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
@@ -14,15 +21,106 @@
           <p class="card-text text-center">
               <b>Please provide the following personal details to conclude.</b></p>
 
-{{ formfields }}
+            {{ formfield 'age' }}
+            {{ formfield 'gender' }}
+            {{ formfield 'education' }}
+            {{ formfield 'ethnicity' }}
+            {{ formfield 'prolificdays_month' }}
+            {{ formfield 'prolifichours_day' }}
+          <div class="form-group">
+              <label for="incomeProlific" class="control-label col-form-label">Is Prolific your primary source of income?</label>
+              <div>
+                <select name="incomeProlific" id="incomeProlific" class="form-select">
+                    <option value="" selected disabled hidden>--------</option>
+                    <option value="1">Yes</option>
+                    <option value="2">No</option>
+                    <option value="3">Other, please specify</option>
+                </select>
+                  <input name="prolificprimary_income" id="hidden_income" value="0" type="hidden"/>
+                  <input name="other_income_specify" id="hidden_others" value="" type="hidden"/>
+              </div>
+            </div>
+
+
+             <div id="other_income_specify_container" style="display:none;">
+               <input id="visible_others" type="text"/>
+            </div>
+            {{ formfield 'familiarity' }}
+
 
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
 <br>
 {{next_button}}
 
 
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectField = document.getElementById('incomeProlific');
+            const otherSpecifyContainer = document.getElementById('other_income_specify_container');
+            selectField.addEventListener('change', function() {
+
+                if (selectField.value == "3") {
+                    otherSpecifyContainer.style.display = 'block';
+                     const prolificprimary_income = document.getElementById('hidden_income');
+                     prolificprimary_income.value = selectField.value;
+                } else {
+                    otherSpecifyContainer.style.display = 'none';
+                     const prolificprimary_income = document.getElementById('hidden_income');
+                     prolificprimary_income.value = selectField.value;
+
+                }
+            });
+
+
+        });
+
+            // Get the input field element
+        const inputField = document.getElementById('visible_others');
+
+
+
+        // Function to handle input field blur or tab key press
+        function handleInputFieldBlur() {
+            console.log('Input field lost focus or Tab key pressed.');
+            const visibleOthers = document.getElementById('visible_others');
+            const hiddenOthers = document.getElementById('hidden_others');
+            if (visibleOthers && hiddenOthers) {
+                hiddenOthers.value = visibleOthers.value;
+            }
+           }
+
+
+
+        // Add a blur event listener to the input field
+        inputField.addEventListener('blur', handleInputFieldBlur);
+
+        // Add a keydown event listener to the input field to detect the Tab key press
+        inputField.addEventListener('keydown', function(event) {
+            if (event.key === 'Tab') {
+                handleInputFieldBlur();
+            }
+        });
+
+        // Function to handle tab visibility change
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                console.log('Tab is not visible.');
+            } else {
+                console.log('Tab is visible.');
+            }
+        }
+
+        // Add an event listener for the visibility change
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+
+    </script>
 {{ endblock }}

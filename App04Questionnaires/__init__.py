@@ -29,6 +29,14 @@ def make_field(label):
     )
 
 
+def make_field7(label):
+    return models.IntegerField(
+        choices=[1, 2, 3, 4, 5, 6, 7],
+        label=label,
+        widget=widgets.RadioSelect,
+    )
+
+
 def make_field2(label):
     return models.IntegerField(
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -39,7 +47,7 @@ def make_field2(label):
 
 def make_field3(label):
     return models.IntegerField(
-        choices=[5, 10, 15, 20, 25, 30],
+        choices=[0, 5, 10, 15, 20, 25, 30],
         label=label,
         widget=widgets.RadioSelect,
     )
@@ -58,39 +66,31 @@ def make_image_data(image_names):
 
 
 class Player(BasePlayer):
+    team_cohesion = models.StringField()
     payoff_quests = models.IntegerField()
     attention_check = models.IntegerField(initial=0)
-    team_cohesion = models.StringField()
-    social_cohesion_1 = make_field('I felt accepted by my team members.')
-    social_cohesion_2 = make_field('I could trust my team members.')
-    social_cohesion_3 = make_field('The members of my team liked each other.')
-    social_cohesion_4 = make_field('The members of my team made an effort to understand the opinions of others.')
-    social_cohesion_5 = make_field(
-        'The members of my team seemed to make an effort to behave in a way that is acceptable to others.')
-    social_cohesion_6 = make_field('The members of my team disclosed personal information or feelings.')
-    attention1 = make_field(
-        'Please select the option "strongly disagree" to show that you are answering the questions attentively.')
-
-    risk = make_field2('Are you generally a risk-taking person or do you try to avoid risks?')
-
+    social_cohesion_short = make_field7('')
+    risk = make_field2('')
     time_1 = make_field2(
-        'How much would you be willing to give up on something that benefits you today in order to benefit more in the future?')
-    negative_rp_1 = make_field2(
-        'How much would you be willing to punish someone who treated YOU unfairly, even if this would have negative consequences for you?')
-    negative_rp_2 = make_field2(
-        'How much would you be willing to punish someone who treated OTHERS unfairly, even if this would incur costs for you?')
-    altruism_1 = make_field2(
-        'How much would you be willing to give for a good cause, without expecting anything in return?')
-    attention2 = make_field2('Please select the option "7" to show that you are answering the questions attentively.')
+        'How willing are you to give up something that is beneficial for you today in order to benefit more from that in the future?')
 
-    positive_rp_1 = make_field2('If someone does me a favor, I am willing to reciprocate.')
+    negative_rp_1 = make_field2(
+        'How willing are you to punish someone who treats you unfairly, even if there may be costs for you?')
+    negative_rp_2 = make_field2(
+        'How willing are you to punish someone who treats others unfairly,even if there may be costs for you?')
+    altruism_1 = make_field2(
+        'How willing are you to give to good causes without expecting anything in return?')
+    attention2 = make_field2('Please select the option "7" to show that you are answering the questions attentively.')
+    attention1 = make_field('Please select the option "1" to show that you are answering the questions attentively.')
+
+    positive_rp_1 = make_field2('When someone does me a favor, I am willing to return it.')
     negative_rp_3 = make_field2(
-        'If I am treated very unfairly, I will seek revenge at the first opportunity, even if it costs me to do so.')
-    trust_1_positive = make_field2('I am convinced that most people have good intentions.')
+        'If I am treated very unjustly, I will take revenge at the first occasion, even if there is a cost to do so.')
+    trust_1_positive = make_field2('I assume that people have only the best intentions.')
     trust_2_negative = make_field2("You can't rely on anyone nowadays.")
     trust_3_positive = make_field2('In general, people can be trusted.')
-    math = make_field2('I am good at mathematics.')
-    time_2 = make_field2('I tend to procrastinate tasks, even though I know it would be better to do them right away.')
+    math = make_field2('I am good at math.')
+    time_2 = make_field2('I tend to postpone tasks even if I know it would be better to do them right away.')
     attention3 = make_field2('Please select the option "3" to show that you are answering the questions attentively.')
     positive_rp_2 = make_field3("")
     altruism_2 = models.IntegerField(label="", min=0, max=1000)
@@ -122,19 +122,19 @@ class Player(BasePlayer):
         "When others disagree, it is important to hold one's own ground and not give in.")
     attention4 = make_field(
         'Please select the option "strongly agree" to show that you are answering the questions attentively.')
-    psychological_safety_1 = make_field('I am not afraid to be myself during the video meeting.')
-    psychological_safety_2 = make_field('I am afraid to express my opinion in the meeting.')
-    psychological_safety_3 = make_field('There is a threatening atmosphere in the meeting.')
+    psychological_safety_1 = make_field('I was not afraid to be myself during the video meeting.')
+    psychological_safety_2 = make_field('I was afraid to express my opinion in the meeting.')
+    psychological_safety_3 = make_field('There was a threatening atmosphere in the meeting.')
     psychological_availability_1 = make_field(
-        'I am confident that I am able to manage competing demands in a meeting.')
+        'I am confident that I was able to manage competing demands in a meeting.')
     psychological_availability_2 = make_field(
-        'I am confident that I am able to deal with problems that arise in the meeting.')
+        'I am confident that I was able to deal with problems that arise in the meeting.')
     psychological_availability_3 = make_field(
-        'I am confident that I am can think clearly in the meeting.')
+        'I am confident that I was able to think clearly in the meeting.')
     psychological_availability_4 = make_field(
-        'I am confident that I am able to show the right emotions in the meeting.')
+        'I am confident that I was able to show the right emotions in the meeting.')
     psychological_availability_5 = make_field(
-        'I am confident that I can cope with the physical demands of the meeting.')
+        'I am confident that I was able to cope with the physical demands of the meeting.')
 
     big5_1 = make_field(
         'I see myself as someone who is reserved.')
@@ -157,59 +157,48 @@ class Player(BasePlayer):
     big5_10 = make_field(
         'I see myself as someone who has an active imagination.')
 
-    engagement_1 = make_field('In the meeting I am full of exuberant energy.')
-    engagement_2 = make_field('The meeting is useful and meaningful.')
-    engagement_3 = make_field('While I am in the meeting, time flies by.')
-    engagement_4 = make_field('I feel fit and energetic during the meeting.')
-    engagement_5 = make_field('I am enthusiastic about my meeting.')
-    engagement_6 = make_field('While I am in the meeting, I forget everything around me.')
-    engagement_7 = make_field('The meeting inspires me.')
-    engagement_8 = make_field('When I get up in the morning, I look forward to my meetings.')
-    engagement_9 = make_field('I feel happy when I work intensively during the meeting.')
-    engagement_10 = make_field('I am proud of my work in the meeting.')
-    engagement_11 = make_field('I am completely absorbed in my work in the meeting.')
-    engagement_12 = make_field('When I am in the meeting, I can stay in it for a very long tine.')
-    engagement_13 = make_field('The meeting is a challenge for me.')
-    engagement_14 = make_field('The meeting carries me away.')
-    engagement_15 = make_field('I am mentally very resilient in the meeting.')
-    engagement_16 = make_field('I find it difficult to detach myself from the me.')
-    engagement_17 = make_field('I always persevere in the meeting, even when things are not going so well.')
-    engagement_18 = make_field(
-        'Completing my task in the meeting is so engrossing that I forget everything else.')
-    engagement_19 = make_field('I often think about other things when I am in the meeting.')
-    engagement_20 = make_field('I am rarely distracted when I am in the meeting.')
-    engagement_21 = make_field('Time passes quickly when I am in the meeting.')
-    engagement_22 = make_field('I put a lot of effort into the meeting.')
-    engagement_23 = make_field('I am excited when I do well in my meeting.')
-    engagement_24 = make_field('I often feel emotionally detached from the meeting.')
-    engagement_25 = make_field('My own feelings depend on how well I do in the meeting.')
-    engagement_26 = make_field('I expend a lot of energy to get through the meeting.')
-    engagement_27 = make_field('I stay until the work in the meeting is done.')
-    engagement_28 = make_field('I avoid working overtime in the meeting whenever possible.')
-    engagement_29 = make_field('I take work home from the meeting to complete it.')
-    engagement_30 = make_field('I avoid working too hard in the meeting.')
-    age = models.IntegerField(label='Please enter your <strong>age</strong>.', min=18, max=65)
-    gender = models.IntegerField(label='<br>Please enter your <strong>gender</strong>.',
+    engagement_1 = make_field(
+        'The video meeting was so absorbing that I forgot about everything else.')
+    engagement_2 = make_field('I often thought about other things during the video meeting. ')
+    engagement_3 = make_field('I was rarely distracted in the video meeting.')
+    engagement_4 = make_field('Time passed quickly in the video meeting.')
+    engagement_5 = make_field('I really put my heart into the video meeting.')
+    engagement_6 = make_field('I got excited when actively contributing in the video meeting.')
+    engagement_7 = make_field('I often felt emotionally detached from the video meeting.')
+    engagement_8 = make_field('My own feelings were affected by how much I contributed in the video meeting.')
+    engagement_9 = make_field('I exerted a lot of energy in the video meeting.')
+    engagement_10 = make_field('I avoided actively contributing in the video meeting.')
+
+    age = models.IntegerField(label='What is your <strong>age</strong> (years) ?', min=18, max=66)
+    gender = models.IntegerField(label='<br>Which <strong>gender</strong> do you identify with?',
                                  choices=[[1, 'male'], [2, 'female'], [3, 'transgender'], [4, 'non-binary'],
                                           [5, 'prefer not to say']])
     ethnicity = models.IntegerField(
-        label="<br>Please indicate which <strong>ethnicity</strong> you would <u>most likely</u> identify with.",
+        label="<br>Which of the following <b>ethnicities</b> best describes you?<br/>",
         choices=[[1, 'Asian or Pacific Islander'], [2, 'Black or African American'], [3, 'Hispanic or Latino'],
-                 [4, 'White or Caucasian'], [5, 'Multiracial or Biracial'], [6, 'A race/ethnicity not listed here']])
+                 [4, 'Native American or Alaskan Native'], [5, 'White or Caucasian'], [6, 'Multiracial or Biracial'],
+                 [7, 'A race/ethnicity not listed here']])
     familiarity = models.IntegerField(
-        label="<br>Please indicate whether you have <strong>encountered a member of your team before participating in this study</strong>.",
+        label="<br>Please indicate whether you have ever <b>met a member of your team before </b> participating in this study</strong>.",
         choices=[[1, 'No, never met before'], [2, 'Yes, met in passing'],
                  [3, 'Yes, we are acquaintances']])
 
     education = models.IntegerField(
-        label="<br>What is the highest level of education you have completed?</br>",
-        choices=[[1, 'a'], [2, 'b'], [3, 'c'],
-                 [4, 'd']])
-    prolificPrevious = models.IntegerField(
-        label="<br>How many studies have you done on Prolific in the last year?</br>",
-        choices=[[1, 'a'], [2, 'b'], [3, 'c'],
-                 [4, 'd']])
+        label="<br>What is the highest level of <b>education</b> you have completed?</br>",
+        choices=[[1, 'less than High School'], [2, 'High School/GED'], [3, 'Some College'],
+                 [4, '2-year College degree'], [5, '4-year College degree'],
+                 [6, 'Master’s degree'], [7, 'Doctoral degree or Professional Degree (JD, MD)']])
+    prolificdays_month = models.IntegerField(
+        label="<br>How many days per month do you typically use Prolific?</br>", min=0, max=31)
+    prolifichours_day = models.IntegerField(
+        label="<br>On the days when you use Prolific, how many hours do you typically spend on it?</br>", min=1, max=24)
+    prolificprimary_income = models.IntegerField(label="Is Prolific your primary source of income?", blank=False,
+                                                 choices=[[1, 'Yes'], [2, 'No'], [3, 'Other, please specify']])
     random = models.CurrencyField()
+    other_income_specify = models.StringField(
+        blank=True,
+        label="Other"
+    )
 
 
 # PAGES
@@ -217,22 +206,33 @@ class Player(BasePlayer):
 class IntroPart3(Page):
     form_model = 'player'
 
-class Quest02(Page):
-    form_model = 'player'
-
-    # usability, satisfaction, intention to use
-    @staticmethod
-    def get_form_fields(player):
-        import random
-        soco = ['social_cohesion_1', 'social_cohesion_2', 'social_cohesion_3', 'social_cohesion_4', 'social_cohesion_5',
-                'social_cohesion_6', 'attention1']
-        random.shuffle(soco)
-        return soco
-
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        if player.attention1 != 1:
-            player.attention_check += 1
+        group_matrix_comm = player.session.vars.get('group_matrix')
+        player.in_round(1).group.subsession.set_group_matrix(group_matrix_comm)
+
+
+class Quest01(Page):
+    form_model = 'player'
+    form_fields = ['team_cohesion']
+
+    def vars_for_template(self: Player):
+        image_names = [
+            'Picture1.png',
+            'Picture2.png',
+            'Picture3.png',
+            'Picture4.png',
+            'Picture5.png',
+            'Picture6.png',
+            'Picture7.png'
+        ]
+        return dict(image_data=make_image_data(image_names))
+
+
+class Quest02(Page):
+    form_model = 'player'
+    form_fields = ['social_cohesion_short']
+    # usability, satisfaction, intention to use
 
 
 class Quest03(Page):
@@ -274,7 +274,12 @@ class Quest07(Page):
 class Quest07a(Page):
     form_model = 'player'
     form_fields = ['big5_1', 'big5_2', 'big5_3', 'big5_4', 'big5_5',
-                   'big5_6', 'big5_7', 'big5_8', 'big5_9', 'big5_10']
+                   'big5_6', 'big5_7', 'big5_8', 'big5_9', 'big5_10', 'attention1']
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if player.attention1 != 1:
+            player.attention_check += 1
 
 
 class Quest08(Page):
@@ -303,30 +308,6 @@ class Quest09(Page):
     form_model = 'player'
 
 
-
-class QuestDemographics(Page):
-    form_model = 'player'
-    form_fields = ['age', 'gender', 'education', 'ethnicity', 'prolificPrevious', 'familiarity']
-
-
-class QuestAR(Page):
-    form_model = 'player'
-    form_fields = ['attricativenessrating']
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        image_names = [
-            'teamco1.png',
-            'teamco2.png',
-            'teamco3.png',
-            'teamco4.png',
-            'teamco5.png',
-            'teamco6.png',
-
-        ]
-        return dict(image_data=make_image_data(image_names))
-
-
 class Quest10(Page):
     form_model = 'player'
     form_fields = ['psychological_safety_1', 'psychological_safety_2', 'psychological_safety_3',
@@ -337,10 +318,7 @@ class Quest10(Page):
 class Quest11(Page):
     form_model = 'player'
     form_fields = ['engagement_1', 'engagement_2', 'engagement_3', 'engagement_4', 'engagement_5', 'engagement_6',
-                   'engagement_7', 'engagement_8', 'engagement_9', 'engagement_10', 'engagement_11', 'engagement_12',
-                   'engagement_13', 'engagement_14', 'engagement_15', 'engagement_16', 'engagement_17', 'engagement_18',
-                   'engagement_19', 'engagement_20', 'engagement_21', 'engagement_22', 'engagement_23', 'engagement_24',
-                   'engagement_25', 'engagement_26', 'engagement_27', 'engagement_28', 'engagement_29', 'engagement_30']
+                   'engagement_7', 'engagement_8', 'engagement_9', 'engagement_10']
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -350,22 +328,23 @@ class Quest11(Page):
             player.payoff_quests = 0
 
 
+class QuestDemographics(Page):
+    form_model = 'player'
+    form_fields = ['age', 'gender', 'education', 'ethnicity', 'prolificdays_month',
+                   'prolifichours_day', 'prolificprimary_income', 'other_income_specify', 'familiarity']
+
+
 class QuestEnd(Page):
+
     @staticmethod
     def vars_for_template(player: Player):
         participant = player.participant
+
         return dict(
-            total_payoff=(200 + player.payoff_quests) * 0.03
+            total_payoff_ecu=(200 + participant.payoff_ppg),
+            total_payoff=(200 + participant.payoff_ppg) * 0.03
         )
 
 
-class ResultsWaitPage(WaitPage):
-    pass
-
-
-class Results(Page):
-    pass
-
-
-page_sequence = [IntroPart3, Quest02, Quest03, Quest04, Quest05, Quest06, Quest07, Quest07a, Quest08, Quest10, Quest11,
-                 QuestDemographics, QuestEnd]
+page_sequence = [IntroPart3, Quest01, Quest02, Quest03, Quest04, Quest05, Quest06, Quest07, Quest07a, Quest08, Quest10,
+                 Quest11, QuestDemographics, QuestEnd]

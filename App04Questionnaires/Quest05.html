@@ -2,7 +2,14 @@
 {% block css %}
 <link rel="stylesheet" type="text/css">
 {% endblock %}
-
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-12">
@@ -10,35 +17,35 @@
         <div class="card-body">
           <h2 class="card-title text-center"></h2>
           <p class="card-text text-center">
-              <b>Please now indicate how much the following statements apply to you. Please use a scale from 0 to 10. You can use the values in between to grade your assessment.</b><br>
+              <b>How well does each of the following statements describe you as a person?<br/> Please indicate your answer on a scale from 0 to 10.<br/> A 0 means "does not describe me at all," and a 10 means "describes me perfectly."</b><br>
 <table class="table" style="text-align: center; vertical-align: middle;">
     <tr>
-        <td style="width: 30%;"></td>
-        <td style="width: 6%;">does not apply at all</td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;"></td>
-        <td style="width: 6%;">fully applies</td>
+        <td style="width: 26%;"></td>
+        <td style="width: 9%;">does not describe <br/> me at all</td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 9%;">describes me perfectly</td>
     </tr>
     <tr>
-        <td style="width: 30%;"></td>
-        <td style="width: 6%;">0</td>
-        <td style="width: 6%;">1</td>
-        <td style="width: 6%;">2</td>
-        <td style="width: 6%;">3</td>
-        <td style="width: 6%;">4</td>
-        <td style="width: 6%;">5</td>
-        <td style="width: 6%;">6</td>
-        <td style="width: 6%;">7</td>
-        <td style="width: 6%;">8</td>
-        <td style="width: 6%;">9</td>
-        <td style="width: 6%;">10</td>
+        <td style="width: 26%;"></td>
+        <td style="width: 9%;">0</td>
+        <td style="width: 6.22%;">1</td>
+        <td style="width: 6.22%;">2</td>
+        <td style="width: 6.22%;">3</td>
+        <td style="width: 6.22%;">4</td>
+        <td style="width: 6.22%;">5</td>
+        <td style="width: 6.22%;">6</td>
+        <td style="width: 6.22%;">7</td>
+        <td style="width: 6.22%;">8</td>
+        <td style="width: 6.22%;">9</td>
+        <td style="width: 9%;">10</td>
     </tr>
     {{ for field in form }}
 
@@ -54,6 +61,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 <br>
 

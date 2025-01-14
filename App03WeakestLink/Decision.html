@@ -45,6 +45,9 @@
     .btn-primary {
         float: left;
         display: none;
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd
     }
 
     datalist {
@@ -58,98 +61,106 @@
         font-weight: bolder;
         color: white !important;
     }
+     .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
 </style>
 {{ endblock }}
 
 {{ block content }}
-    <!-- TODO
-        Decision screen
-        Show payoff table as hint -- template
-        Dynamically calculate and show payoff
-    -->
-    <br>
-    <label for="ownDecision">
-        <p style="font-size: 20px;"><strong>Please now decide how many hours you would like to work on Project A. The remaining hours will be allocated to your individual Project B.</strong></p>
-    </label>
-    <br>
-    {{ include_sibling 'PayoffTable.html' }}
-    <br>
-    <select name="ownDecision" id="ownDecision" class="dropdown">
-        <option value="" selected disabled>Please choose one</option>
-        <option value="0">0</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="30">30</option>
-        <option value="40">40</option>
-    </select>
-    <br>
-    <br>
+
     <br>
 
-{{ next_button }}
+       <div class="my-box">
+    <fieldset>
+        <legend><b>Please now decide how many hours you would like to work on Project A. The remaining hours will be allocated to your individual Project B.</b></legend>
+          {{ include_sibling 'PayoffTable.html' }}
+        <br/>
+        <p> Please choose one:</p>
+        <label for="ownDecision0">
+            <input type="radio" id="ownDecision0" name="ownDecision" value="0"> 0 &nbsp;&nbsp;
+        </label>
+        <label for="ownDecision10">
+            <input type="radio" id="ownDecision10" name="ownDecision" value="10"> 10 &nbsp;&nbsp;
+        </label>
+        <label for="ownDecision20">
+            <input type="radio" id="ownDecision20" name="ownDecision" value="20"> 20 &nbsp;&nbsp;
+        </label>
+        <label for="ownDecision30">
+            <input type="radio" id="ownDecision30" name="ownDecision" value="30"> 30 &nbsp;&nbsp;
+        </label>
+        <label for="ownDecision40">
+            <input type="radio" id="ownDecision40" name="ownDecision" value="40"> 40 &nbsp;&nbsp;
+        </label>
+    </fieldset>
+        </div>
+        <br/>
+ {{ next_button }}
+
+
 {{ endblock }}
 
 {{ block scripts }}
-    <script>
-        const slider = document.getElementById("ownDecision")
-        const nextBtn = document.querySelector(".btn-primary")
-        //default config
-        let row = document.querySelector("tbody").children[3]
-        let rowA = Array.from(row.children)
-        rowA.shift()
+<script>
 
-        slider.addEventListener("input", function() {
-            const val = slider.value
+ document.addEventListener("DOMContentLoaded", function() {
+    const nextBtn = document.querySelector(".btn-primary");
+    let row = document.querySelector("tbody").children[3];
+    let rowA = Array.from(row.children);
+    rowA.shift();
+    const radioButtons = document.querySelectorAll('input[name="ownDecision"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener("change", function() {
+            const val = this.value;
             switch (val) {
                 case "0":
-                    rowA.forEach(el => el.classList.remove("selected"))
-                    row = document.querySelector("tbody").children[1]
-                    rowA = Array.from(row.children)
-                    rowA.shift()
-                    rowA.forEach(el => el.classList.add("selected"))
-                    nextBtn.style.display = "block"
-                    break
+                    updateSelection(1);
+                    break;
                 case "10":
-                    rowA.forEach(el => el.classList.remove("selected"))
-                    row = document.querySelector("tbody").children[2]
-                    rowA = Array.from(row.children)
-                    rowA.shift()
-                    rowA.forEach(el => el.classList.add("selected"))
-                    nextBtn.style.display = "block"
-                    break
+                    updateSelection(2);
+                    break;
                 case "20":
-                    rowA.forEach(el => el.classList.remove("selected"))
-                    row = document.querySelector("tbody").children[3]
-                    rowA = Array.from(row.children)
-                    rowA.shift()
-                    rowA.forEach(el => el.classList.add("selected"))
-                    nextBtn.style.display = "block"
-                    break
+                    updateSelection(3);
+                    break;
                 case "30":
-                    rowA.forEach(el => el.classList.remove("selected"))
-                    row = document.querySelector("tbody").children[4]
-                    rowA = Array.from(row.children)
-                    rowA.shift()
-                    rowA.forEach(el => el.classList.add("selected"))
-                    nextBtn.style.display = "block"
-                    break
+                    updateSelection(4);
+                    break;
                 case "40":
-                    rowA.forEach(el => el.classList.remove("selected"))
-                    row = document.querySelector("tbody").children[5]
-                    rowA = Array.from(row.children)
-                    rowA.shift()
-                    rowA.forEach(el => el.classList.add("selected"))
-                    nextBtn.style.display = "block"
-                    break
+                    updateSelection(5);
+                    break;
                 default:
-                    nextBtn.style.display = "none"
+                    nextBtn.style.display = "none";
             }
-        })
+        });
 
-        document.onsubmit = () => {
+    });
+
+    function updateSelection(rowIndex) {
+        rowA.forEach(el => el.classList.remove("selected"));
+        row = document.querySelector("tbody").children[rowIndex];
+        rowA = Array.from(row.children);
+        rowA.shift();
+        rowA.forEach(el => el.classList.add("selected"));
+        nextBtn.style.display = "block";
+    }
+});
+     document.onsubmit = () => {
+            console.log("Next button clicked 2");
+            const radios = document.getElementsByName("ownDecision");
+            let selectedValue;
+            for (const radio of radios) {
+                if (radio.checked) {
+                    selectedValue = radio.value;
+                    break;
+                }
+            }
+
             liveSend({
-                "ownDecision" : parseInt(slider.value)
-            })
-        }
-    </script>
+                "ownDecision": parseInt(selectedValue)
+            });
+            }
+</script>
+
 {{ endblock }}

@@ -6,7 +6,15 @@
 label {
   display: inline-block;
 }
+.my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+}
 </style>
+
+
+<div class="my-box">
 <label>
     <p>Thank you for your interest in our study. The goal of the study is to investigate the role of communication in virtual teams. You will be paid a fixed compensation of GBP XX (We will determine the duration and offer a compensation that amounts to 6-9 GBP per hour) for participating in this study and receive a potential bonus.</p>
     <p>Before we start, we want to give you some information about the study and inform you about data protection.</p>
@@ -30,64 +38,13 @@ label {
     <p>Participation is entirely voluntary. You may leave the study and withdraw your consent at any time without any penalty or prejudice.</p>
 
     <h4><b>Ethics Approval:</b></h4>
-    <p>This research has been reviewed according to the ethics procedures involving human subjects by the Karlsruhe Institute of Technology.</p>
+    <p>This research has been reviewed according to the ethics procedures involving human subjects by the Karlsruhe Institute of Technology (IRB Number: A2024-026).</p>
 
-    <p>If you want further information about data protection, please click
-        <a href="{{ static '02Privacy.pdf'}}" target="_blank">here</a>
-   <br/><br/>
-    <h4><b>Optional Opt-In</b></h4>
-
-
-    <input type="checkbox" id="opt_in_checkbox" onchange="updateConsent(this.checked)">
-      <label for="opt_in_checkbox">  I agree with the usage of my video and audio in research presentations with a scientific audience.
-        I understand that therefore my video and audio data will be kept by researchers for an unlimited period of time.
-        I understand that this opt-in is completely voluntary and is no prerequisite for study participation.
-    </label>
-     <input id="hiddenOptIn" type="hidden" name="optInConsent" value="0"/>
-    <br/><br/>
-    <h4><b>Consent</b></h4>
-    <p> I have understood the instructions and wish to participate in the project.
-        I understand that my Prolific ID and the individual participation code will
-        be used to verify my participation and send my payment on Prolific.
-        After you have clicked yes, the study will start.</p>
-
-        <script>
-          function updateParticipation(selectedValue) {
-            // Update the participationValue based on the selected radio button
-             var consent = document.getElementById("hiddenConsent");
-            if (selectedValue === 'yes') {
-              consent.value = 1;
-            } else {
-              consent.value = 0;
-            }
-          }
-        </script>
-
-      <form>
-        <p>Do you want to participate?</p>
-        <input type="radio" id="yes" name="participation" value="yes" onchange="updateParticipation(this.value)">
-          <input id="hiddenConsent" type="hidden" name="consent" value="0"/>
-        <label for="yes">Yes, I want to participate.</label><br>
-        <input type="radio" id="no" name="participation" value="no" onchange="updateParticipation(this.value)">
-        <label for="no">No, I do not want to participate.</label><br>
-      </form>
-
-
-      <script>
-
-      function updateConsent(isChecked) {
-         var hiddenOptIn = document.getElementById("hiddenOptIn");
-        if (isChecked) {
-          hiddenOptIn.value = 1;
-        } else {
-          hiddenOptIn.value = 0;
-        }
-      }
-    </script>
-
-
-
+     <p>If you want further information about data protection, please click
+        <a href="{{ static '02Privacy.pdf'}}" target="_blank">here</a>.
+     </p>
 </label>
+</div>
 <br/><br/>
 {{next_button}}
 {{ endblock }}

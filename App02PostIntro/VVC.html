@@ -1,205 +1,436 @@
 {{ extends 'global/Page.html' }}
-{{ block title }} Virtual Video Call{{ endblock }}
+
 {{ block content }}
 
 <style>
-        * {
-            box-sizing: border-box;
-        }
+    .column {
+        float: left;
+        height: 80vh; /* Responsive height */
+        box-sizing: border-box;
+    }
+    .left {
+        width: 80%;
+    }
+    .right {
+        width: 20%;
+        vertical-align: middle;
+        border: 1px solid #000;
+    }
 
+    /* Row style with maximum width and responsive adjustments */
+    .row {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto; /* Center align the row */
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    #meet {
+        width: 100%;
+        height: 80vh; /* Set the height to 100% of the viewport height */
+    }
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+    .my-box1 {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+        display:none;
+    }
+    #displaymessage {
+        display: none;
+    }
+
+    #progressBarContainer {
+        width: 100%;
+        background-color: #f3f3f3;
+        border: 1px solid #ccc;
+        margin-top: 20px;
+        display: none;
+    }
+
+    #progressBar {
+        width: 0;
+        height: 30px;
+        background-color: #4caf50;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+    }
+
+    /* Responsive layout */
+    @media (max-width: 1200px) {
         .row {
-            width: 1200px;
+            max-width: 1000px;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .row {
+            max-width: 800px;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .row {
+            max-width: 600px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .row {
+            max-width: 100%;
         }
 
-        /* Create two unequal columns that floats next to each other */
         .column {
-            float: left;
-            height: 480px;
+            float: none;
+            width: 100%;
+            height: 80vh; /* Adjust height to auto for small screens */
         }
-        .left {
-            width: 70%;
+
+        .left, .right {
+            width: 100%;
         }
+
         .right {
-            width: 30%;
-            vertical-align: middle;
-            border: 1px solid #000;
+            margin-top: 20px;
+            border: none;
         }
+    }
 
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-    </style>
-
-   <div class="row">
+</style>
+<div id="myHeader" class="otree-title page-header"><h2>Virtual Video Call</h2></div>
+<div id = "box1" class="my-box">
+    <div id="message"><p><b>The video meeting will last for 8 minutes.
+        After 8 minutes, you will be automatically redirected to the next page.</b>
+    </p></div>
+    <div id="videopanel" class="row">
         <div class="column left">
-            <div id=meet></div>
+            <div id="meet"></div>
         </div>
-        <div id="container" class="column right">
-        </div>
+        <div id="container" class="column right"></div>
     </div>
+    <div id="progressBarContainer" style="display:none;">
+        <div id="progressBar">0%</div>
+    </div>
+    <div id="nextButtonContainer" style="display:none;">
+        <button id="nextButton">Next</button>
+    </div>
+</div>
 
-     
+<div id = "description"  type = "hidden" class="my-box1">
+
+This part consists of 5 rounds.
+<br/><br/>
+Imagine that you and the other three members of your group belong to a <b>virtual team </b>of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends <b>40 hours </b>working for the firm. You must choose how to allocate your time between two projects, <b>Project A</b> and <b>Project B</b>.
+<br/><br/>
+Project B: Think of this project as your <b>own</b> project. It has been assigned to you by the firm and you are solely responsible for the success.
+<br/><br/>
+    Project A: This project is a <b>team</b> project. The success of this project depends on all members in your virtual team and is calculated by the contribution of the team member who contributes the least.
+<br/><br/>
+<b>We will ask you how many hours per round you allocate to Project A (denoted by h<sub>A</sub>).</b>
+<br/><br/>
+The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. Your remaining hours will be put towards Project B. For example, if you devote 30 hours to Project A, this means that 10 hours will be put towards Project B.
+<br/><br/>
+For your decision you have to consider the following conditions:<br/><br/> Working on the team Project A generates a higher effort for you than on your own Project B, i.e., <b>working on Project A generates additional costs of 5 ECU per hour </b> for you which will be deducted from your personal payoff in the respective round. <br/><br/>Note further, that we will also ask the other three members of your virtual team how they allocate their time to your common Project A and their own individual Project B. <br/> <br/>
+</div>
+<br/>
+{{next_button}}
+<br/>
+
+<br/>
+
 <script src="https://haps-meeting.k8s.iism.kit.edu/external_api.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
-<script>
-Highcharts.chart('container', {
-    chart: {
-        polar: true,
-        type: 'line'
-    },
-    accessibility: {
-        description: '.'
-    },
-    title: {
-        text: 'Sample Intervention',
-        x: -80
-    },
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.0/dist/ffmpeg.min.js"></script>
 
-    pane: {
-        size: '80%'
-    },
-    xAxis: {
-        categories: ['Team Convergence', 'Team Performance', 'My own performance', 'Harmony (avoid hard conflicts)',
-            'My social reputation in the team'],
-        tickmarkPlacement: 'on',
-        lineWidth: 0
-    },
-    yAxis: {
-        gridLineInterpolation: 'polygon',
-        lineWidth: 0,
-        min: 0
-    },
-    tooltip: {
-        shared: true,
-        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
-    },
-    legend: {
-        align: 'right',
-        verticalAlign: 'middle',
-        layout: 'vertical'
-    },
-    series: [{
-        name: 'Member xyz',
-        data: [1, 3, 4, 5, 4],
-        pointPlacement: 'on'
-    }, {
-        name: 'Member 324',
-        data: [2, 2, 1, 4, 5],
-        pointPlacement: 'on'
-    },
-     {
-        name: 'Member 234',
-        data: [3, 2, 1, 4, 5],
-        pointPlacement: 'on'
-    },
-     {
-        name: 'Member 2345',
-        data: [4, 1, 2, 5, 3],
-        pointPlacement: 'on'
-    }],
-
-    responsive: {
-        rules: [{
-            condition: {
-                maxWidth: 500
-            },
-            chartOptions: {
-                legend: {
-                    align: 'center',
-                    verticalAlign: 'bottom',
-                    layout: 'horizontal'
-                },
-                pane: {
-                    size: '70%'
-                }
-            }
-        }]
-    }
-
-});
-</script>
 
 <script>
+    console.debug("is dropout");
     const domain = "haps-meeting.k8s.iism.kit.edu"; //Here goes your domain where the meeting takes place.
-    var isStreamOn = false; //This is a variable I've defined to use later.
+    const NameParam = {{player.id_in_group}} % 4;
+    const TN_name = "P";
+    // adjust information to display
+
     const options = {
-        roomName: "Video Meeting", //This is the name of the room.
-        height: 480,                //Same as above, just vertical.
+        roomName: "Video Meeting" + {{player.group_id}}, //This is the name of the room, with player's group ID
         parentNode: document.querySelector('#meet'), //Now, you declare here which element should parent your stream.
         configOverwrite: {
-            //fileRecordingsEnabled =true,
-            //fileRecordingsServiceEnabled =true,
-            //useHostPageLocalStorage = true,
             prejoinConfig: {
-                  enabled: false
+                enabled: false
             },
             disableSelfView: false,
             startWithAudioMuted: false,
             startWithVideoMuted: false,
             filmstrip: {
-                 disableResizable: true,
-             }
-        }, //You can turn on or off config elements with this prop.
-        interfaceConfigOverwrite: { TOOLBAR_BUTTONS: ["settings"] } //You can turn on or off interface elements with this prop. check https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe for details
+                disableResizable: true,
+            },
+            participantsPane: {
+                hideModeratorSettingsTab: true,
+                hideMoreActionsButton: true,
+                hideMuteAllButton: true
+            },
+	    disableAEC: false, // Acoustic Echo Cancellation
+            disableNS: false,  // Noise Suppression
+            resolution: 480,
+                constraints: {
+                    video: {
+                        height: {
+                            ideal: 480,
+                            max: 480,
+                            min: 240
+                        }
+                    }
+                },
+                disableSimulcast: false,
+                enableLayerSuspension: true
+
+        },
+        interfaceConfigOverwrite: {
+            TOOLBAR_BUTTONS: [],
+            SHOW_JITSI_WATERMARK: false,
+            TILE_VIEW_MAX_COLUMNS: 2,
+            TILE_VIEW_ENABLED: true,
+            SHOW_MEETING_TIMER: false,
+            SHOW_MORE_ACTIONS: false,
+            PARTICIPANT_MENU_BUTTONS: []
+        },
+        userInfo: {
+            displayName: TN_name,
         }
+    };
+     {% if is_dropout == False %}
         const api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
         //The function below turns on the Tile View everytime a participant joins. Practically it makes Tile View the default mode
-        api.addEventListener(`videoConferenceJoined`, () => {
-        const listener = ({ enabled }) => {
-            api.removeEventListener(`tileViewChanged`, listener);
-            if (!enabled) {
-                api.executeCommand(`toggleTileView`);
-            }
-        };
-    });
-
-    function streamHandler() {
-        try {
-            if (!isStreamOn) {
-                document.getElementById("streamingResponseMsg").innerHTML = "Starting streaming...";
-                //The function below starts the stream or recording, according to its "mode"
-                api.executeCommand('startRecording', {
-                    mode: 'stream', //recording mode, either `file` or `stream`.
-                    rtmpStreamKey: '', //This where you *should* put your favoured rtmp stream server along with your key, like "rtmp:\/\/some.address/norecord/stream-key"
-                    youtubeStreamKey: 'rtmp:\/\/some.address/norecord/stream-key', //the youtube stream key.
-                });
-            } else {
-                document.getElementById("streamingResponseMsg").innerHTML = "Stopping streaming...";
-                //The function below stops the stream or recording, according to the string you pass. Official guide shows an object, while it should be a string
-                api.executeCommand('stopRecording', 'stream');
-            }
-
-        }
-        catch (e){
-            if (isStreamOn){
-                document.getElementById("streamingResponseMsg").innerHTML = "Error while stopping stream.";
-                console.log("Exception while stopping stream.", e);
-            }else{
-                document.getElementById("streamingResponseMsg").innerHTML = "Error while starting stream.";
-                console.log("Exception while starting stream.", e);
-
-            }    
-            this.isStreamOn = false;
-         }
-    };
-        //This part doesn't work without making some changes to the code as per this; https://github.com/team-ai-repo/jitsi-meet/pull/4/files
-        api.addEventListener("recordingStarted", () => {
-        document.getElementById("stream-btn").innerHTML="Stop Streaming";
-        document.getElementById("streamingResponseMsg").innerHTML = "Stream is on";
-        this.isStreamOn = true;
-        console.log("Example Stream On", this.isStreamOn);
+        api.addEventListener('videoConferenceJoined', () => {
+            api.executeCommand('setTileView', true);
         });
+     {% endif %}
 
-        api.addEventListener("recordingStopped", () => {
-        document.getElementById("stream-btn").innerHTML="Start Streaming";
-        document.getElementById("streamingResponseMsg").innerHTML = "Stream is off";
-        console.log("Example Stream Off", this.isStreamOn);
-        this.isStreamOn = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let stream;
+    let audioStream;
+    let audioRecorder;
+    let recordedAudioChunks = [];
+
+    document.addEventListener('DOMContentLoaded', async function () {
+       const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+
+          {% if is_dropout == True %}
+                var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                for (var i = 0; i < timerElements.length; i++) {
+                    timerElements[i].style.display = 'none';
+                }
+                   nextBtn.style.display = "block";
+                   nextBtn.click();
+           {% endif %}
+
+        {% if is_dropout == False %}
+        nextBtn.style.display = "none";
+        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+        for (var i = 0; i < timerElements.length; i++) {
+            timerElements[i].style.display = 'none';
+            // Or use: timerElements[i].style.visibility = 'hidden';
+        }
+        {% endif %}
+
+
+       // Send the data to the server
+
+       {% if is_dropout == False %}
+        const videoFormData = new FormData();
+        const audioFormData = new FormData();
+
+        try {
+            console.log('Requesting display media...');
+            stream = await navigator.mediaDevices.getDisplayMedia({
+                preferCurrentTab: true,
+                video: {
+                    mediaSource: 'tab',
+                    frameRate: { max: 10 },
+                    width: { max: 1024 },
+                    height: { max: 768 }
+                },
+                audio: true // Do not include audio in the display media stream
+            });
+
+            console.log('Requesting audio media...');
+            audioStream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: false // Only audio is needed here
+            });
+
+            console.log('Media streams obtained.');
+
+            // Create a MediaRecorder for video
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                    console.log('Video data available:', event.data);
+                }
+            };
+
+            mediaRecorder.onstop = async () => {
+                console.log('Video recorder stopped.');
+
+                // Create a Blob from the recorded chunks
+                const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+
+                const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+                const groupId = '{{ group.id_in_subsession }}';
+                const playerId = '{{ player.id_in_group }}';
+                const filenameWebm = `recording_${groupId}_${playerId}_${timestamp}.webm`;
+
+                // Append the webm file to videoFormData
+                videoFormData.append('video', videoBlob, filenameWebm);
+                console.log('Video form data prepared for upload.');
+
+                // Upload video data
+                let uploadUrlVideo = 'https://kithumansubjectsstudy.org:3000/upload/video/noOptIn';
+                {% if participant.vars.optInConsent == 0 %}
+                    uploadUrlVideo = 'https://kithumansubjectsstudy.org:3000/upload/video/noOptIn';
+                {% else %}
+                    uploadUrlVideo = 'https://kithumansubjectsstudy.org:3000/upload/video/optIn';
+                {% endif %}
+
+                try {
+                    const response = await fetch(uploadUrlVideo, {
+                        method: 'POST',
+                        body: videoFormData
+                    });
+
+                    if (response.ok) {
+                        console.log('Video uploaded successfully.');
+                        nextBtn.style.display = "block";
+                        document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+
+                        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                        for (var i = 0; i < timerElements.length; i++) {
+                            timerElements[i].style.display = 'none';
+                        }
+                    } else {
+                        console.error('Failed to upload video.');
+                        nextBtn.style.display = "block";
+                        document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                        for (var i = 0; i < timerElements.length; i++) {
+                            timerElements[i].style.display = 'none';
+                        }
+
+                    }
+                } catch (error) {
+                    console.error('Error uploading video:', error);
+                    nextBtn.style.display = "block";
+                    document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                    var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                        for (var i = 0; i < timerElements.length; i++) {
+                            timerElements[i].style.display = 'none';
+                    }
+
+                }
+            };
+
+            // Create a MediaRecorder for audio
+            audioRecorder = new MediaRecorder(audioStream, { mimeType: 'audio/webm' });
+
+            audioRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedAudioChunks.push(event.data);
+                    console.log('Audio data available:', event.data);
+                }
+            };
+
+            audioRecorder.onstop = async () => {
+                console.log('Audio recorder stopped.');
+
+                // Create a Blob from the recorded audio chunks
+                const audioBlob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+
+                const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+                const groupId = '{{ group.id_in_subsession }}';
+                const playerId = '{{ player.id_in_group }}';
+                const filenameWebm = `audio_${groupId}_${playerId}_${timestamp}.webm`;
+
+                // Append the webm file to audioFormData
+                audioFormData.append('audio', audioBlob, filenameWebm);
+                console.log('Audio form data prepared for upload.');
+
+                // Upload audio data
+                let uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/noOptIn';
+                {% if participant.vars.optInConsent == 0 %}
+                    uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/noOptIn';
+                {% else %}
+                    uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/optIn';
+                {% endif %}
+
+                try {
+                    const response = await fetch(uploadUrlAudio, {
+                        method: 'POST',
+                        body: audioFormData
+                    });
+
+                    if (response.ok) {
+                        console.log('Audio uploaded successfully.');
+                    } else {
+                        console.error('Failed to upload audio.');
+                    }
+                } catch (error) {
+                    console.error('Error uploading audio:', error);
+                }
+
+                // Hide the video and audio panels and show the message after both uploads
+
+            };
+
+            mediaRecorder.start();
+            audioRecorder.start();
+            console.log('Media recorders started.');
+
+            // Stop recording after 15 minutes
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 181) {
+                    mediaRecorder.stop();
+                    audioRecorder.stop();
+                    stream.getTracks().forEach(track => track.stop());
+                    audioStream.getTracks().forEach(track => track.stop());
+                    api.dispose();
+                    document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. <br/> Please wait briefly until the upload completes.<br/> While you wait please start reading the instructions for the second part of the study below. <br/></b></p>';
+                    var headerElement= document.getElementById('myHeader');
+                    console.debug('header element');
+                    console.debug(headerElement);
+                    if (headerElement) {
+                        console.debug('header element found');
+                        headerElement.innerHTML = '<h2>Description Part 2</h2>';
+
+                    } else {
+                        console.error('Header element not found');
+                    }
+                    document.getElementById('description').style.display = 'block';
+                    document.getElementById('videopanel').style.display = 'none';
+                }
+            });
+
+        } catch (err) {
+            console.error('Error accessing media.', err);
+        }
+
+         {% endif %}
     });
+
 </script>
 {{ endblock }}
