@@ -5,7 +5,7 @@ c = cu
 doc = ''
 class C(BaseConstants):
     NAME_IN_URL = 'App08DropoutThankYou'
-    PLAYERS_PER_GROUP = 4
+    PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 1
 class Subsession(BaseSubsession):
     pass

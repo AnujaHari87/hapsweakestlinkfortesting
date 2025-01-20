@@ -7,7 +7,7 @@ doc = ''
 
 class C(BaseConstants):
     NAME_IN_URL = 'App05Payoff'
-    PLAYERS_PER_GROUP = 4
+    PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 1
 
 

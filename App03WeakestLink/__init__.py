@@ -16,7 +16,7 @@ def make_field(label):
 
 class C(BaseConstants):
     NAME_IN_URL = 'App03WeakestLink'
-    PLAYERS_PER_GROUP = 4
+    PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 5
     ENDOWMENT = 200
 

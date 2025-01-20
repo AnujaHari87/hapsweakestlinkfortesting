@@ -10,7 +10,7 @@ doc = ''
 
 class C(BaseConstants):
     NAME_IN_URL = '02_Post_Intro'
-    PLAYERS_PER_GROUP = 4
+    PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 1
 
 
@@ -186,7 +186,7 @@ class MyWaitPage(WaitPage):
                            p.vars.get('micAndCameraCheck') == 0
                            and p.vars.get('numberVideo') == 2 and p.vars.get('colorVideo') == 3]
 
-        if len(players_consent) % 4 == 0:
+        if len(players_consent) % 3 == 0:
             waiting_count = 4
         else:
             waiting_count = len(players_consent) % 4

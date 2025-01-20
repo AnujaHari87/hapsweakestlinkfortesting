@@ -107,7 +107,7 @@
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
     const domain = "haps-meeting.k8s.iism.kit.edu"; // Here goes your domain where the meeting takes place.
-    const NameParam = {{ player.id_in_group }} % 4;
+    const NameParam = {{ player.id_in_group }} % 3;
     const TN_name = "P" + {{ player.id_in_subsession }}; // Adjust information to display
 
     const options = {

@@ -9,7 +9,7 @@ Your app description
 
 class Constants(BaseConstants):
     name_in_url = 'App04Questionnaires'
-    players_per_group = 4
+    players_per_group = 3
     num_rounds = 1
 
     nasa_values = dict(

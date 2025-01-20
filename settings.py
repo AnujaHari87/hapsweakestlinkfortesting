@@ -1,7 +1,7 @@
 from os import environ
 
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fee=0)
-SESSION_CONFIGS = [dict(name='weakestlinkdemo', num_demo_participants=20,
+SESSION_CONFIGS = [dict(name='weakestlinkdemo', num_demo_participants=18,
                         app_sequence=['App01ConsentAndCheck',  'App02PostIntro',
                                       'App03WeakestLink', 'App04Questionnaires', 'App05Payoff', 'App06ThankYou',
                                       'App07ConsentThankYou','App08DropoutThankYou', 'App09TeamExitThankYou'])]
