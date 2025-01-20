@@ -1,7 +1,6 @@
-{{ block content }}
+
 {% block css %}
 <link rel="stylesheet" type="text/css">
-{% endblock %}
 <style>
     .my-box {
         border: 1px solid #ccc;
@@ -9,6 +8,8 @@
         background-color: #f9f9f9;
     }
 </style>
+{% endblock %}
+{% block content %}
 <div class="my-box">
 <div class="container">
   <div class="row justify-content-center">
@@ -45,11 +46,11 @@
                     <td style="width: 8.66%;">9</td>
                     <td style="width: 12%;">10</td>
                 </tr>
-                {{ for field in form }}
+                {{  for field in form }}
                 <tr>
                         {{ for choice in field }}
-                            <td>{{ choice }}</td>
-                        {{ endfor }}
+                            <td>{{choice }}</td>
+                        {{  endfor  }}
                     </tr>
                 {{ endfor }}
            </table>
@@ -63,5 +64,4 @@
 
 {{next_button}}
 
-
-{{ endblock }}
+{% endblock %}

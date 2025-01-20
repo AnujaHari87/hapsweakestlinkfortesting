@@ -40,9 +40,16 @@ def make_field(label):
         widget=widgets.RadioSelect,
     )
 
+def make_field2(label):
+    return models.IntegerField(
+        choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        label=label,
+        widget=widgets.RadioSelect,
+    )
 
 class Player(BasePlayer):
     ProlificId = models.StringField(label='Prolific ID')
+    riskFalk = make_field2(' ')
     holidays_1 = make_field('Sun, sea, and beach holiday.')
     holidays_2 = make_field('Party holiday.')
     holidays_3 = make_field('Winter sports holiday.')
@@ -105,42 +112,8 @@ class Player(BasePlayer):
         label='',
         widget=widgets.CheckboxInput
     )
-    team1MicCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
-    team2MicCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
-    team3MicCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
 
-    team1CameraCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
-    team2CameraCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
-    team3CameraCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
-    groupExit = models.BooleanField(
-        default=False,
-        label='',
-        blank=True
-    )
+
 
 
 def comprehension1_error_message(player: Player, value):
@@ -325,116 +298,28 @@ class DescriptionVideoCommunication(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
-
-class WaitBeforeVideoTest(WaitPage):
-    title_text = 'Please wait until all players have entered the test video meeting.'
-
+class PreVideoQuestionnaire(Page):
+    form_model = 'player'
+    form_fields = ['riskFalk']
     def get_timeout_seconds(player):
         participant = player.participant
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
             return 5 * 60
-
-    def before_next_page(player, timeout_happened):
-        if timeout_happened:
-            print('Setting to true in WaitBeforeVideoTest')
-            player.participant.vars['is_dropout'] = True
-            player.is_dropout = True
-
-
-class VVC0(Page):
-    form_model = 'player'
-    form_fields = ['micCheck', 'cameraCheck', 'team1MicCheck', 'team2MicCheck', 'team3MicCheck',
-                   'team1CameraCheck', 'team2CameraCheck', 'team3CameraCheck']
-
-    def before_next_page(player: Player, timeout_happened):
-        if not timeout_happened:
-            player.participant.vars['cameraCheck'] = player.cameraCheck
-            player.participant.vars['micCheck'] = player.micCheck
-            player.participant.vars['wait_page_arrival'] = time.time()
-
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
         else:
             is_dropout = False
-
-
-        is_dropout1 = player.group.get_player_by_id(1).is_dropout
-        is_dropout2 = player.group.get_player_by_id(2).is_dropout
-        is_dropout3 = player.group.get_player_by_id(3).is_dropout
-        return dict(
-            dropouts={
-                player.group.get_player_by_id(1).is_dropout,
-                player.group.get_player_by_id(2).is_dropout,
-                player.group.get_player_by_id(3).is_dropout },
-            is_dropout=is_dropout,
-            is_dropout1=is_dropout1,
-            is_dropout2=is_dropout2,
-            is_dropout3=is_dropout3,
-
-        )
-
         return dict(is_dropout=is_dropout)
-
-
-class GroupWaitPage(WaitPage):
-    body_text = 'Please wait until all players in your group have completed the test video meeting.'
-
-    def after_all_players_arrive(group: Group):
-
-        for p in group.get_players():  # Assuming group.get_players() returns a list of players
-            print(p.id_in_group)
-            checks = [ p.group.get_player_by_id(1).cameraCheck,
-                p.group.get_player_by_id(1).micCheck,
-                p.group.get_player_by_id(2).team1CameraCheck,
-                p.group.get_player_by_id(2).team1MicCheck,
-                p.group.get_player_by_id(3).team2CameraCheck,
-                p.group.get_player_by_id(3).team2MicCheck,
-                p.group.get_player_by_id(4).team3CameraCheck,
-                p.group.get_player_by_id(4).team3MicCheck,
-            ]
-            if p.is_dropout is False:
-                # Remove checks based on dropout status
-                if p.group.get_player_by_id(1).is_dropout is True:
-                    checks.remove(p.group.get_player_by_id(1).cameraCheck)
-                    checks.remove(p.group.get_player_by_id(1).micCheck)
-
-                if p.group.get_player_by_id(2).is_dropout is True:
-                    checks.remove(p.group.get_player_by_id(2).team1CameraCheck)
-                    checks.remove(p.group.get_player_by_id(2).team1MicCheck)
-
-                if p.group.get_player_by_id(3).is_dropout is True:
-                    checks.remove(p.group.get_player_by_id(3).team2CameraCheck)
-                    checks.remove(p.group.get_player_by_id(3).team2MicCheck)
-
-                if p.group.get_player_by_id(4).is_dropout is True:
-                    checks.remove(p.group.get_player_by_id(4).team3CameraCheck)
-                    checks.remove(p.group.get_player_by_id(4).team3MicCheck)
-
-                # Check if all remaining checks are set to 0
-                if any(check == 0 for check in checks):
-                    for player in p.get_players():
-                        player.groupExit = True
-
-
-    def app_after_this_page(player: Player, upcoming_apps):
-        if player.groupExit:
-            return 'App09TeamExitThankYou'
-
-    def get_timeout_seconds(player):
-        participant = player.participant
-        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
-            return 1  # instant timeout, 1 second
-        else:
-            return 5 * 60
-
     def before_next_page(player, timeout_happened):
         if timeout_happened:
-            print('Setting to true in WaitBeforeVideoTest')
+            print('Setting to true in PreVideoQuestionnaire')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+
 
 
 class DescriptionVideoCommunication1(Page):
@@ -630,6 +515,8 @@ class Comprehension4(Page):
         return dict(is_dropout=is_dropout)
 
 
-page_sequence = [MyWaitPage, EnterProlificId, PartsRoundsGroups, DescriptionVideoCommunication, WaitBeforeVideoTest,
+page_sequence = [MyWaitPage, EnterProlificId, PartsRoundsGroups,
+                 PreVideoQuestionnaire,
+                 DescriptionVideoCommunication,
                  DescriptionVideoCommunication1, WaitBeforeVideo, VVC, StudyIntroduction2,
                  StudyIntroduction3, Comprehension1, Comprehension2, Comprehension3, Comprehension4]
