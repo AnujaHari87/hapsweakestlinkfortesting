@@ -40,9 +40,17 @@ def make_field(label):
         widget=widgets.RadioSelect,
     )
 
+def make_field2(label):
+    return models.IntegerField(
+        choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        label=label,
+        widget=widgets.RadioSelect,
+    )
 
 class Player(BasePlayer):
     ProlificId = models.StringField(label='Prolific ID')
+    riskFalk = make_field2(' ')
+
     holidays_1 = make_field('Sun, sea, and beach holiday.')
     holidays_2 = make_field('Party holiday.')
     holidays_3 = make_field('Winter sports holiday.')
@@ -325,6 +333,29 @@ class DescriptionVideoCommunication(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
+class PreVideoQuestionnaire(Page):
+    form_model = 'player'
+    form_fields = ['riskFalk']
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PreVideoQuestionnaire')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
 
 class WaitBeforeVideoTest(WaitPage):
     title_text = 'Please wait until all players have entered the test video meeting.'
@@ -360,7 +391,6 @@ class VVC0(Page):
         else:
             is_dropout = False
 
-
         is_dropout1 = player.group.get_player_by_id(1).is_dropout
         is_dropout2 = player.group.get_player_by_id(2).is_dropout
         is_dropout3 = player.group.get_player_by_id(3).is_dropout
@@ -388,15 +418,15 @@ class GroupWaitPage(WaitPage):
 
         for p in group.get_players():  # Assuming group.get_players() returns a list of players
             print(p.id_in_group)
-            checks = [ p.group.get_player_by_id(1).cameraCheck,
-                p.group.get_player_by_id(1).micCheck,
-                p.group.get_player_by_id(2).team1CameraCheck,
-                p.group.get_player_by_id(2).team1MicCheck,
-                p.group.get_player_by_id(3).team2CameraCheck,
-                p.group.get_player_by_id(3).team2MicCheck,
-                p.group.get_player_by_id(4).team3CameraCheck,
-                p.group.get_player_by_id(4).team3MicCheck,
-            ]
+            checks = [p.group.get_player_by_id(1).cameraCheck,
+                      p.group.get_player_by_id(1).micCheck,
+                      p.group.get_player_by_id(2).team1CameraCheck,
+                      p.group.get_player_by_id(2).team1MicCheck,
+                      p.group.get_player_by_id(3).team2CameraCheck,
+                      p.group.get_player_by_id(3).team2MicCheck,
+                      p.group.get_player_by_id(4).team3CameraCheck,
+                      p.group.get_player_by_id(4).team3MicCheck,
+                      ]
             if p.is_dropout is False:
                 # Remove checks based on dropout status
                 if p.group.get_player_by_id(1).is_dropout is True:
@@ -419,7 +449,6 @@ class GroupWaitPage(WaitPage):
                 if any(check == 0 for check in checks):
                     for player in p.get_players():
                         player.groupExit = True
-
 
     def app_after_this_page(player: Player, upcoming_apps):
         if player.groupExit:
@@ -632,6 +661,10 @@ class Comprehension4(Page):
         return dict(is_dropout=is_dropout)
 
 
-page_sequence = [MyWaitPage, EnterProlificId, PartsRoundsGroups, DescriptionVideoCommunication, WaitBeforeVideoTest,
-                 VVC0, GroupWaitPage, DescriptionVideoCommunication1, WaitBeforeVideo, VVC, StudyIntroduction2,
+page_sequence = [MyWaitPage, EnterProlificId, PartsRoundsGroups, PreVideoQuestionnaire,
+                 DescriptionVideoCommunication,
+                 # WaitBeforeVideoTest,
+                 # VVC0,
+                 #GroupWaitPage,
+                 DescriptionVideoCommunication1, WaitBeforeVideo, VVC, StudyIntroduction2,
                  StudyIntroduction3, Comprehension1, Comprehension2, Comprehension3, Comprehension4]

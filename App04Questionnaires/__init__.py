@@ -12,6 +12,25 @@ class Constants(BaseConstants):
     players_per_group = 4
     num_rounds = 1
 
+    nasa_values = dict(
+        C1=['Very_low', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
+        C2=['Very_Low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
+        C3=['Very_low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
+        C4=['Perfect', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Failure'],
+        C5=['Very_low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
+        C6=['Very_low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
+    )
+
+    nasa_values_processed = {
+    'C1': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C1']],
+         'C2': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C2']],
+         'C3': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C3']],
+         'C4': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C4']],
+         'C5': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C5']],
+         'C6': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C6']]
+    }
+
+
 
 class Subsession(BaseSubsession):
     pass
@@ -60,7 +79,12 @@ def make_field4(label):
         widget=widgets.RadioSelect,
     )
 
-
+def make_field21(label):
+    return models.IntegerField(
+        choices=[ 1, 2, 3,4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21],
+        label=label,
+        widget=widgets.RadioSelectHorizontal,
+    )
 def make_image_data(image_names):
     return [dict(name=name, path='images/{}'.format(name)) for name in image_names]
 
@@ -70,7 +94,7 @@ class Player(BasePlayer):
     payoff_quests = models.IntegerField()
     attention_check = models.IntegerField(initial=0)
     social_cohesion_short = make_field7('')
-    risk = make_field2('')
+
     time_1 = make_field2(
         'How willing are you to give up something that is beneficial for you today in order to benefit more from that in the future?')
 
@@ -199,6 +223,25 @@ class Player(BasePlayer):
         blank=True,
         label="Other"
     )
+    videoconfsfa1 = make_field('I was focusing on what I would say or do next.')
+    videoconfsfa2 = make_field('I was focusing on the impression I was making on the other person.')
+    videoconfsfa3 = make_field('I was focusing on my level of anxiety.')
+    videoconfsfa4 = make_field('I was focusing on my internal bodily reactions (for example, heart rate).')
+    videoconfsfa5 = make_field('I was focusing on past social failures.')
+
+    videoconfpc1 = make_field('I felt confident that I could stay focused on my performance.')
+    videoconfpc2 = make_field('I believed in my ability to perform.')
+    videoconfpc3 = make_field('I felt I had the resources to meet any challenges.')
+    videoconfpc4 = make_field('I believed my performance goals were achievable.')
+
+    nasatlx1 = make_field21('How mentally demanding was the task?')
+    nasatlx2 = make_field21('How physically demanding was the task')
+    nasatlx3 = make_field21('How hurried or rushed was the pace of the task?')
+    nasatlx4 = make_field21('How successful were you in accomplishing what you were asked to do?')
+    nasatlx5 = make_field21('How hard did you have to work to accomplish your level of performance?')
+    nasatlx6 = make_field21('How insecure, discouraged, irritated, stressed and annoyed were you?')
+
+
 
 
 # PAGES
@@ -237,8 +280,23 @@ class Quest02(Page):
 
 class Quest03(Page):
     form_model = 'player'
-    form_fields = ['risk']
+    form_fields = ['videoconfsfa1','videoconfsfa2','videoconfsfa3','videoconfsfa4','videoconfsfa5']
 
+
+class Quest03a(Page):
+    form_model = 'player'
+    form_fields = ['videoconfpc1','videoconfpc2','videoconfpc3','videoconfpc4']
+
+
+class Quest03NasaTLX(Page):
+    form_model = 'player'
+    form_fields = ['nasatlx1','nasatlx2','nasatlx3','nasatlx4','nasatlx5','nasatlx6']
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            Constants.nasa_values_processed
+        )
 
 class Quest04(Page):
     form_model = 'player'
@@ -346,5 +404,5 @@ class QuestEnd(Page):
         )
 
 
-page_sequence = [IntroPart3, Quest01, Quest02, Quest03, Quest04, Quest05, Quest06, Quest07, Quest07a, Quest08, Quest10,
+page_sequence = [IntroPart3, Quest01, Quest02, Quest03, Quest03a,Quest03NasaTLX, Quest04, Quest05, Quest06, Quest07, Quest07a, Quest08, Quest10,
                  Quest11, QuestDemographics, QuestEnd]
