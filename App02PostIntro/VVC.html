@@ -1,5 +1,5 @@
 {{ extends 'global/Page.html' }}
-
+{{ block title }} Virtual Team Meeting {{ endblock }}
 {{ block content }}
 
 <style>
@@ -107,11 +107,37 @@
     }
 
 </style>
-<div id="myHeader" class="otree-title page-header"><h2>Virtual Video Call</h2></div>
+<div id="myHeader" class="otree-title page-header"></div>
+
 <div id = "box1" class="my-box">
-    <div id="message"><p><b>The video meeting will last for 8 minutes.
-        After 8 minutes, you will be automatically redirected to the next page.</b>
-    </p></div>
+    <div id="message">
+    The virtual team meeting has started and you have a total of <b>7 minutes to discuss vacation types. In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
+    <br/><br/>
+
+        <div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+            <b>Note:</b>
+            <ul>
+                <li>You can click on <b>^ above the "Mute / Unmute" (microphone) icon </b>to select the microphone and speaker you want to use. This might help if your <b>currently selected microphone or speaker do not work</b>.
+                <br/>"Mute / Unmute" (microphone) icon:
+                    <img src="{% static 'Picture_Microphone.jpg' %}" alt="microphone-icon"/></li>
+                <br/>
+                <li>If you have several cameras, you can choose which camera is used by clicking on <b>^ above the "Start/Stop camera" icon</b>. It is mandatory to keep the camera turned on during the meeting.
+                <br/>"Start/Stop camera" icon:
+                    <img src="{% static 'Picture_Camera.jpg' %}" alt="camera-icon"/></li>
+                <br/>
+                <li>Optionally, you can click on the "Select background" icon and select one of the <b>gray images (they are all the same)</b> as your virtual background.
+                <br/>"Select background" icon:
+                    <img src="{% static 'Picture_Background.jpg' %}" alt="background-icon"/></li>
+            </ul>
+            <p>
+                Each team member is given a name during <b>Stage 2 and Stage 3</b>. Your name is <b>Team Member O</b> and the names of the other team members are: </b>Team Member E and I</b>.
+                <br/>
+                The names were assigned <b>randomly</b> and there is <b>no hierarchy</b> based on the names. In the Jitsi meeting, you can see the names of each team member in the <b>bottom left corner of each screen</b>.
+            </p>
+        </div>
+    </div>
+</div>
+
     <div id="videopanel" class="row">
         <div class="column left">
             <div id="meet"></div>
@@ -124,29 +150,31 @@
     <div id="nextButtonContainer" style="display:none;">
         <button id="nextButton">Next</button>
     </div>
-</div>
+
 
 <div id = "description"  type = "hidden" class="my-box1">
 
-This part consists of 5 rounds.
-<br/><br/>
-Imagine that you and the other two members of your group belong to a <b>virtual team </b>of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends <b>40 hours </b>working for the firm. You must choose how to allocate your time between two projects, <b>Project A</b> and <b>Project B</b>.
-<br/><br/>
-Project B: Think of this project as your <b>own</b> project. It has been assigned to you by the firm and you are solely responsible for the success.
-<br/><br/>
-    Project A: This project is a <b>team</b> project. The success of this project depends on all members in your virtual team and is calculated by the contribution of the team member who contributes the least.
-<br/><br/>
-<b>We will ask you how many hours per round you allocate to Project A (denoted by h<sub>A</sub>).</b>
-<br/><br/>
-The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. Your remaining hours will be put towards Project B. For example, if you devote 30 hours to Project A, this means that 10 hours will be put towards Project B.
-<br/><br/>
-For your decision you have to consider the following conditions:<br/><br/> Working on the team Project A generates a higher effort for you than on your own Project B, i.e., <b>working on Project A generates additional costs of 5 ECU per hour </b> for you which will be deducted from your personal payoff in the respective round. <br/><br/>Note further, that we will also ask the other two members of your virtual team how they allocate their time to your common Project A and their own individual Project B. <br/> <br/>
+<div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+    <div class="my-box">
+        <b>Stage 3: Instructions</b>
+        <br/><br/>
+        The decision-making task consists of <b>10 identical, consecutive rounds</b>.
+        <br/><br/>
+        Imagine that you and the other two members of your group belong to a virtual team of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends 40 hours working for the firm. You must choose how to allocate your time between two projects, Project A and Project B.
+        <br/><br/>
+        <b>Project A:</b> This project is a <b>team project</b>. The success of this project depends on all members in your virtual team and is determined by the contribution of the team member who contributes the least.
+        <br/><br/>
+        <b>Project B:</b> Think of this project as your <b>individual project</b>. It has been assigned to you by the firm and you are solely responsible for its success.
+        <br/><br/>
+        <b>In each round, we will ask you how many hours you contribute to the Team Project A.</b> The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. <b>Your remaining hours will be put towards Project B.</b> For example, if you contribute 30 hours to Project A, this means that 10 hours will be put towards Project B.
+        <br/><br/>
+        <b>For your decision, you have to consider the following conditions:</b> Working on the Team Project A generates higher costs for you than working on your Individual Project B. Specifically, each hour that you contribute to Project A instead of Project B generates additional costs of 5 ECU, which will be deducted from your personal payoff in the respective round. Note further, that we will also ask the other two members of your virtual team how they allocate their time to your Team Project A and their own Individual Project B.
+        <br/> <br/>
+        You will find detailed information on individual payoff on the next page.
+    </div>
 </div>
-<br/>
-{{next_button}}
-<br/>
 
-<br/>
+</div>
 
 <script src="https://haps-meeting.k8s.iism.kit.edu/external_api.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -160,8 +188,9 @@ For your decision you have to consider the following conditions:<br/><br/> Worki
 <script>
     console.debug("is dropout");
     const domain = "haps-meeting.k8s.iism.kit.edu"; //Here goes your domain where the meeting takes place.
-    const NameParam = {{player.id_in_group}} % 3;
-    const TN_name = "P";
+    const NameParam = {{player.id_in_group}} % 4;
+    let TN_name="";
+
     // adjust information to display
 
     const options = {
@@ -217,6 +246,31 @@ For your decision you have to consider the following conditions:<br/><br/> Worki
         api.addEventListener('videoConferenceJoined', () => {
             api.executeCommand('setTileView', true);
         });
+        /*let counter = 0;
+         let counter2;
+         let counter3;
+         let counter1 = counter2 = counter3 = 0;
+        api.addEventListener("participantJoined", async (event) => {
+            counter++;
+
+            if (counter===2) {
+
+                const participantId = event.id;
+                const participants = api.getParticipantsInfo();
+
+                participants.forEach(participant => {
+
+                     if (participantId ===participant.participantId) {
+                        participant.displayName = "O";
+
+                    } else {
+                         participant.displayName = "E";
+                    }
+                      api.executeCommand("displayName", participant.displayName);
+                });
+            }
+
+        });*/
      {% endif %}
 
     let mediaRecorder;
@@ -242,7 +296,7 @@ For your decision you have to consider the following conditions:<br/><br/> Worki
         nextBtn.style.display = "none";
         var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
         for (var i = 0; i < timerElements.length; i++) {
-            timerElements[i].style.display = 'none';
+            timerElements[i].style.visibility = 'hidden';
             // Or use: timerElements[i].style.visibility = 'hidden';
         }
         {% endif %}
@@ -409,7 +463,7 @@ For your decision you have to consider the following conditions:<br/><br/> Worki
                     stream.getTracks().forEach(track => track.stop());
                     audioStream.getTracks().forEach(track => track.stop());
                     api.dispose();
-                    document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. <br/> Please wait briefly until the upload completes.<br/> While you wait please start reading the instructions for the second part of the study below. <br/></b></p>';
+                    document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can start reading the instructions of Stage 3 below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
                     var headerElement= document.getElementById('myHeader');
                     console.debug('header element');
                     console.debug(headerElement);

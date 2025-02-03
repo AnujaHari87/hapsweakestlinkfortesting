@@ -1,5 +1,5 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}Part 2{{ endblock }}
+{{ block title }}Thank you for your valuable participation in the study thus far.{{ endblock }}
 
 {{ block content }}
 
@@ -12,10 +12,11 @@
 </style>
 
 <div class="my-box">
+    <p>Please click the "Next” button to start the task. Round {{ round_num }} will start as soon as all team members are ready.</p>
 
-    <p> On the following screen, you will proceed with the Round {{ round_num }} of Part 2.</p>
 </div>
 <br/>
 {{ next_button }}
 
 {{ endblock }}
+

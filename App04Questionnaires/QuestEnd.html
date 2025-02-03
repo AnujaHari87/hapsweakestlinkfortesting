@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 
 {% block title %}
-Result
+Thank you for participating in our study!
 {% endblock %}
 {% block content %}
 <style>
@@ -13,12 +13,25 @@ Result
 </style>
 
 <div class="my-box">
-<p> In Part 1, your fixed payment is <b>200.00 ECU.</b> <br/><br/>
-In Part 2, Round {{participant.payoff_round}} was chosen at random for payoff. <br/>Thus, your bonus payment for Part 2 is <b>{{participant.payoff_ppg}} ECU.</b><br/> <br/>
-Your total payoff for this study is <b>{{total_payoff_ecu}} ECU.</b> <br/><br/>
-This corresponds to a total payment amount of <b>GBP {{ total_payoff }}.</b> <br/>
+    <p><b>Result and Payoff:</b></p>
+    <p>Your fixed payment for this study is <b>£6.00.</b>
+    <br/><br/>
+    In Stage 3, <b>Round {{participant.payoff_round}}</b> was chosen at random to be payoff-relevant. Thus, your <b>bonus payment for Stage 3 is {{participant.payoff_ppg}}.00 ECU</b>.
+    <br/><br/>
+    This corresponds to a bonus payment of <b>£{{participant.payoff_ppg}}</b> and a total payment of <b>{{total_payoff}}</b>.
+    <!-- ANUJA (Done): I (Bella) am the one who added the "* 0.03" above, because I believe we need to give the payment amount
+    in pounds (£), but I'm not sure I found a variable for that in the Python code.
+    I think this has been already implemented in the init.py for Questionnaires-->
+    <br/><br/>
+    <b>Please paste the participation code on the Prolific website: xx<!-- Needs to be replaced by actual variable -->, or click Click <a href="?????" target="_blank" onclick="window.open(this.href, '_blank'); window.close(); return false;">here</a><!-- Needs to be replaced by the actual link.--> to finish the study and be redirected to Prolific.</b>
 </div>
 <br/>
 {{next_button}}
 
+<!-- ANUJA: You might just need to go over the amounts above please, to make sure they:
+        1. Correspond to the correct variable from the Python code.
+        2. Correctly reflect the payment, depending on whether it's in ECU or in pounds (£).
+     ALSO, the "xx" of the participant code needs to be replaced by the real variable.
+     AND, I unfortunately don't know what the "here" link is supposed to lead to. We can ask Michelle the question.
+-->
 {% endblock %}

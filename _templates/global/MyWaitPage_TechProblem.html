@@ -1,0 +1,59 @@
+{% block global_styles %}
+<style>
+
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        .my-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #ffffff;
+            text-align: center;
+            position: relative;
+        }
+        .rotating-time {
+            display: inline-block;
+            font-size: 24px;
+            margin-top: 20px;
+            animation: rotate 2s linear infinite;
+        }
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+</style>
+{% endblock %}
+
+{% block content %}
+ <div class="my-box">
+        <div id="dropout" class="dropout">
+            <p>
+                At least one of the team members stated that they could not hear and see both of the other two team members during the virtual team meeting.
+                <br/>
+                Unfortunately, the whole team cannot proceed with this study.
+                <br/><br/>
+                Please <b>return your submission</b> and, afterwards, we will <b>send you a bonus payment of <u>£4.00</u> for your time</b>.
+                <br/><br/>
+                <b>Click <a href="https://app.prolific.com" target="_blank" onclick="window.open(this.href, '_blank'); window.close(); return false;">here</a> to be redirected to Prolific.</b>
+            </p>
+        </div>
+ </div>
+<script>
+    function reloadPage() {
+        setTimeout(function() {
+            location.reload();
+        }, 5000); // Reload interval from js_vars
+    }
+    window.onload = reloadPage;
+</script>
+{% endblock %}

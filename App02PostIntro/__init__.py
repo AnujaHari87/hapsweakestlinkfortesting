@@ -40,16 +40,9 @@ def make_field(label):
         widget=widgets.RadioSelect,
     )
 
-def make_field2(label):
-    return models.IntegerField(
-        choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        label=label,
-        widget=widgets.RadioSelect,
-    )
 
 class Player(BasePlayer):
     ProlificId = models.StringField(label='Prolific ID')
-    riskFalk = make_field2(' ')
     holidays_1 = make_field('Sun, sea, and beach holiday.')
     holidays_2 = make_field('Party holiday.')
     holidays_3 = make_field('Winter sports holiday.')
@@ -63,14 +56,17 @@ class Player(BasePlayer):
     comp3_check = models.IntegerField(initial=0)
     comp4_check = models.IntegerField(initial=0)
     comprehension1 = models.IntegerField(
-        label='<br><strong>What would be your compensation if you work 0 hours on Project A '
-              'and the lowest contribution of a team member to Project A is 10 hours?</strong>', min=0, max=240)
+        label='<br><strong>What would your payoff be if you contribute 0 hours to Project A '
+              'and the minimum number of hours contributed to Project A by any team member other than yourself '
+              'is 10 hours?</strong>', min=0, max=400)
     comprehension2 = models.IntegerField(
-        label='<br><strong>What would be your compensation if you work 20 hours on Project A '
-              'and the lowest contribution of a team member to Project A is 10 hours?</strong>', min=0, max=240)
+        label='<br><strong>What would your payoff be if you contribute 20 hours to Project A and the minimum '
+              'number of hours contributed to Project A by any team member other than yourself is 10 hours?</strong>',
+              min=0, max=400)
     comprehension3 = models.IntegerField(
-        label='<br><strong>What would be your compensation if you work 40 hours on Project A '
-              'and the lowest contribution of a team member to Project A is 30 hours?</strong>', min=0, max=240)
+        label='<br><strong>What would your payoff be if you contribute 40 hours to Project A and the minimum '
+              'number of hours contributed to Project A by any team member other than yourself is 30 hours?</strong>',
+              min=0, max=400)
 
     comprehension4a = models.BooleanField(
         default=False,
@@ -101,6 +97,16 @@ class Player(BasePlayer):
         label='',
         blank=True
     )
+    no_dropout = models.BooleanField(
+        default=False,
+        label='',
+        blank=True
+    )
+    group_see_hear = models.BooleanField(
+        default=False,
+        label='',
+        blank=True
+    )
     micCheck = models.BooleanField(
         blank=True,
         label='',
@@ -114,35 +120,43 @@ class Player(BasePlayer):
     )
 
 
+    seeHear = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1']], label='',
+                                         attrs={"invisible": True})
+
+    groupExit = models.BooleanField(
+        default=False,
+        label='',
+        blank=True
+    )
 
 
 def comprehension1_error_message(player: Player, value):
     if value != 200:
         player.comp1_check += 1
         if player.comp1_check == 1:
-            return "Unfortunately, that's incorrect. Please try again."
+            return "Unfortunately, your answer is not correct. Please try again."
         if player.comp1_check >= 2:
-            return "Unfortunately, that's incorrect. The correct answer is <strong>200</strong>."
-    return None  # Allow the participant to try again if they haven't clicked incorrectly twice
+            return "Unfortunately, your answer is not correct. The correct answer is <strong>200</strong>. <strong>Please enter the correct answer</strong> and click the \"Next\" button to proceed."
+    return None  # Allow the participant to try again if they have clicked incorrectly twice
 
 
 def comprehension2_error_message(player: Player, value):
-    if value != 160:
+    if value != 200:
         player.comp2_check += 1
         if player.comp2_check == 1:
-            return "Unfortunately, that's incorrect. Please try again."
+            return "Unfortunately, your answer is not correct. Please try again."
         elif player.comp2_check >= 2:
-            return "Unfortunately, that's incorrect. The correct answer is <strong>160</strong>."
+            return "Unfortunately, your answer is not correct. The correct answer is <strong>200</strong>. <strong>Please enter the correct answer</strong> and click the \"Next\" button to proceed."
     return None
 
 
 def comprehension3_error_message(player: Player, value):
-    if value != 180:
+    if value != 300:
         player.comp3_check += 1
         if player.comp3_check == 1:
-            return "Unfortunately, that's incorrect. Please try again."
+            return "Unfortunately, your answer is not correct. Please try again."
         elif player.comp3_check >= 2:
-            return "Unfortunately, that's incorrect. The correct answer is <strong>180</strong>."
+            return "Unfortunately, your answer is not correct. The correct answer is <strong>300</strong>. <strong>Please enter the correct answer</strong> and click the \"Next\" button to proceed."
     return None
 
 
@@ -150,9 +164,9 @@ def comprehension4a_error_message(player: Player, value):
     if not value:
         player.comp4_check += 1
         if player.comp4_check == 1:
-            return "Unfortunately, that's incorrect. Please try again."
+            return "Unfortunately, your answer is not correct. Please try again."
         elif player.comp4_check >= 2:
-            return "Unfortunately, that's incorrect. Your compensation depends on the <strong>number of hours you work on Project A</strong> and the <strong>fewest number of hours worked by a member of your team on Project A</strong>."
+            return "Unfortunately, your answer is not correct. The correct answer is that your payoff depends on the <strong>number of hours you contribute to Project A</strong> and the <strong>minimum number of hours contributed to Project A by a team member other than yourself</strong>. <strong>Please select the correct answers and click the \"Next\" button to proceed.</strong>"
     return None
 
 
@@ -160,9 +174,9 @@ def comprehension4b_error_message(player: Player, value):
     if value:
         player.comp4_check += 1
         if player.comp4_check == 1:
-            return "Unfortunately, that's incorrect. Please try again."
+            return "Unfortunately, your answer is not correct. Please try again."
         elif player.comp4_check >= 2:
-            return "Unfortunately, that's incorrect. Your compensation depends on the <strong>number of hours you work on Project A</strong> and the <strong>fewest number of hours worked by a member of your team on Project A</strong>."
+            return "Unfortunately, your answer is not correct. The correct answer is that your payoff depends on the <strong>number of hours you contribute to Project A</strong> and the <strong>minimum number of hours contributed to Project A by a team member other than yourself</strong>. <strong>Please select the correct answers and click the Next button to proceed.</strong>"
     return None
 
 
@@ -170,20 +184,24 @@ def comprehension4c_error_message(player: Player, value):
     if not value:
         player.comp4_check += 1
         if player.comp4_check == 1:
-            return "Unfortunately, that's incorrect. Please try again."
+            return "Unfortunately, your answer is not correct. Please try again."
         elif player.comp4_check >= 2:
-            return "Unfortunately, that's incorrect. Your compensation depends on the <strong>number of hours you work on Project A</strong> and the <strong>fewest number of hours worked by a member of your team on Project A</strong>."
+            return "Unfortunately, your answer is not correct. The correct answer is that your payoff depends on the <strong>number of hours you contribute to Project A</strong> and the <strong>minimum number of hours contributed to Project A by a team member other than yourself</strong>. <strong>Please select the correct answers and click the Next button to proceed.</strong>"
     return None
 
 
-class MyWaitPage(WaitPage):
+class MyWaitPageStage2Instructions(WaitPage):
     group_by_arrival_time = True
     body_text = "Please wait until your team members arrive."
+    @staticmethod
+    def vars_for_template(player):
+        return dict(waiting_count=player.subsession.waitCount)
+
 
     @staticmethod
     def get_template_name():
         # Use a standard oTree template and modify it with JavaScript
-        return 'global/MyWaitPage2.html'
+        return 'global/MyWaitPage_Stage2Instructions.html'
 
     @staticmethod
     def after_all_players_arrive(group: Group):
@@ -194,6 +212,27 @@ class MyWaitPage(WaitPage):
         duration = end_time - start_time
         print(f"after_all_players_arrive took {duration} seconds")
 
+class MyWaitPage_PreVirtualMeeting(WaitPage):
+    body_text = "Please wait until your team members arrive."
+
+    @staticmethod
+    def get_template_name():
+        # Use a standard oTree template and modify it with JavaScript
+        return 'global/MyWaitPage_PreVirtualMeeting.html'
+
+    def vars_for_template(player):
+        no_dropout = all(p.is_dropout is False for p in player.group.get_players())
+        return dict(no_dropout =no_dropout)
+
+
+    @staticmethod
+    def after_all_players_arrive(group: Group):
+        import time
+        start_time = time.time()
+        group.session.vars['group_matrix'] = group.subsession.get_group_matrix()
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"after_all_players_arrive took {duration} seconds")
 
 class EnterProlificId(Page):
     form_model = 'player'
@@ -298,28 +337,87 @@ class DescriptionVideoCommunication(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
-class PreVideoQuestionnaire(Page):
+class GenInstructions1(Page):
     form_model = 'player'
-    form_fields = ['riskFalk']
+
+
+class WaitBeforeVideoTest(WaitPage):
+    title_text = 'Please wait until all players have entered the test video meeting.'
+
     def get_timeout_seconds(player):
         participant = player.participant
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
             return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in WaitBeforeVideoTest')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+
+class VVC0(Page):
+    form_model = 'player'
+    form_fields = ['micCheck', 'cameraCheck', 'team1MicCheck', 'team2MicCheck', 'team3MicCheck',
+                   'team1CameraCheck', 'team2CameraCheck', 'team3CameraCheck']
+
+    def before_next_page(player: Player, timeout_happened):
+        if not timeout_happened:
+            player.participant.vars['cameraCheck'] = player.cameraCheck
+            player.participant.vars['micCheck'] = player.micCheck
+            player.participant.vars['wait_page_arrival'] = time.time()
+
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
         else:
             is_dropout = False
+
+
+        is_dropout1 = player.group.get_player_by_id(1).is_dropout
+        is_dropout2 = player.group.get_player_by_id(2).is_dropout
+        is_dropout3 = player.group.get_player_by_id(3).is_dropout
+
+        return dict(
+            dropouts={
+                player.group.get_player_by_id(1).is_dropout,
+                player.group.get_player_by_id(2).is_dropout,
+                player.group.get_player_by_id(3).is_dropout},
+            is_dropout=is_dropout,
+            is_dropout1=is_dropout1,
+            is_dropout2=is_dropout2,
+            is_dropout3=is_dropout3
+        )
+
         return dict(is_dropout=is_dropout)
+
+
+class GroupWaitPage(WaitPage):
+    body_text = 'Please wait until all players in your group have completed the test video meeting.'
+
+
+
+
+
+
+    def app_after_this_page(player: Player, upcoming_apps):
+        if player.groupExit:
+            return 'App09TeamExitThankYou'
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
     def before_next_page(player, timeout_happened):
         if timeout_happened:
-            print('Setting to true in PreVideoQuestionnaire')
+            print('Setting to true in WaitBeforeVideoTest')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
-
-
 
 
 class DescriptionVideoCommunication1(Page):
@@ -353,7 +451,7 @@ class WaitBeforeVideo(WaitPage):
 
 class VVC(Page):
     form_model = 'player'
-    timeout_seconds = 660
+    timeout_seconds = 600
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -367,6 +465,29 @@ class VVC(Page):
             is_dropout = False
         return dict(is_dropout=is_dropout)
 
+
+class StudyIntroduction1(Page):
+    form_model = 'player'
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in StudyIntroduction1')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
 
 class StudyIntroduction2(Page):
     form_model = 'player'
@@ -514,9 +635,72 @@ class Comprehension4(Page):
             is_dropout = False
         return dict(is_dropout=is_dropout)
 
+class PostVVCQuestionnaire(Page):
+    # ANUJA (Done): Please check how the page sends you to other pages.
+    form_model = 'player'
+    form_fields = ['seeHear']
 
-page_sequence = [MyWaitPage, EnterProlificId, PartsRoundsGroups,
-                 PreVideoQuestionnaire,
-                 DescriptionVideoCommunication,
-                 DescriptionVideoCommunication1, WaitBeforeVideo, VVC, StudyIntroduction2,
-                 StudyIntroduction3, Comprehension1, Comprehension2, Comprehension3, Comprehension4]
+
+
+
+class MyWaitPage_TechProblem(WaitPage):
+    body_text = "Please wait until your team members arrive."
+
+    @staticmethod
+    def get_template_name():
+        # Use a standard oTree template and modify it with JavaScript
+        return 'global/MyWaitPage_TechProblem.html'
+
+    def is_displayed(player):
+        group_see_hear = True
+        return player.seeHear == False
+
+
+
+class MyWaitPage_PostTechCheck(WaitPage):
+    body_text = "Please wait until your team members arrive."
+
+    @staticmethod
+    def get_template_name():
+        # Use a standard oTree template and modify it with JavaScript
+        return 'global/MyWaitPage_PostTechCheck.html'
+
+    def is_displayed(player):
+        group_see_hear = True
+        #for p in player.group.get_players():
+         #   if p.seeHear is None or p.seeHear != 1:
+         #       group_see_hear = False
+         #       break
+        return player.seeHear == True
+
+    def vars_for_template(player):
+        no_dropout = all(p.is_dropout is False for p in player.group.get_players())
+        group_see_hear=all(p.seeHear is True for p in player.group.get_players())
+        return dict(no_dropout =no_dropout,
+                    group_see_hear = group_see_hear)
+
+
+
+
+page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
+                  MyWaitPage_PreVirtualMeeting, VVC, PostVVCQuestionnaire,MyWaitPage_TechProblem,MyWaitPage_PostTechCheck,
+                  StudyIntroduction1, StudyIntroduction2, StudyIntroduction3, Comprehension1, Comprehension2,
+                  Comprehension3, Comprehension4]
+
+# Comments from Bella:
+# The page sequence needs to be updated to be the following:
+# page_sequence = [MyWaitPage_Stage2Instructions (optional add-on for the waiting time above 5 minutes),
+#                  PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
+#                  MyWaitPage_PreVirtualMeeting, VVC, PostVVCQuestionnaire, [TechProblem and/or PostTechCheck],
+#                  StudyIntroduction1, StudyIntroduction2, StudyIntroduction3, Comprehension1, Comprehension2,
+#                  Comprehension3, Comprehension4]
+# IMPORTANT NOTES:
+#     - There are now only 3 team members per group.
+#     - The DescriptionVideoCommunication page where the team members get to know each other will now last 7, instead
+#       of 8 minutes.
+#
+# NEW NOTES FOR ANUJA FROM BELLA:
+#     - I tried to implement the checkbox on page GenInstructions1, but needs to be checked by Anuja (Done).
+#     - I tried to implement the two radio buttons on page _templates.global.TechProblem, but need to be checked also.
+#     - I also tried to add the two pages PostVVCQuestionnaire and _templates.global.MyWaitPage_TechProblem in their
+#       Python files, but also needs to be checked if it was done correctly.

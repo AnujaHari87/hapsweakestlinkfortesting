@@ -22,8 +22,10 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    ProlificId = models.StringField(label='Prolific ID')
+    ProlificId = models.StringField(label='Please enter your Prolific ID so that we can pay you.')
     consent = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1']], label='Consent',
+                                  attrs={"invisible": True})
+    eligibility = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1']], label='Eligibility',
                                   attrs={"invisible": True})
     optInConsent = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Opt-In Consent',
                                        attrs={"invisible": True})
@@ -36,6 +38,16 @@ class Player(BasePlayer):
 def wait_for_all(group: Group):
     pass
 
+class EligibilityCheck(Page):
+    form_model = 'player'
+    form_fields = ['eligibility']
+
+    @staticmethod
+    def app_after_this_page(player: Player, upcoming_apps):
+        if player.eligibility == 0:
+            return 'App07bEligibilityThankYou'
+        # NOTE FOR BELLA: Put the right page if the user says 'No'! ! ! !
+
 class GeneralInformation(Page):
     form_model = 'player'
 
@@ -43,36 +55,48 @@ class GeneralInformation(Page):
 class ConsentFormA(Page):
     form_model = 'player'
 
-
-class ConsentFormB(Page):
+class ConsentFormA2(Page):
     form_model = 'player'
-    form_fields = ['consent', 'optInConsent']
+    form_fields = ['optInConsent']
 
     def before_next_page(player: Player, timeout_happened):
         if not timeout_happened:
             player.participant.vars['optInConsent'] = player.optInConsent
+
+
+class ConsentFormB(Page):
+    form_model = 'player'
+    form_fields = ['consent']
+
+    def before_next_page(player: Player, timeout_happened):
+        if not timeout_happened:
             player.participant.vars['consent'] = player.consent
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
         if player.consent == 0:
-            return 'App07ConsentThankYou'
+            return 'App01bConsentAndCheck'
+        else:
+            return 'App01cConsentAndCheck'
 
 
-class AudioVideoCheck(Page):
-    form_model = 'player'
-    form_fields = ['colorVideo', 'numberVideo']
 
-    def before_next_page(player: Player, timeout_happened):
-        if not timeout_happened:
-            player.participant.vars['colorVideo'] = player.colorVideo
-            player.participant.vars['numberVideo'] = player.numberVideo
-            player.participant.vars['wait_page_arrival'] = time.time()
+page_sequence = [EligibilityCheck, ConsentFormA, ConsentFormA2, ConsentFormB]
+# From Bella:
+# New page sequence:
+# page_sequence = [EligibilityCheck, ConsentFormA, ConsentFormA2, ConsentFormB, [ConsentFormB2],
+#                  EnterProlificId, GeneralInformation, GeneralInformation2, AudioVideoCheck, AudioVideoCheck2,
+#                  AudioVideoCheck3]
+# I created a new page called "Eligibility Check", as it seems to be a new one added to the experiment.
+# I split the ConsentFormA into ConsentFormA and ConsentFormA2, because the content of ConsentFormA was separated into
+# two different pages. It needs to be added to the page sequence of the Python file.
+# I also added the page ConsentFormB2, however I put it in brackets in the page sequence above, because ConsentFormB2
+# must be displayed to users ONLY if they click "NO".
+# The page GeneralInformation now must go after ConsentFormB2.
+# Also added the page GeneralInformation2 right after GeneralInformation, because the study information has been split
+# into two pages (first page with general info, and the second one with payment information).
+# The pages PartsRoundsGroups and VVC0 seem to have been removed from the experiment.
+# The page AudioVideoCheck seems to now be split into 3 different pages.
 
-    @staticmethod
-    def app_after_this_page(player: Player, upcoming_apps):
-        if player.numberVideo != 2 or player.colorVideo != 3:
-            return 'App06ThankYou'
-
-
-page_sequence = [GeneralInformation, ConsentFormA, ConsentFormB, AudioVideoCheck]
+# NOTE FOR BELLA: Put the right page if the user says 'No'! ! ! ! You will need to create a new app (with the folder
+# and all for it)!

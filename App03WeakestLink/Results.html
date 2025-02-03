@@ -1,5 +1,5 @@
 {{ block title }}
-    Result - Round {{ round_num }}
+    Results - Round {{ round_num }}
 {{ endblock }}
 
 {{ block content }}
@@ -10,23 +10,26 @@
             background-color: #f9f9f9;
         }
 </style>
- <div class="my-box">
-<p>
-     {{  if dropout_count > 0}}
-      <p>  {{dropout_count}} team member(s) did not proceed to the next page or did not reach a decision in due time and, thus were tagged as a “dropout”. <br/>
-       <b>Decisions (especially number of hours contributed to Project A) of “dropout” team members are <u>no longer relevant for the calculation of your payoff. </u> </b> </p>
-     {{ else }}
+     <div class="my-box">
+        <p>
 
-    {{ endif }}
+            {{  if dropout_count > 0}}
+            <div>
+              <p>  {{dropout_count}} team member(s) did not proceed to the next page or did not reach a decision in due time and, thus were tagged as a “dropout”. <br/>
+               <b>Decisions (especially number of hours contributed to Project A) of “dropout” team members are <u>no longer relevant for the calculation of your payoff. </u> </b> </p>
+               </div>
+             {{ else }}
+                 You contributed <strong>{{ player.ownDecision }} hours</strong> to Project A.
+                <br/><br/>
+                In this round, the minimum number of hours allocated to Project A in your team was <strong>{{ group.groupMin }} hours</strong>.
+                <br><br>
+                Thus, your payoff in this round is <strong>{{ player.payoff_hypo }}</strong> ECU.
+            {{ endif }} <!-- ANUJA (Done): I'm not sure what this does and if it's still relevant.
+             is there an else part needed to this?-->
 
-    In this round, the minimum number of hours allocated to Project A from any of your virtual team members was
-    <strong>{{ group.groupMin }} hours</strong>.
-    <br><br>
-    You have decided to work <strong>{{ player.ownDecision }} hours</strong> on Project A. <br/><br/>Therefore, your compensation for this round amounts to <strong>{{ player.payoff_hypo }} ECU</strong>.
 
-
-</p>
- </div>
+        </p>
+     </div>
 <br/>
 {{ next_button }}
 {{ endblock }}

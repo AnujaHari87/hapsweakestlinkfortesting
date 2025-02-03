@@ -17,7 +17,7 @@ def make_field(label):
 class C(BaseConstants):
     NAME_IN_URL = 'App03WeakestLink'
     PLAYERS_PER_GROUP = 3
-    NUM_ROUNDS = 5
+    NUM_ROUNDS = 10
     ENDOWMENT = 200
 
 
@@ -34,13 +34,14 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    ownDecision = make_field("Please choose one")
+    ownDecision = make_field("") # ANUJA (Done): There is no longer any "Please choose one" in the texts, so I just left some empty quotation marks, if that's OK?
     payoff_hypo = models.IntegerField()
     is_dropout = models.BooleanField(
         default=False,
         label='',
         blank=True
     )
+    # ANUJA: I'm not sure where in the code exactly, but the calculation of the payout for the participant will need to be changed to match the new compensation table.
 
 
 class Decision(Page):
@@ -70,7 +71,8 @@ class Decision(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        return dict(round_num=player.round_number)
+        dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        return dict(round_num=player.round_number, dropout_count = dropout_count)
 
 
 class CalculatePayoff(WaitPage):
@@ -86,8 +88,13 @@ class CalculatePayoff(WaitPage):
             'waiting_count': waiting_count
         }
 
-    def get_template_name(self):
-        return 'global/MyWaitPage.html'
+    # ANUJA: Had to split the page MyWaitPage in two, because the two Waiting Pages of this section are now different.
+    # Named the 1st one “MyWaitPage_Description” and added this in the following snippet of code (hope that’s correct):
+    def get_template_name(player):
+        if player.group.round_number == 1:
+            return 'global/MyWaitPage_Description.html'
+        else:
+            return 'global/MyWaitPage_Decision.html'
 
     def js_vars(self):
         return {
@@ -119,9 +126,9 @@ class CalculatePayoff(WaitPage):
             p.payoff_hypo = C.ENDOWMENT + (6 * group.groupMin) - (5 * p.ownDecision)
 
         # Additional logic for round number 5
-        if group.round_number == 5:
+        if group.round_number == 10:
             print('we are getting here')
-            group.randomNumber = random.choice(range(1, 6))
+            group.randomNumber = random.choice(range(1, 11))
             for p in group.get_players():
                 p_past = p.in_round(group.randomNumber)
                 g_past = group.in_round(group.randomNumber)
@@ -195,3 +202,12 @@ class Description(Page):
 
 
 page_sequence = [Description, Decision, CalculatePayoff, Results]
+
+
+# NOTES FOR ANUJA FROM BELLA:
+#      - Created a MyWaitPage_Description to go after the Description page above, and a MyWaitPage_Decision to go after
+#        the decision page above. You might need to please double check that I connected the pages correctly.
+#        PS: The only difference in the text is in the first sentence: "finished with reading the instructions and
+#            answering the comprehension questions" in page MyWaitPage_Description, and it's changed to "finished with
+#            their decision" in the page MyWaitPage_Decision. So perhaps alternatively, this could maybe even be a
+#            variable if it's easier to implement?

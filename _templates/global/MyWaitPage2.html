@@ -39,33 +39,35 @@
 
 {{ if player.waitpage_too_long == True }}
  <div class="my-box">
-    <div id="dropout" class="dropout">
-        You already waited for more than <b>five minutes</B> to create a group.
-        <br>
-        <br>
-        If you do not want to wait longer, you have now the opportunity to leave the study.
-        <br>
-        <br>
-        In this case, we will <b>send you a bonus payment of <u>£1.50</u> for your time</b>.
-        <br>
-        <br>
-        If you leave this study, <b>please close this tab!</b>
-        <br>
-        <b>Click
-            <a href="https://app.prolific.com"
-               target="_blank"
-               onclick="window.open(this.href, '_blank'); window.close(); return false;">
-                <b>here</b>
-            </a>
-            to be redirected to Prolific.</b>
-
-        <br>
-    </div>
+     <div id="dropout" class="dropout" style="background-color: #FF7F7F; padding: 10px; margin: 0;">
+            You already waited for more than <b>five minutes</b> to create a team for Stage 2.
+            <br>
+            <br>
+            If you do not wish to wait longer, you have now the opportunity to leave the study now.
+            <br>
+            <br>
+            In this case, <b>please return your submission</b> and, afterwards, we will <b> send you a bonus payment of <u>£1.50</u> for your time</b>.
+            <br>
+            <br>
+            If you leave this study, <b>please close this tab!</b>
+            <br>
+            <b>Click
+                <a href="https://app.prolific.com"
+                   target="_blank"
+                   onclick="window.open(this.href, '_blank'); window.close(); return false;">
+                    <b>here</b>
+                </a>
+                to be redirected to Prolific.</b>
+            <br>
+            <br>
+            If you leave the study now, you still might have the opportunity to participant in Part 2 of this study at a later time.
+            <br>
+        </div>
   </div>
 {{ else }}
     <div class="my-box">
         <h2>Please wait until your team members arrive.</h2>
-        <p id="player-count"> {{ subsession.waitCount }} out of 3 players have arrived.</p>
+        <p id="player-count"> {{ subsession.waitCount }} out of 4 players have arrived.</p>
         <div class="rotating-time">⏳</div>
 
     </div>

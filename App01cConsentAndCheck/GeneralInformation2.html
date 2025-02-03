@@ -1,0 +1,30 @@
+{{ extends 'global/Page.html' }}
+{{ block title }} Payoff{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    We use the "ECU" currency for the study. It will be converted into <b>GBP (£)</b> for payoff at the end of the study. <b> <br/> In this study, 10 ECU = £0.20.</b>
+    <br/> <br/>
+    If you are not able to proceed with the study during Stage 1, you will not get any payoff and need to return your submission.
+    <br/>
+    You will receive a <b>fixed payment of £6.00 for your participation in the study</b>.<br/>
+    <br/>
+    <b>You may also receive an additional bonus payment in Stage 3. You will receive more detailed information before the start of Stage 3.</b>
+    <br/><br/>
+    Note: None of the participants will know how much another participant has been paid.
+</div>
+
+<br/><br/>
+{{ next_button }}
+
+{{ endblock }}
