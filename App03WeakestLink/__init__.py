@@ -123,7 +123,7 @@ class CalculatePayoff(WaitPage):
         group.groupMin = min(p.ownDecision for p in group.get_players())
 
         for p in group.get_players():
-            p.payoff_hypo = C.ENDOWMENT + (6 * group.groupMin) - (5 * p.ownDecision)
+            p.payoff_hypo = C.ENDOWMENT + (10 * group.groupMin) - (5 * p.ownDecision)
 
         # Additional logic for round number 5
         if group.round_number == 10:
@@ -132,7 +132,7 @@ class CalculatePayoff(WaitPage):
             for p in group.get_players():
                 p_past = p.in_round(group.randomNumber)
                 g_past = group.in_round(group.randomNumber)
-                p.payoff = C.ENDOWMENT + (6 * g_past.groupMin) - (5 * p_past.ownDecision)
+                p.payoff = C.ENDOWMENT + (10 * g_past.groupMin) - (5 * p_past.ownDecision)
                 part = p.participant
                 part.payoff_ppg = p.payoff
                 part.payoff_round = group.randomNumber
