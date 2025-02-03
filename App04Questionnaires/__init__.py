@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from otree.api import *
 
 c = Currency
@@ -241,6 +242,10 @@ class Player(BasePlayer):
     nasatlx5 = make_field21('How hard did you have to work to accomplish your level of performance?')
     nasatlx6 = make_field21('How insecure, discouraged, irritated, stressed and annoyed were you?')
 
+    def clean(self):
+        super().clean()
+        if self.age < 18:
+            raise ValidationError({"age": "You must be between 18 years old and 66 years."})
 
 
 

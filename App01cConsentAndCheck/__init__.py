@@ -68,8 +68,50 @@ class EnterProlificId(Page):
 class GeneralInformation(Page):
     form_model = 'player'
 
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In PartsRoundsGroups')
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PartsRoundsGroups')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
 class GeneralInformation2(Page):
     form_model = 'player'
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In PartsRoundsGroups')
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PartsRoundsGroups')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
 
 
 class AudioVideoCheck(Page):
@@ -84,6 +126,9 @@ class AudioVideoCheck(Page):
 class AudioVideoCheck2(Page):
     form_model = 'player'
 
+    def before_next_page(player: Player, timeout_happened):
+        if not timeout_happened:
+            player.participant.vars['wait_page_arrival'] = time.time()
 
 class AudioVideoCheck3(Page):
     form_model = 'player'

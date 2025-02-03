@@ -339,6 +339,25 @@ class DescriptionVideoCommunication(Page):
 
 class GenInstructions1(Page):
     form_model = 'player'
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in GenInstructions1')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
 
 
 class WaitBeforeVideoTest(WaitPage):
@@ -396,11 +415,6 @@ class VVC0(Page):
 
 class GroupWaitPage(WaitPage):
     body_text = 'Please wait until all players in your group have completed the test video meeting.'
-
-
-
-
-
 
     def app_after_this_page(player: Player, upcoming_apps):
         if player.groupExit:
@@ -636,10 +650,27 @@ class Comprehension4(Page):
         return dict(is_dropout=is_dropout)
 
 class PostVVCQuestionnaire(Page):
-    # ANUJA (Done): Please check how the page sends you to other pages.
     form_model = 'player'
     form_fields = ['seeHear']
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
 
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PostVVCQuestionnaire')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
 
 
 
@@ -654,6 +685,13 @@ class MyWaitPage_TechProblem(WaitPage):
     def is_displayed(player):
         group_see_hear = True
         return player.seeHear == False
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = player.seeHear
+        return dict(is_dropout=is_dropout)
 
 
 
