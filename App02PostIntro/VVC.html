@@ -1,7 +1,6 @@
 {{ extends 'global/Page.html' }}
 {{ block title }} Virtual Team Meeting {{ endblock }}
 {{ block content }}
-
 <style>
     .column {
         float: left;
@@ -108,7 +107,6 @@
 
 </style>
 <div id="myHeader" class="otree-title page-header"></div>
-
 <div id = "box1" class="my-box">
     <div id="message">
     The virtual team meeting has started and you have a total of <b>7 minutes to discuss vacation types. In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
@@ -281,11 +279,18 @@
     let recordedAudioChunks = [];
 
     document.addEventListener('DOMContentLoaded', async function () {
+
+        let timerElement = document.querySelector('.otree-timer');
+        if (timerElement) {
+            timerElement.style.visibility = 'hidden';  // Hides the timer
+        }
+
        const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
 
           {% if is_dropout == True %}
                 var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                 for (var i = 0; i < timerElements.length; i++) {
+                    timerElements[i].style.visibility = 'hidden';
                     timerElements[i].style.display = 'none';
                 }
                    nextBtn.style.display = "block";
@@ -297,6 +302,7 @@
         var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
         for (var i = 0; i < timerElements.length; i++) {
             timerElements[i].style.visibility = 'hidden';
+            timerElements[i].style.display = 'none';
             // Or use: timerElements[i].style.visibility = 'hidden';
         }
         {% endif %}
@@ -375,6 +381,7 @@
 
                         var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                         for (var i = 0; i < timerElements.length; i++) {
+                            timerElements[i].style.visibility = 'hidden';
                             timerElements[i].style.display = 'none';
                         }
                     } else {
@@ -383,6 +390,7 @@
                         document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
                         var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                         for (var i = 0; i < timerElements.length; i++) {
+                            timerElements[i].style.visibility = 'hidden';
                             timerElements[i].style.display = 'none';
                         }
 
@@ -393,6 +401,7 @@
                     document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
                     var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                         for (var i = 0; i < timerElements.length; i++) {
+                            timerElements[i].style.visibility = 'hidden';
                             timerElements[i].style.display = 'none';
                     }
 
@@ -455,7 +464,7 @@
             audioRecorder.start();
             console.log('Media recorders started.');
 
-            // Stop recording after 15 minutes
+            // Stop recording after 7 minutes
             $('.otree-timer__time-left').on('update.countdown', function (event) {
                 if (event.offset.totalSeconds === 181) {
                     mediaRecorder.stop();

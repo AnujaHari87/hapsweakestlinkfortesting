@@ -103,7 +103,7 @@ class Player(BasePlayer):
         blank=True
     )
     group_see_hear = models.BooleanField(
-        default=False,
+        default=True,
         label='',
         blank=True
     )
@@ -672,6 +672,13 @@ class PostVVCQuestionnaire(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
+    def app_after_this_page(player, upcoming_apps):
+        if player.seeHear==False:
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+            for p in player.group.get_players(): p.is_dropout = True
+            return 'App09TeamExitThankYou'
+
 
 
 class MyWaitPage_TechProblem(WaitPage):
@@ -682,15 +689,21 @@ class MyWaitPage_TechProblem(WaitPage):
         # Use a standard oTree template and modify it with JavaScript
         return 'global/MyWaitPage_TechProblem.html'
 
+
     def is_displayed(player):
-        group_see_hear = True
+        player.group_see_hear = player.group_see_hear  and (player.seeHear)
         return player.seeHear == False
+
+    def app_after_this_page(player, upcoming_apps):
+        if not player.group_see_hear:
+            return 'App09TeamExitThankYou'
 
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
         else:
-            is_dropout = player.seeHear
+            is_dropout = False
+        is_dropout = is_dropout and player.seeHear
         return dict(is_dropout=is_dropout)
 
 
@@ -704,20 +717,13 @@ class MyWaitPage_PostTechCheck(WaitPage):
         return 'global/MyWaitPage_PostTechCheck.html'
 
     def is_displayed(player):
-        group_see_hear = True
-        #for p in player.group.get_players():
-         #   if p.seeHear is None or p.seeHear != 1:
-         #       group_see_hear = False
-         #       break
+        player.group_see_hear = player.group_see_hear and (player.seeHear)
         return player.seeHear == True
 
     def vars_for_template(player):
-        no_dropout = all(p.is_dropout is False for p in player.group.get_players())
-        group_see_hear=all(p.seeHear is True for p in player.group.get_players())
+        no_dropout = all(p.is_dropout is False and p.group_see_hear is True for p in player.group.get_players())
         return dict(no_dropout =no_dropout,
-                    group_see_hear = group_see_hear)
-
-
+                    group_see_hear =  player.group_see_hear)
 
 
 page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
