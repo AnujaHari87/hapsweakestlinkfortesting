@@ -17,4 +17,11 @@ class ThankYouExit(Page):
     form_model = 'player'
 
 
-page_sequence = [ThankYouExit]
+class MyWaitPage_TechProblem(WaitPage):
+    @staticmethod
+    def get_template_name():
+        # Use a standard oTree template and modify it with JavaScript
+        return 'global/MyWaitPage_TechProblem.html'
+
+
+page_sequence = [MyWaitPage_TechProblem, ThankYouExit]

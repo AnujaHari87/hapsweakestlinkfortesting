@@ -413,25 +413,6 @@ class VVC0(Page):
         return dict(is_dropout=is_dropout)
 
 
-class GroupWaitPage(WaitPage):
-    body_text = 'Please wait until all players in your group have completed the test video meeting.'
-
-    def app_after_this_page(player: Player, upcoming_apps):
-        if player.groupExit:
-            return 'App09TeamExitThankYou'
-
-    def get_timeout_seconds(player):
-        participant = player.participant
-        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
-            return 1  # instant timeout, 1 second
-        else:
-            return 5 * 60
-
-    def before_next_page(player, timeout_happened):
-        if timeout_happened:
-            print('Setting to true in WaitBeforeVideoTest')
-            player.participant.vars['is_dropout'] = True
-            player.is_dropout = True
 
 
 class DescriptionVideoCommunication1(Page):
@@ -672,40 +653,20 @@ class PostVVCQuestionnaire(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
-    def app_after_this_page(player, upcoming_apps):
-        if player.seeHear==False:
-            player.participant.vars['is_dropout'] = True
-            player.is_dropout = True
-            for p in player.group.get_players(): p.is_dropout = True
-            return 'App09TeamExitThankYou'
 
 
-
-class MyWaitPage_TechProblem(WaitPage):
+class MyWaitPagePostVVC(WaitPage):
     body_text = "Please wait until your team members arrive."
 
     @staticmethod
-    def get_template_name():
-        # Use a standard oTree template and modify it with JavaScript
-        return 'global/MyWaitPage_TechProblem.html'
+    def after_all_players_arrive(group: Group):
+        groupReady = all(p.seeHear for p in group.get_players())  # No need for 'is True'
+        for p in group.get_players():
+            p.groupExit = not groupReady
 
-
-    def is_displayed(player):
-        player.group_see_hear = player.group_see_hear  and (player.seeHear)
-        return player.seeHear == False
-
-    def app_after_this_page(player, upcoming_apps):
-        if not player.group_see_hear:
-            return 'App09TeamExitThankYou'
-
-    def vars_for_template(player: Player):
-        if 'is_dropout' in player.participant.vars:
-            is_dropout = player.participant.vars['is_dropout']
-        else:
-            is_dropout = False
-        is_dropout = is_dropout and player.seeHear
-        return dict(is_dropout=is_dropout)
-
+    def app_after_this_page(player: Player, upcoming_apps):
+            if player.groupExit:
+                return 'App09TeamExitThankYou'
 
 
 class MyWaitPage_PostTechCheck(WaitPage):
@@ -717,17 +678,15 @@ class MyWaitPage_PostTechCheck(WaitPage):
         return 'global/MyWaitPage_PostTechCheck.html'
 
     def is_displayed(player):
-        player.group_see_hear = player.group_see_hear and (player.seeHear)
-        return player.seeHear == True
+        return player.groupExit == False
 
     def vars_for_template(player):
-        no_dropout = all(p.is_dropout is False and p.group_see_hear is True for p in player.group.get_players())
-        return dict(no_dropout =no_dropout,
-                    group_see_hear =  player.group_see_hear)
+        no_dropout = all(p.is_dropout is False for p in player.group.get_players())
+        return dict(no_dropout =no_dropout)
 
 
 page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
-                  MyWaitPage_PreVirtualMeeting, VVC, PostVVCQuestionnaire,MyWaitPage_TechProblem,MyWaitPage_PostTechCheck,
+                  MyWaitPage_PreVirtualMeeting, VVC, PostVVCQuestionnaire,MyWaitPagePostVVC,MyWaitPage_PostTechCheck,
                   StudyIntroduction1, StudyIntroduction2, StudyIntroduction3, Comprehension1, Comprehension2,
                   Comprehension3, Comprehension4]
 
