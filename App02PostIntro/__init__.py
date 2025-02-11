@@ -197,7 +197,6 @@ class MyWaitPageStage2Instructions(WaitPage):
     def vars_for_template(player):
         return dict(waiting_count=player.subsession.waitCount)
 
-
     @staticmethod
     def get_template_name():
         # Use a standard oTree template and modify it with JavaScript
@@ -212,6 +211,22 @@ class MyWaitPageStage2Instructions(WaitPage):
         duration = end_time - start_time
         print(f"after_all_players_arrive took {duration} seconds")
 
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In MyWaitPageStage2Instructions')
+            player.is_dropout = True
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting dropout to true in MyWaitPageStage2Instructions')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+
 class MyWaitPage_PreVirtualMeeting(WaitPage):
     body_text = "Please wait until your team members arrive."
 
@@ -224,6 +239,22 @@ class MyWaitPage_PreVirtualMeeting(WaitPage):
         no_dropout = all(p.is_dropout is False for p in player.group.get_players())
         return dict(no_dropout =no_dropout)
 
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In PartsRoundsGroups')
+            player.is_dropout = True
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PartsRoundsGroups')
+            print('Setting dropout to true in PartsRoundsGroups')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
 
     @staticmethod
     def after_all_players_arrive(group: Group):
@@ -234,30 +265,6 @@ class MyWaitPage_PreVirtualMeeting(WaitPage):
         duration = end_time - start_time
         print(f"after_all_players_arrive took {duration} seconds")
 
-class EnterProlificId(Page):
-    form_model = 'player'
-    form_fields = ['ProlificId']
-
-    def get_timeout_seconds(player):
-        participant = player.participant
-        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
-            print('In PartsRoundsGroups')
-            return 1  # instant timeout, 1 second
-        else:
-            return 5 * 60
-
-    def before_next_page(player, timeout_happened):
-        if timeout_happened:
-            print('Setting to true in PartsRoundsGroups')
-            player.participant.vars['is_dropout'] = True
-            player.is_dropout = True
-
-    def vars_for_template(player: Player):
-        if 'is_dropout' in player.participant.vars:
-            is_dropout = player.participant.vars['is_dropout']
-        else:
-            is_dropout = False
-        return dict(is_dropout=is_dropout)
 
 
 class PartsRoundsGroups(Page):
@@ -300,6 +307,8 @@ def group_by_arrival_time_method(subsession, waiting_players):
 
     for player in waiting_players:
         player.waitpage_too_long = waiting_too_long(player)
+        if (player.waitpage_too_long): player.payoff = 1.50
+
     subsession.waitCount = len(waiting_players)
     if len(waiting_players) >= 3:
         print('about to create a group')
@@ -446,7 +455,7 @@ class WaitBeforeVideo(WaitPage):
 
 class VVC(Page):
     form_model = 'player'
-    timeout_seconds = 600
+    timeout_seconds = 420
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -668,6 +677,29 @@ class MyWaitPagePostVVC(WaitPage):
             if player.groupExit:
                 return 'App09TeamExitThankYou'
 
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In MyWaitPagePostVVC')
+            player.is_dropout = True
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in MyWaitPagePostVVC')
+            print('Setting dropout to true in MyWaitPagePostVVC')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
 
 class MyWaitPage_PostTechCheck(WaitPage):
     body_text = "Please wait until your team members arrive."
@@ -682,7 +714,30 @@ class MyWaitPage_PostTechCheck(WaitPage):
 
     def vars_for_template(player):
         no_dropout = all(p.is_dropout is False for p in player.group.get_players())
-        return dict(no_dropout =no_dropout)
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout,no_dropout =no_dropout)
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In MyWaitPagePostVVC')
+            player.is_dropout = True
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in MyWaitPagePostVVC')
+            print('Setting dropout to true in MyWaitPagePostVVC')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+
+
 
 
 page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,

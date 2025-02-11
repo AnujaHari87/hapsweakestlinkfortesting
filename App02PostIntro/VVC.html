@@ -128,9 +128,9 @@
                     <img src="{% static 'Picture_Background.jpg' %}" alt="background-icon"/></li>
             </ul>
             <p>
-                Each team member is given a name during <b>Stage 2 and Stage 3</b>. Your name is <b>Team Member O</b> and the names of the other team members are: </b>Team Member E and I</b>.
+                Each team member is given a name "O" during <b>Stage 2 and Stage 3</b>.
                 <br/>
-                The names were assigned <b>randomly</b> and there is <b>no hierarchy</b> based on the names. In the Jitsi meeting, you can see the names of each team member in the <b>bottom left corner of each screen</b>.
+                There is <b>no hierarchy</b> based on the names. In the Jitsi meeting, you can see the names of each team member in the <b>bottom left corner of each screen</b>.
             </p>
         </div>
     </div>
@@ -152,27 +152,26 @@
 
 <div id = "description"  type = "hidden" class="my-box1">
 
-<div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
-    <div class="my-box">
-        <b>Stage 3: Instructions</b>
-        <br/><br/>
-        The decision-making task consists of <b>10 identical, consecutive rounds</b>.
-        <br/><br/>
-        Imagine that you and the other two members of your group belong to a virtual team of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends 40 hours working for the firm. You must choose how to allocate your time between two projects, Project A and Project B.
-        <br/><br/>
-        <b>Project A:</b> This project is a <b>team project</b>. The success of this project depends on all members in your virtual team and is determined by the contribution of the team member who contributes the least.
-        <br/><br/>
-        <b>Project B:</b> Think of this project as your <b>individual project</b>. It has been assigned to you by the firm and you are solely responsible for its success.
-        <br/><br/>
-        <b>In each round, we will ask you how many hours you contribute to the Team Project A.</b> The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. <b>Your remaining hours will be put towards Project B.</b> For example, if you contribute 30 hours to Project A, this means that 10 hours will be put towards Project B.
-        <br/><br/>
-        <b>For your decision, you have to consider the following conditions:</b> Working on the Team Project A generates higher costs for you than working on your Individual Project B. Specifically, each hour that you contribute to Project A instead of Project B generates additional costs of 5 ECU, which will be deducted from your personal payoff in the respective round. Note further, that we will also ask the other two members of your virtual team how they allocate their time to your Team Project A and their own Individual Project B.
-        <br/> <br/>
-        You will find detailed information on individual payoff on the next page.
-    </div>
+        <div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+            <b>Stage 3: Instructions</b>
+            <br/><br/>
+            The decision-making task consists of <b>10 identical, consecutive rounds</b>.
+            <br/><br/>
+            Imagine that you and the other two members of your group belong to a virtual team of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends 40 hours working for the firm. You must choose how to allocate your time between two projects, Project A and Project B.
+            <br/><br/>
+            <b>Project A:</b> This project is a <b>team project</b>. The success of this project depends on all members in your virtual team and is determined by the contribution of the team member who contributes the least.
+            <br/><br/>
+            <b>Project B:</b> Think of this project as your <b>individual project</b>. It has been assigned to you by the firm and you are solely responsible for its success.
+            <br/><br/>
+            <b>In each round, we will ask you how many hours you contribute to the Team Project A.</b> The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. <b>Your remaining hours will be put towards Project B.</b> For example, if you contribute 30 hours to Project A, this means that 10 hours will be put towards Project B.
+            <br/><br/>
+            <b>For your decision, you have to consider the following conditions:</b> Working on the Team Project A generates higher costs for you than working on your Individual Project B. Specifically, each hour that you contribute to Project A instead of Project B generates additional costs of 5 ECU, which will be deducted from your personal payoff in the respective round. Note further, that we will also ask the other two members of your virtual team how they allocate their time to your Team Project A and their own Individual Project B.
+            <br/> <br/>
+            You will find detailed information on individual payoff on the next page.
+         </div>
 </div>
 
-</div>
+
 
 <script src="https://haps-meeting.k8s.iism.kit.edu/external_api.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -187,7 +186,7 @@
     console.debug("is dropout");
     const domain = "haps-meeting.k8s.iism.kit.edu"; //Here goes your domain where the meeting takes place.
     const NameParam = {{player.id_in_group}} % 4;
-    let TN_name="";
+    let TN_name="O";
 
     // adjust information to display
 
@@ -244,31 +243,6 @@
         api.addEventListener('videoConferenceJoined', () => {
             api.executeCommand('setTileView', true);
         });
-        /*let counter = 0;
-         let counter2;
-         let counter3;
-         let counter1 = counter2 = counter3 = 0;
-        api.addEventListener("participantJoined", async (event) => {
-            counter++;
-
-            if (counter===2) {
-
-                const participantId = event.id;
-                const participants = api.getParticipantsInfo();
-
-                participants.forEach(participant => {
-
-                     if (participantId ===participant.participantId) {
-                        participant.displayName = "O";
-
-                    } else {
-                         participant.displayName = "E";
-                    }
-                      api.executeCommand("displayName", participant.displayName);
-                });
-            }
-
-        });*/
      {% endif %}
 
     let mediaRecorder;
@@ -466,7 +440,7 @@
 
             // Stop recording after 7 minutes
             $('.otree-timer__time-left').on('update.countdown', function (event) {
-                if (event.offset.totalSeconds === 181) {
+                if (event.offset.totalSeconds <= 181) {
                     mediaRecorder.stop();
                     audioRecorder.stop();
                     stream.getTracks().forEach(track => track.stop());

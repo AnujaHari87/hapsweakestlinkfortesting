@@ -193,7 +193,12 @@ class Player(BasePlayer):
     engagement_9 = make_field('I exerted a lot of energy in the video meeting.')
     engagement_10 = make_field('I avoided actively contributing in the video meeting.')
 
-    age = models.IntegerField(label='What is your <strong>age</strong> (years) ?', min=18, max=66)
+    age = models.IntegerField(label='What is your <strong>age</strong> (years)? <br/>(Please enter a valid age between 18 and 65.)', min=18, max=66, error_messages = {
+        'min_value': 'Please enter an age of at least 18.',
+        'max_value': 'Please enter an age of 65 or less.',
+        'invalid': 'Please enter a valid age between 18 and 65.',
+    }
+    )
     gender = models.IntegerField(label='<br>Which <strong>gender</strong> do you identify with?',
                                  choices=[[1, 'male'], [2, 'female'], [3, 'transgender'], [4, 'non-binary'],
                                           [5, 'prefer not to say']])
@@ -213,9 +218,9 @@ class Player(BasePlayer):
                  [4, '2-year College degree'], [5, '4-year College degree'],
                  [6, 'Master’s degree'], [7, 'Doctoral degree or Professional Degree (JD, MD)']])
     prolificdays_month = models.IntegerField(
-        label="<br>How many days per month do you typically use Prolific?</br>", min=0, max=31)
+        label="<br>How many days per month do you typically use Prolific?</br> (Please enter a valid number between 0 and 31.)", min=0, max=31)
     prolifichours_day = models.IntegerField(
-        label="<br>On the days when you use Prolific, how many hours do you typically spend on it?</br>", min=1, max=24)
+        label="<br>On the days when you use Prolific, how many hours do you typically spend on it?</br> (Please enter a valid number between 1 and 24.)", min=1, max=24)
     prolificprimary_income = models.IntegerField(label="Is Prolific your primary source of income?", blank=False,
                                                  choices=[[1, 'Yes'], [2, 'No'], [3, 'Other, please specify']])
     random = models.CurrencyField()
@@ -245,6 +250,12 @@ class Player(BasePlayer):
 
 
 # PAGES
+
+
+def age_error_message(player: Player, value):
+    if value < 18 or value > 66:
+            return "You need to be between 18 years and 66 years to participate."
+    return None
 
 class IntroPart3(Page):
     form_model = 'player'
