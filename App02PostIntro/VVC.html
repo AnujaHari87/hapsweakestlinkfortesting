@@ -255,9 +255,9 @@
     document.addEventListener('DOMContentLoaded', async function () {
 
         let timerElement = document.querySelector('.otree-timer');
-        if (timerElement) {
-            timerElement.style.visibility = 'hidden';  // Hides the timer
-        }
+       // if (timerElement) {
+          //  timerElement.style.visibility = 'hidden';  // Hides the timer
+        //}
 
        const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
 
@@ -275,8 +275,8 @@
         nextBtn.style.display = "none";
         var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
         for (var i = 0; i < timerElements.length; i++) {
-            timerElements[i].style.visibility = 'hidden';
-            timerElements[i].style.display = 'none';
+           // timerElements[i].style.visibility = 'hidden';
+            //timerElements[i].style.display = 'none';
             // Or use: timerElements[i].style.visibility = 'hidden';
         }
         {% endif %}
@@ -309,15 +309,6 @@
 
             console.log('Media streams obtained.');
 
-            // Create a MediaRecorder for video
-            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                    console.log('Video data available:', event.data);
-                }
-            };
 
             mediaRecorder.onstop = async () => {
                 console.log('Video recorder stopped.');
@@ -342,44 +333,44 @@
                     uploadUrlVideo = 'https://kithumansubjectsstudy.org:3000/upload/video/optIn';
                 {% endif %}
 
-                try {
-                    const response = await fetch(uploadUrlVideo, {
-                        method: 'POST',
-                        body: videoFormData
-                    });
+                //try {
+                  //  const response = await fetch(uploadUrlVideo, {
+                    //    method: 'POST',
+                     //   body: videoFormData
+                    //});
 
-                    if (response.ok) {
-                        console.log('Video uploaded successfully.');
-                        nextBtn.style.display = "block";
-                        document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                    //if (response.ok) {
+                      //  console.log('Video uploaded successfully.');
+                        //nextBtn.style.display = "block";
+                        //document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
 
-                        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
-                        for (var i = 0; i < timerElements.length; i++) {
-                            timerElements[i].style.visibility = 'hidden';
-                            timerElements[i].style.display = 'none';
-                        }
-                    } else {
-                        console.error('Failed to upload video.');
-                        nextBtn.style.display = "block";
-                        document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
-                        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
-                        for (var i = 0; i < timerElements.length; i++) {
-                            timerElements[i].style.visibility = 'hidden';
-                            timerElements[i].style.display = 'none';
-                        }
+                        //var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                        //for (var i = 0; i < timerElements.length; i++) {
+                          //  timerElements[i].style.visibility = 'hidden';
+                           // timerElements[i].style.display = 'none';
+                       // }
+                   // } else {
+                     //   console.error('Failed to upload video.');
+                       // nextBtn.style.display = "block";
+                        //document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                        //var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                        //for (var i = 0; i < timerElements.length; i++) {
+                          //  timerElements[i].style.visibility = 'hidden';
+                           // timerElements[i].style.display = 'none';
+                        //}
 
-                    }
-                } catch (error) {
-                    console.error('Error uploading video:', error);
-                    nextBtn.style.display = "block";
-                    document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
-                    var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
-                        for (var i = 0; i < timerElements.length; i++) {
-                            timerElements[i].style.visibility = 'hidden';
-                            timerElements[i].style.display = 'none';
-                    }
+                    //}
+               // } catch (error) {
+                 //   console.error('Error uploading video:', error);
+                   // nextBtn.style.display = "block";
+                    //document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                    //var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                      //  for (var i = 0; i < timerElements.length; i++) {
+                        //    timerElements[i].style.visibility = 'hidden';
+                          //  timerElements[i].style.display = 'none';
+                    //}
 
-                }
+                //}
             };
 
             // Create a MediaRecorder for audio
@@ -434,16 +425,16 @@
 
             };
 
-            mediaRecorder.start();
+          //  mediaRecorder.start();
             audioRecorder.start();
             console.log('Media recorders started.');
 
             // Stop recording after 7 minutes
             $('.otree-timer__time-left').on('update.countdown', function (event) {
-                if (event.offset.totalSeconds <= 181) {
-                    mediaRecorder.stop();
+                if (event.offset.totalSeconds == 60) {
+                  //  mediaRecorder.stop();
                     audioRecorder.stop();
-                    stream.getTracks().forEach(track => track.stop());
+                   // stream.getTracks().forEach(track => track.stop());
                     audioStream.getTracks().forEach(track => track.stop());
                     api.dispose();
                     document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can start reading the instructions of Stage 3 below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';

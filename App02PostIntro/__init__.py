@@ -307,7 +307,9 @@ def group_by_arrival_time_method(subsession, waiting_players):
 
     for player in waiting_players:
         player.waitpage_too_long = waiting_too_long(player)
-        if (player.waitpage_too_long): player.payoff = 1.50
+        if (player.waitpage_too_long):
+            player.payoff = 50
+            player.participant.payoff_ppg = 50
 
     subsession.waitCount = len(waiting_players)
     if len(waiting_players) >= 3:
@@ -455,7 +457,7 @@ class WaitBeforeVideo(WaitPage):
 
 class VVC(Page):
     form_model = 'player'
-    timeout_seconds = 420
+    timeout_seconds = 540
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -675,6 +677,8 @@ class MyWaitPagePostVVC(WaitPage):
 
     def app_after_this_page(player: Player, upcoming_apps):
             if player.groupExit:
+                player.payoff = 133.33
+                player.participant.payoff_ppg = 133.33
                 return 'App09TeamExitThankYou'
 
     def get_timeout_seconds(player):
