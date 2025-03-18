@@ -1,6 +1,7 @@
 import time
 
 from otree.api import *
+import re
 
 c = cu
 
@@ -39,6 +40,11 @@ class Player(BasePlayer):
         blank=True
     )
 
+
+def ProlificId_error_message(player: Player, value):
+    if not re.fullmatch(r'^[A-Za-z0-9]{24}$', value):
+        return "Prolific ID must be exactly 24 alphanumeric characters (letters and numbers only)."
+    return None
 
 def wait_for_all(group: Group):
     pass

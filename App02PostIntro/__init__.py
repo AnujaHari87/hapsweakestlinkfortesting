@@ -1,4 +1,5 @@
 import time
+import re
 
 from otree.api import *
 
@@ -130,6 +131,11 @@ class Player(BasePlayer):
     )
 
 
+def ProlificId_error_message(player: Player, value):
+    if not re.fullmatch(r'^[A-Za-z0-9]{24}$', value):
+        return "Prolific ID must be exactly 24 alphanumeric characters (letters and numbers only)."
+    return None
+
 def comprehension1_error_message(player: Player, value):
     if value != 200:
         player.comp1_check += 1
@@ -218,13 +224,17 @@ class MyWaitPageStage2Instructions(WaitPage):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 5 * 60
+            return 15 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
             print('Setting dropout to true in MyWaitPageStage2Instructions')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+    #def app_after_this_page(player: Player, upcoming_apps):
+     #   if player.is_dropout:
+      #      return 'App08DropoutThankYou'
 
 
 class MyWaitPage_PreVirtualMeeting(WaitPage):
@@ -299,7 +309,7 @@ def waiting_too_long(player):
 
     import time
     # assumes you set wait_page_arrival in PARTICIPANT_FIELDS.
-    return time.time() - participant.vars['wait_page_arrival'] > 5 * 60
+    return time.time() - participant.vars['wait_page_arrival'] > 15 * 60
 
 
 def group_by_arrival_time_method(subsession, waiting_players):
@@ -309,6 +319,7 @@ def group_by_arrival_time_method(subsession, waiting_players):
         player.waitpage_too_long = waiting_too_long(player)
         if (player.waitpage_too_long):
             player.payoff = 50
+          #  player.is_dropout = True
             player.participant.payoff_ppg = 50
 
     subsession.waitCount = len(waiting_players)
@@ -671,7 +682,7 @@ class MyWaitPagePostVVC(WaitPage):
 
     @staticmethod
     def after_all_players_arrive(group: Group):
-        groupReady = all(p.seeHear for p in group.get_players())  # No need for 'is True'
+        groupReady = all(p.seeHear is not None and p.seeHear for p in group.get_players())
         for p in group.get_players():
             p.groupExit = not groupReady
 
@@ -739,8 +750,6 @@ class MyWaitPage_PostTechCheck(WaitPage):
             print('Setting dropout to true in MyWaitPagePostVVC')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
-
-
 
 
 
