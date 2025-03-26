@@ -103,11 +103,6 @@ class Player(BasePlayer):
         label='',
         blank=True
     )
-    group_see_hear = models.BooleanField(
-        default=True,
-        label='',
-        blank=True
-    )
     micCheck = models.BooleanField(
         blank=True,
         label='',
@@ -121,7 +116,7 @@ class Player(BasePlayer):
     )
 
 
-    seeHear = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1']], label='',
+    seeHear = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
                                          attrs={"invisible": True})
 
     groupExit = models.BooleanField(
@@ -469,6 +464,7 @@ class WaitBeforeVideo(WaitPage):
 class VVC(Page):
     form_model = 'player'
     timeout_seconds = 540
+    form_fields = ['seeHear']
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -682,7 +678,7 @@ class MyWaitPagePostVVC(WaitPage):
 
     @staticmethod
     def after_all_players_arrive(group: Group):
-        groupReady = all(p.seeHear is not None and p.seeHear for p in group.get_players())
+        groupReady = all(p.seeHear is not None and (p.seeHear ==1 or p.seeHear ==2) for p in group.get_players())
         for p in group.get_players():
             p.groupExit = not groupReady
 
@@ -754,7 +750,7 @@ class MyWaitPage_PostTechCheck(WaitPage):
 
 
 page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
-                  MyWaitPage_PreVirtualMeeting, VVC, PostVVCQuestionnaire,MyWaitPagePostVVC,MyWaitPage_PostTechCheck,
+                  MyWaitPage_PreVirtualMeeting, VVC, MyWaitPagePostVVC,MyWaitPage_PostTechCheck,
                   StudyIntroduction1, StudyIntroduction2, StudyIntroduction3, Comprehension1, Comprehension2,
                   Comprehension3, Comprehension4]
 
