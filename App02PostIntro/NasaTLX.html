@@ -106,9 +106,9 @@
 <div>
     <center><strong>Mental Demand</strong></center>
     <center><strong>How mentally demanding was the task?</strong></center>
-    <input type="range" name="nasatlx1" min="1" max="21" step="1" class="slider">
+    <input type="range" name="nasatlx1" min="1" max="20" step="1" class="slider">
              <div class="slider-ticks">
-        {% for i in range(21) %}
+        {% for i in range(20) %}
          <span class="{% if i == 10 %}midpoint{% endif %}"></span>
         {% endfor %}
     </div>
@@ -119,12 +119,15 @@
     </datalist>
     <br><br>
 </div>
+
 <div>
-    <center><strong>Physical Demand</strong></center>
-    <center><strong>How physically demanding was the task?</strong></center>
-    <input type="range" name="nasatlx2" min="1" max="21" step="1" class="slider">
+    <center><strong>Temporal Demand</strong></center>
+     <center><strong>How hurried or rushed was the pace of the task?</strong></center>
+
+    <input type="range" name="nasatlx2" min="1" max="20" step="1" class="slider">
+
      <div class="slider-ticks">
-        {% for i in range(21) %}
+        {% for i in range(20) %}
          <span class="{% if i == 10 %}midpoint{% endif %}"></span>
         {% endfor %}
     </div>
@@ -136,75 +139,6 @@
     <br><br>
 </div>
 
-<div>
-    <center><strong>Temporal Demand</strong></center>
-     <center><strong>How hurried or rushed was the pace of the task?</strong></center>
-
-    <input type="range" name="nasatlx3" min="1" max="21" step="1" class="slider">
-
-     <div class="slider-ticks">
-        {% for i in range(21) %}
-         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
-        {% endfor %}
-    </div>
-    <datalist>
-          {% for item in C3 %}
-            <option value="{{ item.value }}" label="{{ item.label }}"></option>
-         {{endfor}}
-    </datalist>
-    <br><br>
-</div>
-
-<div>
-    <center><strong>Performance</strong></center>
-    <center><strong>How successful were you in accomplishing what you were asked to do?</strong></center>
-    <input type="range" name="nasatlx4" min="1" max="21" step="1" class="slider">
-     <div class="slider-ticks">
-        {% for i in range(21) %}
-         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
-        {% endfor %}
-    </div>
-    <datalist>
-         {% for item in C4%}
-            <option value="{{ item.value }}" label="{{ item.label }}"></option>
-         {{endfor}}
-    </datalist>
-    <br><br>
-</div>
-
-<div>
-    <center><strong>Effort</strong></center>
-    <center><strong>How hard did you have to work to accomplish your level of performance?</strong></center>
-    <input type="range" name="nasatlx5" min="1" max="21" step="1" class="slider">
-     <div class="slider-ticks">
-        {% for i in range(21) %}
-         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
-        {% endfor %}
-    </div>
-    <datalist>
-          {% for item in C5 %}
-            <option value="{{ item.value }}" label="{{ item.label }}"></option>
-         {{endfor}}
-    </datalist>
-    <br><br>
-</div>
-
-<div>
-    <center><strong>Frustration</strong></center>
-    <center><strong>How insecure, discouraged, irritated, stressed and annoyed were you?</strong></center>
-    <input type="range" name="nasatlx6" min="1" max="21" step="1" class="slider">
-     <div class="slider-ticks">
-        {% for i in range(21) %}
-         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
-        {% endfor %}
-    </div>
-    <datalist>
-          {% for item in C6 %}
-            <option value="{{ item.value }}" label="{{ item.label }}"></option>
-         {{endfor}}
-    </datalist>
-    <br><br>
-</div>
 
 
 </div>

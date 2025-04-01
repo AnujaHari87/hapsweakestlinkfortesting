@@ -12,24 +12,6 @@ class Constants(BaseConstants):
     players_per_group = 3
     num_rounds = 1
 
-    nasa_values = dict(
-        C1=['Very_low', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
-        C2=['Very_Low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
-        C3=['Very_low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
-        C4=['Perfect', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Failure'],
-        C5=['Very_low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
-        C6=['Very_low',  '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
-    )
-
-    nasa_values_processed = {
-    'C1': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C1']],
-         'C2': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C2']],
-         'C3': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C3']],
-         'C4': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C4']],
-         'C5': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C5']],
-         'C6': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C6']]
-    }
-
 
 
 class Subsession(BaseSubsession):
@@ -104,7 +86,7 @@ class Player(BasePlayer):
         'How willing are you to punish someone who treats others unfairly,even if there may be costs for you?')
     altruism_1 = make_field2(
         'How willing are you to give to good causes without expecting anything in return?')
-    attention2 = make_field2('Please select the option "7" to show that you are answering the questions attentively.')
+    attention2 = make_field('Please select the option "4" to show that you are answering the questions attentively.')
     attention1 = make_field('Please select the option "1" to show that you are answering the questions attentively.')
 
     positive_rp_1 = make_field2('When someone does me a favor, I am willing to return it.')
@@ -217,10 +199,10 @@ class Player(BasePlayer):
         choices=[[1, 'less than High School'], [2, 'High School/GED'], [3, 'Some College'],
                  [4, '2-year College degree'], [5, '4-year College degree'],
                  [6, 'Master’s degree'], [7, 'Doctoral degree or Professional Degree (JD, MD)']])
-    prolificdays_month = models.IntegerField(
-        label="<br>How many days per month do you typically use Prolific?</br> (Please enter a valid number between 0 and 31.)", min=0, max=31)
-    prolifichours_day = models.IntegerField(
-        label="<br>On the days when you use Prolific, how many hours do you typically spend on it?</br> (Please enter a valid number between 1 and 24.)", min=1, max=24)
+    prolificprev_studies = models.IntegerField(
+        label="<br>How many studies have you done on Prolific in the last year? <br/>")
+    us_state = models.StringField(
+        label="<br>Which U.S state do you currently live in? <br/>")
     prolificprimary_income = models.IntegerField(label="Is Prolific your primary source of income?", blank=False,
                                                  choices=[[1, 'Yes'], [2, 'No'], [3, 'Other, please specify']])
     random = models.CurrencyField()
@@ -228,23 +210,11 @@ class Player(BasePlayer):
         blank=True,
         label="Other"
     )
-    videoconfsfa1 = make_field('I was focusing on what I would say or do next.')
-    videoconfsfa2 = make_field('I was focusing on the impression I was making on the other person.')
-    videoconfsfa3 = make_field('I was focusing on my level of anxiety.')
-    videoconfsfa4 = make_field('I was focusing on my internal bodily reactions (for example, heart rate).')
-    videoconfsfa5 = make_field('I was focusing on past social failures.')
+    interperstrust1 = make_field('I am convinced that most people have good intentions.')
+    interperstrust2 = make_field('You can\'t rely on anyone these days.')
+    interperstrust3 = make_field('In general, people can be trusted.')
+    appearance = make_field2 ('How satisfied are you with your appearance right now?')
 
-    videoconfpc1 = make_field('I felt confident that I could stay focused on my performance.')
-    videoconfpc2 = make_field('I believed in my ability to perform.')
-    videoconfpc3 = make_field('I felt I had the resources to meet any challenges.')
-    videoconfpc4 = make_field('I believed my performance goals were achievable.')
-
-    nasatlx1 = make_field21('How mentally demanding was the task?')
-    nasatlx2 = make_field21('How physically demanding was the task')
-    nasatlx3 = make_field21('How hurried or rushed was the pace of the task?')
-    nasatlx4 = make_field21('How successful were you in accomplishing what you were asked to do?')
-    nasatlx5 = make_field21('How hard did you have to work to accomplish your level of performance?')
-    nasatlx6 = make_field21('How insecure, discouraged, irritated, stressed and annoyed were you?')
 
 
 
@@ -291,53 +261,31 @@ class Quest02(Page):
 
 class Quest03(Page):
     form_model = 'player'
-    form_fields = ['videoconfsfa1','videoconfsfa2','videoconfsfa3','videoconfsfa4','videoconfsfa5']
+    form_fields = ['interperstrust1','interperstrust2','interperstrust3', 'attention2']
 
-
-class Quest03a(Page):
-    form_model = 'player'
-    form_fields = ['videoconfpc1','videoconfpc2','videoconfpc3','videoconfpc4']
-
-
-class Quest03NasaTLX(Page):
-    form_model = 'player'
-    form_fields = ['nasatlx1','nasatlx2','nasatlx3','nasatlx4','nasatlx5','nasatlx6']
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        return dict(
-            Constants.nasa_values_processed
-        )
-
-class Quest04(Page):
-    form_model = 'player'
-    form_fields = ['time_1', 'negative_rp_1', 'negative_rp_2', 'attention2', 'altruism_1']
-
-    @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        if player.attention2 != 7:
+        if player.attention2 != 4:
             player.attention_check += 1
+
 
 
 class Quest05(Page):
     form_model = 'player'
-    form_fields = ['positive_rp_1', 'negative_rp_3', 'trust_1_positive', 'trust_2_negative', 'trust_3_positive',
-                   'attention3', 'math', 'time_2']
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        if player.attention3 != 3:
-            player.attention_check += 1
+    form_fields = ['positive_rp_1', 'negative_rp_3' ]
 
 
-class Quest06(Page):
+
+
+class Quest04(Page):
     form_model = 'player'
-    form_fields = ['positive_rp_2']
+    form_fields = [ 'negative_rp_1', 'negative_rp_2']
+
+
 
 
 class Quest07(Page):
     form_model = 'player'
-    form_fields = ['altruism_2']
+    form_fields = ['positive_rp_2']
 
 
 class Quest07a(Page):
@@ -353,41 +301,7 @@ class Quest07a(Page):
 
 class Quest08(Page):
     form_model = 'player'
-
-    # usability, satisfaction, intention to use
-    @staticmethod
-    def get_form_fields(player):
-        import random
-        collective = ['collective_orientation_1_p', 'collective_orientation_2_n', 'collective_orientation_3_n',
-                      'collective_orientation_4_p', "collective_orientation_5_n", "collective_orientation_6_n",
-                      "collective_orientation_7_n", "collective_orientation_8_n", "collective_orientation_9_n",
-                      'collective_orientation_10_n', 'collective_orientation_11_n', 'collective_orientation_12_n',
-                      'collective_orientation_13_n', 'collective_orientation_14_n', 'collective_orientation_15_n',
-                      'attention4']
-        random.shuffle(collective)
-        return collective
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        if player.attention4 != 5:
-            player.attention_check += 1
-
-
-class Quest09(Page):
-    form_model = 'player'
-
-
-class Quest10(Page):
-    form_model = 'player'
-    form_fields = ['psychological_safety_1', 'psychological_safety_2', 'psychological_safety_3',
-                   'psychological_availability_1', 'psychological_availability_2', 'psychological_availability_3',
-                   'psychological_availability_4', 'psychological_availability_5']
-
-
-class Quest11(Page):
-    form_model = 'player'
-    form_fields = ['engagement_1', 'engagement_2', 'engagement_3', 'engagement_4', 'engagement_5', 'engagement_6',
-                   'engagement_7', 'engagement_8', 'engagement_9', 'engagement_10']
+    form_fields = ['appearance']
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -397,10 +311,12 @@ class Quest11(Page):
             player.payoff_quests = 0
 
 
+
+
 class QuestDemographics(Page):
     form_model = 'player'
-    form_fields = ['age', 'gender', 'education', 'ethnicity', 'prolificdays_month',
-                   'prolifichours_day', 'prolificprimary_income', 'other_income_specify', 'familiarity']
+    form_fields = ['familiarity','prolificprev_studies',
+                     'us_state',  'gender', 'age', 'education', 'ethnicity']
 
 
 class QuestEnd(Page):
@@ -411,9 +327,9 @@ class QuestEnd(Page):
 
         return dict(
             total_payoff_ecu=(200 + participant.payoff_ppg),
-            total_payoff=(200 + participant.payoff_ppg) * 0.03
+            payoff_bonus = (participant.payoff_ppg * 0.02),
+            total_payoff=6 + (participant.payoff_ppg) * 0.02
         )
 
 
-page_sequence = [IntroPart3, Quest01, Quest02, Quest03, Quest03a,Quest03NasaTLX, Quest04, Quest05, Quest06, Quest07, Quest07a, Quest08, Quest10,
-                 Quest11, QuestDemographics, QuestEnd]
+page_sequence = [IntroPart3, Quest01, Quest02, Quest03,  Quest05, Quest04, Quest07, Quest07a, Quest08, QuestDemographics, QuestEnd]

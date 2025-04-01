@@ -21,31 +21,13 @@
           <p class="card-text text-center">
               <b>Please provide the following personal details to conclude.</b></p>
 
+             {{ formfield 'familiarity' }}
+            {{ formfield 'prolificprev_studies' }}
+            {{ formfield 'us_state' }}
             {{ formfield 'age' }}
             {{ formfield 'gender' }}
             {{ formfield 'education' }}
             {{ formfield 'ethnicity' }}
-            {{ formfield 'prolificdays_month' }}
-            {{ formfield 'prolifichours_day' }}
-          <div class="form-group">
-              <label for="incomeProlific" class="control-label col-form-label">Is Prolific your primary source of income?</label>
-              <div>
-                <select name="incomeProlific" id="incomeProlific" class="form-select">
-                    <option value="" selected disabled hidden>--------</option>
-                    <option value="1">Yes</option>
-                    <option value="2">No</option>
-                    <option value="3">Other, please specify</option>
-                </select>
-                  <input name="prolificprimary_income" id="hidden_income" value="0" type="hidden"/>
-                  <input name="other_income_specify" id="hidden_others" value="" type="hidden"/>
-              </div>
-            </div>
-
-
-             <div id="other_income_specify_container" style="display:none;">
-               <input id="visible_others" type="text"/>
-            </div>
-            {{ formfield 'familiarity' }}
 
 
         </div>

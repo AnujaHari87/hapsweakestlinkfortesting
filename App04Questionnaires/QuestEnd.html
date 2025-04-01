@@ -16,14 +16,14 @@ Thank you for participating in our study!
     <p><b>Result and Payoff:</b></p>
     <p>Your fixed payment for this study is <b>£6.00.</b>
     <br/><br/>
-    In Stage 3, <b>Round {{participant.payoff_round}}</b> was chosen at random to be payoff-relevant. Thus, your <b>bonus payment for Stage 3 is {{participant.payoff_ppg}}.00 ECU</b>.
+    In Stage 3, <b>Round {{participant.payoff_round}}</b> was chosen at random to be payoff-relevant. Thus, your <b>bonus payment for Stage 3 is {{participant.payoff_ppg}} ECU</b>.
     <br/><br/>
-    This corresponds to a bonus payment of <b>£{{participant.payoff_ppg}}</b> and a total payment of <b>{{total_payoff}}</b>.
+    This corresponds to a bonus payment of <b>£{{payoff_bonus}}</b> and a total payment of <b>£{{total_payoff}}</b>.
     <!-- ANUJA (Done): I (Bella) am the one who added the "* 0.03" above, because I believe we need to give the payment amount
     in pounds (£), but I'm not sure I found a variable for that in the Python code.
     I think this has been already implemented in the init.py for Questionnaires-->
     <br/><br/>
-    <b>Please paste the participation code on the Prolific website: C13FO8SH<!-- Needs to be replaced by actual variable -->, or Click <a href="https://app.prolific.com/submissions/complete?cc=C13FO8SH" target="_blank" onclick="window.open(this.href, '_blank'); window.close(); return false;">here</a><!-- Needs to be replaced by the actual link.--> to finish the study and be redirected to Prolific.</b>
+    <b>Please paste the participation code on the Prolific website: C13FO8SH<!-- Needs to be replaced by actual variable --> <br/> <br/>or click <a href="https://app.prolific.com/submissions/complete?cc=C13FO8SH" target="_blank" onclick="window.open(this.href, '_blank'); window.close(); return false;">here</a><!-- Needs to be replaced by the actual link.--> to finish the study and be redirected to Prolific.</b>
 </div>
 <br/>
 {{next_button}}

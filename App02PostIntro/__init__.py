@@ -12,6 +12,15 @@ class C(BaseConstants):
     NAME_IN_URL = '02_Post_Intro'
     PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 1
+    nasa_values = dict(
+        C1=['Very_low', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high'],
+        C2=['Very_Low', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Very_high']
+    )
+
+    nasa_values_processed = {
+        'C1': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C1']],
+        'C2': [{'value': p, 'label': p.replace('_', ' ').title()} for p in nasa_values['C2']]
+    }
 
 
 class Subsession(BaseSubsession):
@@ -41,9 +50,60 @@ def make_field(label):
         widget=widgets.RadioSelect,
     )
 
+def make_field5(label):
+    return models.IntegerField(
+        choices=[1, 2, 3, 4, 5],
+        label=label,
+        widget=widgets.RadioSelect,
+    )
+
+def make_field2(label):
+    return models.IntegerField(
+        choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        label=label,
+        widget=widgets.RadioSelect,
+    )
+
+def make_field4(label):
+    return models.IntegerField(
+        choices=[0,1,2,3],
+        label=label,
+        widget=widgets.RadioSelect,
+    )
+
+def make_field20(label):
+    return models.IntegerField(
+        choices=[ 1, 2, 3,4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20],
+        label=label,
+        widget=widgets.RadioSelectHorizontal,
+    )
 
 class Player(BasePlayer):
     ProlificId = models.StringField(label='Prolific ID')
+    self_cons_1 = make_field4('I am always trying to figure myself out.')
+    self_cons_2 = make_field4('I think about myself a lot.')
+    self_cons_3 = make_field4('I often daydream about myself.')
+    self_cons_4 = make_field4('I never take a hard look at myself.')
+    self_cons_5 = make_field4('I generally pay attention to my inner feelings.')
+    self_cons_6 = make_field4('I am constantly thinking about my reasons for doing things.')
+    self_cons_7 = make_field4('I sometimes step back (in my mind) in order to examine myself from a distance.')
+    self_cons_8 = make_field4('I am quick to notice changes in my mood.')
+    self_cons_9 = make_field4('I know the way my mind works when I work through a problem.')
+    self_cons_10 = make_field4('I am concerned about my style of doing things.')
+    self_cons_11 = make_field4('I care a lot about how I present myself to others.')
+    self_cons_12 = make_field4('I am self-conscious about the way I look.')
+    self_cons_13 = make_field4('I usually worry about making a good impression.')
+    self_cons_14 = make_field4('Before I leave my house. I check how I look.')
+    self_cons_15 = make_field4('I am concerned about what other people think of me.')
+    self_cons_16 = make_field4('I am usually aware of my appearance.')
+    self_cons_17 = make_field4('It takes me time to get over my shyness in new situations.')
+    self_cons_18 = make_field4('It is hard for me to work when someone is watching me.')
+    self_cons_19 = make_field4('I get embarrassed very easily.')
+    self_cons_20 = make_field4('It is easy for me to talk to strangers.')
+    self_cons_21 = make_field4('I feel nervous when I speak in front of a group.')
+    self_cons_22 = make_field4('Large groups make me nervous.')
+
+    risk = make_field2("")
     holidays_1 = make_field('Sun, sea, and beach holiday.')
     holidays_2 = make_field('Party holiday.')
     holidays_3 = make_field('Winter sports holiday.')
@@ -125,6 +185,14 @@ class Player(BasePlayer):
         blank=True
     )
 
+    nasatlx1 = make_field20('How mentally demanding was the task?')
+    nasatlx2 = make_field20('How hurried or rushed was the pace of the task?')
+
+    vcSelfFocAtt1 = make_field5('I was focusing on what I would say or do next.')
+    vcSelfFocAtt2 = make_field5('I was focusing on the impression I was making on the other persons.')
+    vcSelfFocAtt3 = make_field5('I was focusing on my level of anxiety.')
+    vcSelfFocAtt4 = make_field5('I was focusing on my internal bodily reactions (for example, heart rate).')
+    vcSelfFocAtt5 = make_field5('I was focusing on past social failures.')
 
 def ProlificId_error_message(player: Player, value):
     if not re.fullmatch(r'^[A-Za-z0-9]{24}$', value):
@@ -219,7 +287,7 @@ class MyWaitPageStage2Instructions(WaitPage):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 15 * 60
+            return 10 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -304,7 +372,7 @@ def waiting_too_long(player):
 
     import time
     # assumes you set wait_page_arrival in PARTICIPANT_FIELDS.
-    return time.time() - participant.vars['wait_page_arrival'] > 15 * 60
+    return time.time() - participant.vars['wait_page_arrival'] > 10 * 60
 
 
 def group_by_arrival_time_method(subsession, waiting_players):
@@ -455,6 +523,58 @@ class DescriptionVideoCommunication1(Page):
             is_dropout = False
         return dict(is_dropout=is_dropout)
 
+class PreVideoQuestionnaire1(Page):
+    form_model = 'player'
+    form_fields = [
+        'self_cons_1', 'self_cons_2', 'self_cons_3', 'self_cons_4', 'self_cons_5',
+        'self_cons_6', 'self_cons_7', 'self_cons_8', 'self_cons_9', 'self_cons_10',
+        'self_cons_11', 'self_cons_12', 'self_cons_13', 'self_cons_14', 'self_cons_15',
+        'self_cons_16', 'self_cons_17', 'self_cons_18', 'self_cons_19', 'self_cons_20',
+        'self_cons_21', 'self_cons_22'
+    ]
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PreVideoQuestionnaire1')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
+class PreVideoQuestionnaire2(Page):
+        form_model = 'player'
+        form_fields = ['risk']
+        def get_timeout_seconds(player):
+            participant = player.participant
+            if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+                return 1  # instant timeout, 1 second
+            else:
+                return 5 * 60
+
+        def before_next_page(player, timeout_happened):
+            if timeout_happened:
+                print('Setting to true in PreVideoQuestionnaire2')
+                player.participant.vars['is_dropout'] = True
+                player.is_dropout = True
+
+        def vars_for_template(player: Player):
+            if 'is_dropout' in player.participant.vars:
+                is_dropout = player.participant.vars['is_dropout']
+            else:
+                is_dropout = False
+            return dict(is_dropout=is_dropout)
 
 class WaitBeforeVideo(WaitPage):
     after_all_players_arrive = goal_wait_for_all
@@ -748,9 +868,28 @@ class MyWaitPage_PostTechCheck(WaitPage):
             player.is_dropout = True
 
 
+class VideoConSelfFocAttn(Page):
+    form_model = 'player'
+    form_fields = ['vcSelfFocAtt1','vcSelfFocAtt2', 'vcSelfFocAtt3', 'vcSelfFocAtt4', 'vcSelfFocAtt5']
 
-page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
-                  MyWaitPage_PreVirtualMeeting, VVC, MyWaitPagePostVVC,MyWaitPage_PostTechCheck,
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            C.nasa_values_processed
+        )
+
+class NasaTLX(Page):
+    form_model = 'player'
+    form_fields = ['nasatlx1','nasatlx2']
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+            C.nasa_values_processed
+        )
+
+page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, PreVideoQuestionnaire1, PreVideoQuestionnaire2, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
+                  MyWaitPage_PreVirtualMeeting, VVC, MyWaitPagePostVVC,MyWaitPage_PostTechCheck,VideoConSelfFocAttn, NasaTLX,
                   StudyIntroduction1, StudyIntroduction2, StudyIntroduction3, Comprehension1, Comprehension2,
                   Comprehension3, Comprehension4]
 
