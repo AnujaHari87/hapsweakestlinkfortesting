@@ -177,7 +177,7 @@ class Player(BasePlayer):
 
 
     seeHear = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
-                                         attrs={"invisible": True})
+                                         attrs={"invisible": True},  default = 1)
 
     groupExit = models.BooleanField(
         default=False,
@@ -287,7 +287,7 @@ class MyWaitPageStage2Instructions(WaitPage):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 10 * 60
+            return 15 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -372,7 +372,7 @@ def waiting_too_long(player):
 
     import time
     # assumes you set wait_page_arrival in PARTICIPANT_FIELDS.
-    return time.time() - participant.vars['wait_page_arrival'] > 10 * 60
+    return time.time() - participant.vars['wait_page_arrival'] > 15 * 60
 
 
 def group_by_arrival_time_method(subsession, waiting_players):
@@ -464,39 +464,23 @@ class WaitBeforeVideoTest(WaitPage):
 
 class VVC0(Page):
     form_model = 'player'
-    form_fields = ['micCheck', 'cameraCheck', 'team1MicCheck', 'team2MicCheck', 'team3MicCheck',
-                   'team1CameraCheck', 'team2CameraCheck', 'team3CameraCheck']
+    
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            print('In VVC0')
+            player.is_dropout = True
+            return 1  # instant timeout, 1 second
+        else:
+            return 1 * 60
 
-    def before_next_page(player: Player, timeout_happened):
-        if not timeout_happened:
-            player.participant.vars['cameraCheck'] = player.cameraCheck
-            player.participant.vars['micCheck'] = player.micCheck
-            player.participant.vars['wait_page_arrival'] = time.time()
 
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
         else:
             is_dropout = False
-
-
-        is_dropout1 = player.group.get_player_by_id(1).is_dropout
-        is_dropout2 = player.group.get_player_by_id(2).is_dropout
-        is_dropout3 = player.group.get_player_by_id(3).is_dropout
-
-        return dict(
-            dropouts={
-                player.group.get_player_by_id(1).is_dropout,
-                player.group.get_player_by_id(2).is_dropout,
-                player.group.get_player_by_id(3).is_dropout},
-            is_dropout=is_dropout,
-            is_dropout1=is_dropout1,
-            is_dropout2=is_dropout2,
-            is_dropout3=is_dropout3
-        )
-
         return dict(is_dropout=is_dropout)
-
 
 
 
@@ -528,7 +512,33 @@ class PreVideoQuestionnaire1(Page):
     form_fields = [
         'self_cons_1', 'self_cons_2', 'self_cons_3', 'self_cons_4', 'self_cons_5',
         'self_cons_6', 'self_cons_7', 'self_cons_8', 'self_cons_9', 'self_cons_10',
-        'self_cons_11', 'self_cons_12', 'self_cons_13', 'self_cons_14', 'self_cons_15',
+        'self_cons_11'
+    ]
+
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 3 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in PreVideoQuestionnaire1')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+    def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
+class PreVideoQuestionnaire1a(Page):
+    form_model = 'player'
+    form_fields = [
+       'self_cons_12', 'self_cons_13', 'self_cons_14', 'self_cons_15',
         'self_cons_16', 'self_cons_17', 'self_cons_18', 'self_cons_19', 'self_cons_20',
         'self_cons_21', 'self_cons_22'
     ]
@@ -538,11 +548,11 @@ class PreVideoQuestionnaire1(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 5 * 60
+            return 3 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
-            print('Setting to true in PreVideoQuestionnaire1')
+            print('Setting to true in PreVideoQuestionnaire1a')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
@@ -561,7 +571,7 @@ class PreVideoQuestionnaire2(Page):
             if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
                 return 1  # instant timeout, 1 second
             else:
-                return 5 * 60
+                return 3 * 60
 
         def before_next_page(player, timeout_happened):
             if timeout_happened:
@@ -679,7 +689,7 @@ class Comprehension1(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 5 * 60
+            return 3 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -703,7 +713,7 @@ class Comprehension2(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 5 * 60
+            return 3 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -728,7 +738,7 @@ class Comprehension3(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 5 * 60
+            return 3 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -753,7 +763,7 @@ class Comprehension4(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 5 * 60
+            return 3 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -823,6 +833,7 @@ class MyWaitPagePostVVC(WaitPage):
             print('Setting dropout to true in MyWaitPagePostVVC')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+            player.payoff = 0
 
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
@@ -872,11 +883,28 @@ class VideoConSelfFocAttn(Page):
     form_model = 'player'
     form_fields = ['vcSelfFocAtt1','vcSelfFocAtt2', 'vcSelfFocAtt3', 'vcSelfFocAtt4', 'vcSelfFocAtt5']
 
-    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 3 * 60
+
     def vars_for_template(player: Player):
-        return dict(
-            C.nasa_values_processed
-        )
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return dict(is_dropout=is_dropout)
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in VideoConSelfFocAttn')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+
+
 
 class NasaTLX(Page):
     form_model = 'player'
@@ -884,14 +912,55 @@ class NasaTLX(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
         return dict(
-            C.nasa_values_processed
+            C.nasa_values_processed,
+            is_dropout=is_dropout
         )
 
-page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, PreVideoQuestionnaire1, PreVideoQuestionnaire2, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 3 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            print('Setting to true in NasaTLX')
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+
+class DescriptionThankYou(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if ('is_dropout' in participant.vars):
+            print(participant.vars['is_dropout'])
+        print('Dropout In DescriptionThankYou')
+        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 5 * 60
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if timeout_happened:
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+
+page_sequence = [MyWaitPageStage2Instructions, PartsRoundsGroups, PreVideoQuestionnaire1, PreVideoQuestionnaire1a,
+                 PreVideoQuestionnaire2, DescriptionVideoCommunication, GenInstructions1, DescriptionVideoCommunication1,VVC0,
                   MyWaitPage_PreVirtualMeeting, VVC, MyWaitPagePostVVC,MyWaitPage_PostTechCheck,VideoConSelfFocAttn, NasaTLX,
                   StudyIntroduction1, StudyIntroduction2, StudyIntroduction3, Comprehension1, Comprehension2,
-                  Comprehension3, Comprehension4]
+                  Comprehension3, Comprehension4, DescriptionThankYou]
 
 # Comments from Bella:
 # The page sequence needs to be updated to be the following:

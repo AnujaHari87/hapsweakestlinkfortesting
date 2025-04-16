@@ -48,22 +48,7 @@
         display: none;
     }
 
-    #progressBarContainer {
-        width: 100%;
-        background-color: #f3f3f3;
-        border: 1px solid #ccc;
-        margin-top: 20px;
-        display: none;
-    }
 
-    #progressBar {
-        width: 0;
-        height: 30px;
-        background-color: #4caf50;
-        text-align: center;
-        line-height: 30px;
-        color: white;
-    }
 
      label {
         display: inline-block;
@@ -139,6 +124,7 @@
 
 </style>
 <div id="myHeader" class="otree-title page-header"></div>
+
 <div id = "box1" class="my-box">
     <div id="message">
     The virtual team meeting has started and you have a total of <b>7 minutes to discuss vacation types. In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
@@ -156,9 +142,8 @@
                     <img src="{% static 'Picture_Camera.jpg' %}" alt="camera-icon"/></li>
                 <li>In the pop-up message that requires you to select a video background, please select one of the available images as your virtual background.
                 <br/></li>
-               <!-- <li>Optionally, you can click on the "Select background" icon and select one of the <b>gray images (they are all the same)</b> as your virtual background.
-                <br/>"Select background" icon:
-                    <img src="{% static 'Picture_Background.jpg' %}" alt="background-icon"/></li>-->
+		<li>If your camera or microphone is not functioning properly, please make sure you have allowed microhone and camera access in your browser settings (Click Browser Settings or to the Left of the address bar) .
+                <br/></li>
 
                <li> Each team member is given a name "O" during <b>Stage 2 and Stage 3</b>.
                 <br/>
@@ -170,16 +155,14 @@
 </div>
 
 
-
     <div id="videopanel" class="row">
         <div class="column left">
             <div id="meet"></div>
         </div>
         <div id="container" class="column right"></div>
     </div>
-    <div id="progressBarContainer" style="display:none;">
-        <div id="progressBar">0%</div>
-    </div>
+
+
     <div id="nextButtonContainer" style="display:none;">
         <button id="nextButton">Next</button>
     </div>
@@ -209,7 +192,7 @@
                 <input type="radio" id="no" name="seehearyes" value="no" onchange="updateSeeHear(this.value)">
                 <label for="no">No, I could not hear and see one or both of the other two team members throughout the call.</label>
             </div>
-            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="0"/>
+            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="1"/>
         </div>
     </form>
     <script>
@@ -221,10 +204,7 @@
                 seeHear.value = 0;
             } else if (selectedValue === 'maybe') {
                 seeHear.value = 2;
-            } else {
-                seeHear.value = 0; // Handle unexpected values
-            }
-
+            } 
         }
     </script>
 </div>
@@ -287,7 +267,7 @@
                 hideMoreActionsButton: true,
                 hideMuteAllButton: true
             },
-	    disableAEC: false, // Acoustic Echo Cancellation
+	        disableAEC: false, // Acoustic Echo Cancellation
             disableNS: false,  // Noise Suppression
             resolution: 480,
                 constraints: {
@@ -326,41 +306,16 @@
             api.executeCommand('setTileView', true);
         });
 
-        api.addEventListener('videoConferenceJoined', () => {
- 
-        setTimeout(() => {
-                   <!-- HTML content to display if participant is a dropout -->
-
-                    api.executeCommand('toggleVirtualBackgroundDialog');
-
-        }, 1000);
-    });
-
-       /*  api.executeCommand('overwriteConfig', {
-                buttonsWithNotifyClick: ['customVirtualBg']
-            });
-
-            api.executeCommand('registerCommand', {
-                name: 'customVirtualBg',
-                shortcut: 'V',
-                tooltip: 'Virtual Background',
-                icon: "{% static 'Picture_Background.jpg' %}", // Replace with your icon
-                callback: () => {
-                    alert('Custom Button Clicked!');
-                    api.executeCommand('applyBackgroundEffect', {
-                        backgroundType: 'blur', // 'blur' for a blurred background
-                        url: "{% static 'Picture_Background.jpg' %}" // Replace with your image URL
-                    });
-                    // Add your custom functionality here
-                }
-            });*/
-
      {% endif %}
 
     let recordedChunks = [];
     let audioStream;
+    let displayStream;
     let audioRecorder;
+    let displayRecorder;
     let recordedAudioChunks = [];
+    let recordedDisplayAudioChunks= [];
+
 
     document.addEventListener('DOMContentLoaded', async function () {
 
@@ -396,6 +351,7 @@
         console.log('Before audio media request...');
        {% if is_dropout == False %}
         const audioFormData = new FormData();
+        const displayFormData = new FormData();
         console.log('audio media request...');
         try {
 
@@ -405,34 +361,113 @@
                 video: false // Only audio is needed here
             });
 
+
             console.log('Media streams obtained.');
 
             // Create a MediaRecorder for audio
             audioRecorder = new MediaRecorder(audioStream, { mimeType: 'audio/webm' });
+            if (audioRecorder) {
+                audioRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedAudioChunks.push(event.data);
+                        console.log('Audio data available:', event.data);
+                    }
+                };
+            }
 
-            audioRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordedAudioChunks.push(event.data);
-                    console.log('Audio data available:', event.data);
-                }
-            };
+            displayStream = await navigator.mediaDevices.getDisplayMedia({
+                preferCurrentTab: true,
+                   video: { mediaSource: 'tab' },
+                    audio: true // Capture system audio
+                });
 
-            audioRecorder.onstop = async () => {
-                console.log('Audio recorder stopped.');
+ 		    displayStream.getVideoTracks()[0].stop();
+        	displayStream.removeTrack(displayStream.getVideoTracks()[0]);
 
-                // Create a Blob from the recorded audio chunks
-                const audioBlob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+            displayRecorder = new MediaRecorder(displayStream, { mimeType: 'audio/webm' });
+            if (displayRecorder) {
+                // Store display media audio data
+                displayRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedDisplayAudioChunks.push(event.data);
+                        console.log('Display media audio chunk stored.');
+                    }
+                };
+            }
+            if (audioRecorder) {
+                audioRecorder.onstop = async () => {
+                    console.log('Audio recorder stopped.');
 
+                    // Create a Blob from the recorded audio chunks
+                    const audioBlob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+
+                    const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+                    const groupId = '{{ group.id_in_subsession }}';
+                    const playerId = '{{ player.id_in_group }}';
+                    const filenameWebm = `audio_${groupId}_${playerId}_${timestamp}.webm`;
+
+                    // Append the webm file to audioFormData
+                    audioFormData.append('audio', audioBlob, filenameWebm);
+                    console.log('Audio form data prepared for upload.');
+
+                    // Upload audio data
+                    let uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/noOptIn';
+                    {% if participant.vars.optInConsent == 0 %}
+                        uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/noOptIn';
+                    {% else %}
+                        uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/optIn';
+                    {% endif %}
+
+                    try {
+                        const response = await fetch(uploadUrlAudio, {
+                            method: 'POST',
+                            body: audioFormData
+                        });
+
+                        if (response.ok) {
+                            console.log('Audio uploaded successfully.');
+
+                            nextBtn.style.display = "block";
+                            document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+
+                            var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                            for (var i = 0; i < timerElements.length; i++) {
+                               timerElements[i].style.visibility = 'hidden';
+                               timerElements[i].style.display = 'none';
+                            }
+                        } else {
+                            console.error('Failed to upload audio.');
+                            nextBtn.style.display = "block";
+                            document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                            var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                            for (var i = 0; i < timerElements.length; i++) {
+                                timerElements[i].style.visibility = 'hidden';
+                                timerElements[i].style.display = 'none';
+                            }
+                        }
+
+
+                    } catch (error) {
+                        console.error('Error uploading audio:', error);
+                    }
+
+                    // Hide the video and audio panels and show the message after both uploads
+
+                };
+
+            }
+            if (displayRecorder) {
+                displayRecorder.onstop =  async()=> {
+                console.log('Display recorder stopped.');
+                const displayBlob = new Blob(recordedDisplayAudioChunks, { type: 'audio/webm' });
                 const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
                 const groupId = '{{ group.id_in_subsession }}';
                 const playerId = '{{ player.id_in_group }}';
-                const filenameWebm = `audio_${groupId}_${playerId}_${timestamp}.webm`;
+                const filenameWebm = `display_${groupId}_${playerId}_${timestamp}.webm`;
 
-                // Append the webm file to audioFormData
-                audioFormData.append('audio', audioBlob, filenameWebm);
-                console.log('Audio form data prepared for upload.');
+                displayFormData.append('audio', displayBlob, filenameWebm);
+                console.log('Display media recording stored.');
 
-                // Upload audio data
                 let uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/noOptIn';
                 {% if participant.vars.optInConsent == 0 %}
                     uploadUrlAudio = 'https://kithumansubjectsstudy.org:3000/upload/audio/noOptIn';
@@ -443,69 +478,112 @@
                 try {
                     const response = await fetch(uploadUrlAudio, {
                         method: 'POST',
-                        body: audioFormData
+                        body: displayFormData
                     });
 
                     if (response.ok) {
-                        console.log('Audio uploaded successfully.');
+                        console.log('Display Audio uploaded successfully.');
 
                         nextBtn.style.display = "block";
-                        document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                            document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
 
-                        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
-                        for (var i = 0; i < timerElements.length; i++) {
-                           timerElements[i].style.visibility = 'hidden';
-                           timerElements[i].style.display = 'none';
-                        }
+                            var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                            for (var i = 0; i < timerElements.length; i++) {
+                               timerElements[i].style.visibility = 'hidden';
+                               timerElements[i].style.display = 'none';
+                            }
+
+
                     } else {
-                        console.error('Failed to upload video.');
-                        nextBtn.style.display = "block";
-                        document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
-                        var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
-                        for (var i = 0; i < timerElements.length; i++) {
-                            timerElements[i].style.visibility = 'hidden';
-                            timerElements[i].style.display = 'none';
-                        }
-                    } 
+                            console.error('Failed to upload display audio.');
+                            nextBtn.style.display = "block";
+                            document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                            var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
+                            for (var i = 0; i < timerElements.length; i++) {
+                                timerElements[i].style.visibility = 'hidden';
+                                timerElements[i].style.display = 'none';
+                            }
+                    }
                 } catch (error) {
-                    console.error('Error uploading audio:', error);
+                    console.error('Error uploading display audio:', error);
                 }
 
                 // Hide the video and audio panels and show the message after both uploads
 
             };
+            }
 
-            audioRecorder.start();
+             if (audioRecorder) audioRecorder.start();
+             if (displayRecorder) displayRecorder.start();
             console.log('Media recorders started.');
+             $('.otree-timer__time-left').on('update.countdown', function (event) {
+                            if (event.offset.totalSeconds === 121) {
+                                if (audioRecorder) audioRecorder.stop();
+                                if (displayRecorder) displayRecorder.stop();
 
-            // Stop recording after 7 minutes
-            $('.otree-timer__time-left').on('update.countdown', function (event) {
-                if (event.offset.totalSeconds == 121) {
-                    audioRecorder.stop();
-                    audioStream.getTracks().forEach(track => track.stop());
-                    api.dispose();
-                    document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
-                    var headerElement= document.getElementById('myHeader');
-                    console.debug('header element');
-                    console.debug(headerElement);
-                    if (headerElement) {
-                        console.debug('header element found');
-                        headerElement.innerHTML = '<h2>Description Part 2</h2>';
+                                if (audioStream) {
+                                    audioStream.getTracks().forEach(track => track.stop());
+                                }
 
-                    } else {
-                        console.error('Header element not found');
-                    }
-                    document.getElementById('description').style.display = 'block';
-                    document.getElementById('videopanel').style.display = 'none';
-                }
-            });
+                                if (displayStream) {
+                                    displayStream.getTracks().forEach(track => track.stop());
+                                }
+
+                                if (api) api.dispose();
+                                document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
+                                var headerElement= document.getElementById('myHeader');
+                                console.debug('header element');
+                                console.debug(headerElement);
+                                if (headerElement) {
+                                    console.debug('header element found');
+                                    headerElement.innerHTML = '<h2>Description Part 2</h2>';
+
+                                } else {
+                                    console.error('Header element not found');
+                                }
+                                document.getElementById('description').style.display = 'block';
+                                document.getElementById('videopanel').style.display = 'none';
+                            }
+                        });
+
 
         } catch (err) {
             console.error('Error accessing media.', err);
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                            if (event.offset.totalSeconds === 121) {
+                                if (audioRecorder) audioRecorder.stop();
+                                if (displayRecorder) displayRecorder.stop();
+
+                                if (audioStream) {
+                                    audioStream.getTracks().forEach(track => track.stop());
+                                }
+
+                                if (displayStream) {
+                                    displayStream.getTracks().forEach(track => track.stop());
+                                }
+
+                                if (api) api.dispose();
+                                document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
+                                var headerElement= document.getElementById('myHeader');
+                                console.debug('header element');
+                                console.debug(headerElement);
+                                if (headerElement) {
+                                    console.debug('header element found');
+                                    headerElement.innerHTML = '<h2>Description Part 2</h2>';
+
+                                } else {
+                                    console.error('Header element not found');
+                                }
+                                document.getElementById('description').style.display = 'block';
+                                document.getElementById('videopanel').style.display = 'none';
+                            }
+                        });
         }
+
 
          {% endif %}
     });
+
 
 </script>
 <br/>

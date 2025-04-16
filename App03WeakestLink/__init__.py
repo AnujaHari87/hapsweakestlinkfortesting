@@ -64,6 +64,9 @@ class Decision(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
+        group_matrix_comm = player.session.vars.get('group_matrix')
+        player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
+
     @staticmethod
     def live_method(player: Player, data):
         if "ownDecision" in data:
@@ -130,12 +133,18 @@ class CalculatePayoff(WaitPage):
             print('we are getting here')
             group.randomNumber = random.choice(range(1, 11))
             for p in group.get_players():
-                p_past = p.in_round(group.randomNumber)
-                g_past = group.in_round(group.randomNumber)
-                p.payoff = C.ENDOWMENT + (10 * g_past.groupMin) - (5 * p_past.ownDecision)
-                part = p.participant
-                part.payoff_ppg = p.payoff
-                part.payoff_round = group.randomNumber
+                if p.is_dropout:
+                    p.payoff = 0
+                    part = p.participant
+                    part.payoff_ppg = p.payoff
+                    part.payoff_round = group.randomNumber
+                else:
+                    p_past = p.in_round(group.randomNumber)
+                    g_past = group.in_round(group.randomNumber)
+                    p.payoff = C.ENDOWMENT + (10 * g_past.groupMin) - (5 * p_past.ownDecision)
+                    part = p.participant
+                    part.payoff_ppg = p.payoff
+                    part.payoff_round = group.randomNumber
 
 
 class Results(Page):
@@ -171,37 +180,9 @@ class Results(Page):
             player.is_dropout = True
 
 
-class Description(Page):
-    form_model = 'player'
-
-    @staticmethod
-    def get_timeout_seconds(player):
-        participant = player.participant
-        if ('is_dropout' in participant.vars):
-            print(participant.vars['is_dropout'])
-        print('Dropout In Description')
-        if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
-            return 1  # instant timeout, 1 second
-        else:
-            return 5 * 60
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-
-        if timeout_happened:
-            player.ownDecision = 40
-            player.participant.vars['is_dropout'] = True
-            player.is_dropout = True
-
-        group_matrix_comm = player.session.vars.get('group_matrix')
-        player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        return dict(round_num=player.round_number)
 
 
-page_sequence = [Description, Decision, CalculatePayoff, Results]
+page_sequence = [Decision, CalculatePayoff, Results]
 
 
 # NOTES FOR ANUJA FROM BELLA:

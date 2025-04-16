@@ -34,7 +34,7 @@ def wait_for_all(group: Group):
 class ConsentFormB2(Page):
     form_model = 'player'
     form_fields = ['confirmConsent']
-    # REVIEW THE FOLLOWING FORM FIELDS: form_fields = ['consent']
+
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):

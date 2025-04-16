@@ -100,47 +100,8 @@ class Player(BasePlayer):
     attention3 = make_field2('Please select the option "3" to show that you are answering the questions attentively.')
     positive_rp_2 = make_field3("")
     altruism_2 = models.IntegerField(label="", min=0, max=1000)
-    collective_orientation_1_p = make_field("I find working on team projects very satisfying.")
-    collective_orientation_2_n = make_field(
-        "I would rather take action on my own than to wait around for others' input.")
-    collective_orientation_3_n = make_field(
-        "I prefer to complete a task from beginning to end with no assistance from others.")
-    collective_orientation_4_p = make_field("Teams usually work very effectively.")
-    collective_orientation_5_n = make_field(
-        "I think it is usually better to take the bull by the horns and do something yourself, rather than to wait for input from others.")
-    collective_orientation_6_n = make_field("For most tasks, I would rather work alone than as part of a group.")
-    collective_orientation_7_n = make_field(
-        "I find it easy to negotiate with others who hold a different viewpoint than I hold.")
-    collective_orientation_8_n = make_field("I can usually perform better when I work on my own.")
-    collective_orientation_9_n = make_field(
-        "I always ask for more information from others before making any important decision.")
-    collective_orientation_10_n = make_field(
-        "I find that it is often more productive to work on my own than with others.")
-    collective_orientation_11_n = make_field(
-        "When solving a problem, it is very important to make your own decision and stick by it.")
-    collective_orientation_12_n = make_field(
-        "If I disagree with other team members, I tend to go with my own gut feelings.")
-    collective_orientation_13_n = make_field(
-        "When I have a different opinion than another team member, I usually stick to my own opinion.")
-    collective_orientation_14_n = make_field(
-        "It is important to stick to your own decisions, even when others around you are trying to get you to change.")
-    collective_orientation_15_n = make_field(
-        "When others disagree, it is important to hold one's own ground and not give in.")
     attention4 = make_field(
         'Please select the option "strongly agree" to show that you are answering the questions attentively.')
-    psychological_safety_1 = make_field('I was not afraid to be myself during the video meeting.')
-    psychological_safety_2 = make_field('I was afraid to express my opinion in the meeting.')
-    psychological_safety_3 = make_field('There was a threatening atmosphere in the meeting.')
-    psychological_availability_1 = make_field(
-        'I am confident that I was able to manage competing demands in a meeting.')
-    psychological_availability_2 = make_field(
-        'I am confident that I was able to deal with problems that arise in the meeting.')
-    psychological_availability_3 = make_field(
-        'I am confident that I was able to think clearly in the meeting.')
-    psychological_availability_4 = make_field(
-        'I am confident that I was able to show the right emotions in the meeting.')
-    psychological_availability_5 = make_field(
-        'I am confident that I was able to cope with the physical demands of the meeting.')
 
     big5_1 = make_field(
         'I see myself as someone who is reserved.')
@@ -163,52 +124,62 @@ class Player(BasePlayer):
     big5_10 = make_field(
         'I see myself as someone who has an active imagination.')
 
-    engagement_1 = make_field(
-        'The video meeting was so absorbing that I forgot about everything else.')
-    engagement_2 = make_field('I often thought about other things during the video meeting. ')
-    engagement_3 = make_field('I was rarely distracted in the video meeting.')
-    engagement_4 = make_field('Time passed quickly in the video meeting.')
-    engagement_5 = make_field('I really put my heart into the video meeting.')
-    engagement_6 = make_field('I got excited when actively contributing in the video meeting.')
-    engagement_7 = make_field('I often felt emotionally detached from the video meeting.')
-    engagement_8 = make_field('My own feelings were affected by how much I contributed in the video meeting.')
-    engagement_9 = make_field('I exerted a lot of energy in the video meeting.')
-    engagement_10 = make_field('I avoided actively contributing in the video meeting.')
-
     age = models.IntegerField(label='What is your <strong>age</strong> (years)? <br/>(Please enter a valid age between 18 and 65.)', min=18, max=66, error_messages = {
         'min_value': 'Please enter an age of at least 18.',
         'max_value': 'Please enter an age of 65 or less.',
         'invalid': 'Please enter a valid age between 18 and 65.',
     }
     )
-    gender = models.IntegerField(label='<br>Which <strong>gender</strong> do you identify with?',
-                                 choices=[[1, 'male'], [2, 'female'], [3, 'transgender'], [4, 'non-binary'],
-                                          [5, 'prefer not to say']])
+    gender = models.IntegerField(label='<br>Which <strong>gender</strong> do you identify with?', blank=False,
+                                 choices=[[1, 'male'], [2, 'female'], [3, 'other']])
     ethnicity = models.IntegerField(
-        label="<br>Which of the following <b>ethnicities</b> best describes you?<br/>",
-        choices=[[1, 'Asian or Pacific Islander'], [2, 'Black or African American'], [3, 'Hispanic or Latino'],
-                 [4, 'Native American or Alaskan Native'], [5, 'White or Caucasian'], [6, 'Multiracial or Biracial'],
-                 [7, 'A race/ethnicity not listed here']])
-    familiarity = models.IntegerField(
-        label="<br>Please indicate whether you have ever <b>met a member of your team before </b> participating in this study</strong>.",
-        choices=[[1, 'No, never met before'], [2, 'Yes, met in passing'],
-                 [3, 'Yes, we are acquaintances']])
-
+        label="<br>Which of the following <b>ethnicities</b> best describes you?<br/>", blank=False,
+        choices=[[1, 'White'], [2, 'Black'], [3, 'Asian'],
+                 [4, 'Mixed'], [5, 'Other'], [6, 'Prefer not to say']])
+    
     education = models.IntegerField(
         label="<br>What is the highest level of <b>education</b> you have completed?</br>",
         choices=[[1, 'less than High School'], [2, 'High School/GED'], [3, 'Some College'],
                  [4, '2-year College degree'], [5, '4-year College degree'],
                  [6, 'Master’s degree'], [7, 'Doctoral degree or Professional Degree (JD, MD)']])
-    prolificprev_studies = models.IntegerField(
-        label="<br>How many studies have you done on Prolific in the last year? <br/>")
-    us_state = models.StringField(
-        label="<br>Which U.S state do you currently live in? <br/>")
+
+    prolificdays_month = models.IntegerField(
+        label="<br>How many days per month do you typically use Prolific?</br> (Please enter a valid number between 0 and 31.)",
+        min=0, max=31)
+    prolifichours_day = models.IntegerField(
+        label="<br>On the days when you use Prolific, how many hours do you typically spend on it?</br> (Please enter a valid number between 1 and 24.)",
+        min=1, max=24)
     prolificprimary_income = models.IntegerField(label="Is Prolific your primary source of income?", blank=False,
                                                  choices=[[1, 'Yes'], [2, 'No'], [3, 'Other, please specify']])
-    random = models.CurrencyField()
     other_income_specify = models.StringField(
         blank=True,
-        label="Other"
+        label=""
+    )
+    us_state = models.StringField(
+        choices=[
+            [1, 'Alabama'], [2, 'Alaska'], [3, 'Arizona'], [4, 'Arkansas'],
+            [5, 'California'], [6, 'Colorado'], [7, 'Connecticut'], [8, 'Delaware'],
+            [9, 'Florida'], [10, 'Georgia'], [11, 'Hawaii'], [12, 'Idaho'],
+            [13, 'Illinois'], [14, 'Indiana'], [15, 'Iowa'], [16, 'Kansas'],
+            [17, 'Kentucky'], [18, 'Louisiana'], [19, 'Maine'], [20, 'Maryland'],
+            [21, 'Massachusetts'], [22, 'Michigan'], [23, 'Minnesota'], [24, 'Mississippi'],
+            [25, 'Missouri'], [26, 'Montana'], [27, 'Nebraska'], [28, 'Nevada'],
+            [29, 'New Hampshire'], [30, 'New Jersey'], [31, 'New Mexico'], [32, 'New York'],
+            [33, 'North Carolina'], [34, 'North Dakota'], [35, 'Ohio'], [36, 'Oklahoma'],
+            [37, 'Oregon'], [38, 'Pennsylvania'], [39, 'Rhode Island'], [40, 'South Carolina'],
+            [41, 'South Dakota'], [42, 'Tennessee'], [43, 'Texas'], [44, 'Utah'],
+            [45, 'Vermont'], [46, 'Virginia'], [47, 'Washington'], [48, 'West Virginia'],
+            [49, 'Wisconsin'], [50, 'Wyoming']
+        ],
+        label="<br>Which U.S state do you currently live in? <br/>"
+    )
+    other_gender_specify = models.StringField(
+        blank=True,
+        label=""
+    )
+    other_ethnicity_specify = models.StringField(
+        blank=True,
+        label=""
     )
     interperstrust1 = make_field('I am convinced that most people have good intentions.')
     interperstrust2 = make_field('You can\'t rely on anyone these days.')
@@ -315,8 +286,9 @@ class Quest08(Page):
 
 class QuestDemographics(Page):
     form_model = 'player'
-    form_fields = ['familiarity','prolificprev_studies',
-                     'us_state',  'gender', 'age', 'education', 'ethnicity']
+    form_fields = [ 'prolificdays_month',
+                   'prolifichours_day', 'prolificprimary_income', 'other_income_specify',
+                     'us_state',  'gender', 'age', 'education', 'ethnicity', 'other_ethnicity_specify', 'other_gender_specify']
 
 
 class QuestEnd(Page):

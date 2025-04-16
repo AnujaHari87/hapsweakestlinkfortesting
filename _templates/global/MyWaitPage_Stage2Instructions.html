@@ -51,7 +51,7 @@
         global.MyWaitPage2 page and I added some new formatting to it to match the text document. -->
 {{ if player.waitpage_too_long == True }}
          <div id="dropout" class="dropout" style="background-color: #FF7F7F; padding: 10px; margin: 0;">
-            You already waited for more than <b>five minutes</b> to create a team for Stage 2.
+            You already waited for more than <b>fifteen minutes</b> to create a team for Stage 2.
             <br>
             <br>
             If you do not wish to wait longer, you have now the opportunity to leave the study now.
@@ -84,33 +84,10 @@
             <p>
                 <b>Number of participants that have currently joined the team: {{waiting_count}} out of 3.</b>
                 <br/>
-                While waiting, you can start reading the instructions of Stage 2 below.
             </p>
         </div>
         <!-- Not sure if the following line should be a <h2>.-->
         <h3>This wait page will automatically refresh every 5 seconds to ensure that you proceed to the next page as soon as all team members are ready.</h3> <br/>
-
-
-        <div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
-             <p class="card-text text-center"> In this stage, you will have the chance to <b>get to know the other team members</b> in a virtual team meeting.<br/>
-                 The virtual team meeting will last <b>7 minutes </b> and will end automatically. <br/><br/>
-
-                 To give you some input for starting the conversation, we ask each of you to evaluate different types of vacation before the meeting starts.
-                 Please feel free to discuss your evaluation with the others during the meeting. You are of course welcome to chat about other topics as well.
-             </p>
-
-            <p><b>On the next page, you should indicate how much you would enjoy the following types of vacation on a scale from 1 (not at all) to 7 (totally).</b></p>
-            <ul>
-                <li>Cruise vacation.</li>
-                <li>City vacation.</li>
-                <li>Winter sports vacation.</li>
-                <li>Camping vacation.</li>
-                <li>Educational vacation.</li>
-                <li>Sun, sea, and beach vacation.</li>
-                <li>Party vacation.</li>
-            </ul>
-
-        </div>
 
         <div class="rotating-time">⏳</div>
     </div>

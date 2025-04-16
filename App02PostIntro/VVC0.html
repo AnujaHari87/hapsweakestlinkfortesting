@@ -108,10 +108,12 @@ This is a test video call. <br/><br/>
 </p>
 <b>2) Please make sure your audio output, microphone and camera are functioning properly. If not, please choose the appropriate device
     from the toolbar options at the bottom of the video call. <br/> <br/></b>
-      <b>3) At the bottom of the page, please select the checkboxes if your own selected devices are working properly, and if you can see and hear other team members in the test video call.
-        Your team can participate only if all your devices are working properly.<br/></b>
-
 <br/>
+
+<b>3) If your camera or microphone is not functioning properly, please make sure you have allowed microhone and camera access in your browser settings (Click Browser Settings or to the Left of the address bar) .
+    <br/> <br/></b>
+<br/>
+
 
 <!-- Checkboxes for user to confirm device checks -->
 
@@ -126,42 +128,8 @@ This is a test video call. <br/><br/>
 <br/>
 <br/>
  <b>
-<div style="padding: 10px;  border: 5px solid gray;  margin: 0;">
-Note: Please test the audio and video with your team members. Once a team member confirms that they can hear and see you, they will automatically leave the team call. This is normal and expected behavior. If your team member has already left the call, 
-but you confirmed that you could hear and see them beforehand, please indicate this in the table below.</b>
 
-</div>
 
-<br/>
-
-   <table border="1">
-            <thead>
-                <tr>
-                    <th>Device Checks</th>
-                    <th>P1<div id="myselfP1"></div></th>
-                    <th>P2<div id="myselfP2"></div></th>
-                    <th>P3<div id="myselfP3"></div></th>
-                    <th>P4<div id="myselfP4"></div></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>I can hear</td>
-                    <td>{{ formfield 'micCheck' }}</td>
-                    <td>{{ formfield 'team1MicCheck' }}</td>
-                    <td>{{ formfield 'team2MicCheck' }}</td>
-                    <td>{{ formfield 'team3MicCheck' }}</td>
-                </tr>
-                <tr>
-                    <td>I can see</td>
-                    <td>{{ formfield 'cameraCheck' }}<span id="myselfP1Camera"></span></td>
-                    <td>{{ formfield 'team1CameraCheck' }}<span id="myselfP2Camera"></span></td>
-                    <td>{{ formfield 'team2CameraCheck' }}<span id="myselfP3Camera"></span></td>
-                    <td>{{ formfield 'team3CameraCheck' }}<span id="myselfP4Camera"></span></td>
-                </tr>
-            </tbody>
-        </table>
-        <br/>
         {{ next_button }}
 
 <script src="https://haps-meeting.k8s.iism.kit.edu/external_api.js"></script>
@@ -239,31 +207,10 @@ but you confirmed that you could hear and see them beforehand, please indicate t
     const playerId = {{ player.id_in_group }};
     console.debug (playerId);
     console.debug(playerId === 1);
-    if (playerId === 1) {
-        document.getElementById('myselfP1').innerText = " (myself, without echo)";
-    } else if (playerId === 2) {
-        document.getElementById('myselfP2').innerText = " (myself, without echo)";
-    } else if (playerId === 3) {
-        document.getElementById('myselfP3').innerText = " (myself, without echo)";
-    } else if (playerId === 4) {
-        document.getElementById('myselfP4').innerText = " (myself, without echo)";
-    }
-
-      {% if is_dropout1 == True %}
-      hideColumnByDivId('myselfP1');
-     {% endif %}
-
-     {% if is_dropout2 == True %}
-      hideColumnByDivId('myselfP2');
-     {% endif %}
-
-     {% if is_dropout3 == True %}
-      hideColumnByDivId('myselfP3');
-     {% endif %}
 
 
        document.addEventListener('DOMContentLoaded', function() {
-                console.debug("Comes here 1")
+
                    {% if is_dropout == True %}
                     console.debug("Comes here 2")
                     const nextBtn = document.querySelector(".otree-btn-next btn btn-primary");
@@ -271,21 +218,6 @@ but you confirmed that you could hear and see them beforehand, please indicate t
                   {% endif %}
            });
 
-    function hideColumnByDivId(divId) {
-    // Find the div by ID
-    const div = document.getElementById(divId);
-
-    // Get the parent th element
-    const th = div.closest('th');
-
-    // Find the index of the th element
-    const thIndex = Array.from(th.parentNode.children).indexOf(th);
-
-    // Hide all cells in this column
-    document.querySelectorAll(`table tr`).forEach(row => {
-        row.children[thIndex].style.display = 'none';
-    });
-}
 
 </script>
 

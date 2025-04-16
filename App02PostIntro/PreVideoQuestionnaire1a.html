@@ -1,0 +1,58 @@
+
+{% block css %}
+<link rel="stylesheet" type="text/css">
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="my-box">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+          <p class="card-text text-center">
+              <b>Please answer the following questions about yourself. For each of the statements, indicate how much each statement is like you by using the provided scale.</b><br/>
+              <b> Please be as honest as you can throughout, and try not to let your responses to one question influence your response to other questions. There are no right or wrong answers </b> <br/>
+            <table class="table" style="text-align: center;  vertical-align: middle;">
+                <tr>
+                     <td style="width: 30%;"></td>
+                    <td style="width: 17.5%;">not at all like me</td>
+                    <td style="width: 17.5%;">a little like me</td>
+                    <td style="width: 17.5%;">somewhat like me</td>
+                    <td style="width: 17.5%;">a lot like me</td>
+                </tr>
+                <tr>
+                     <td style="width: 30%;"></td>
+                    <td style="width: 17.5%;">0</td>
+                    <td style="width: 17.5%;">1</td>
+                    <td style="width: 17.5%;">2</td>
+                    <td style="width: 17.5%;">3</td>
+                </tr>
+                 {{ for field in form }}
+
+                <tr>
+                        <td style="text-align: left;">{{ field.label }}</td>
+                        {{ for choice in field }}
+                            <td>{{ choice }}</td>
+                        {{ endfor }}
+                    </tr>
+                {{ endfor }}
+           </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+{{next_button}}
+
+{% endblock %}
