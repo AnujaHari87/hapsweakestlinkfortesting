@@ -1,5 +1,6 @@
 import time
 import re
+import random
 
 from otree.api import *
 
@@ -28,7 +29,7 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-    pass
+    randomNumberTreatment = models.IntegerField()
 
 
 def wait_for_all(group: Group):
@@ -184,6 +185,7 @@ class Player(BasePlayer):
         label='',
         blank=True
     )
+    treatmentNumber = models.IntegerField(initial=0)
 
     nasatlx1 = make_field20('How mentally demanding was the task?')
     nasatlx2 = make_field20('How hurried or rushed was the pace of the task?')
@@ -337,6 +339,9 @@ class MyWaitPage_PreVirtualMeeting(WaitPage):
         end_time = time.time()
         duration = end_time - start_time
         print(f"after_all_players_arrive took {duration} seconds")
+        group.randomNumberTreatment = random.choice(range(1, 4))
+        for p in group.get_players():
+            p.treatmentNumber = group.randomNumberTreatment
 
 
 
@@ -591,15 +596,17 @@ class WaitBeforeVideo(WaitPage):
     title_text = 'Please wait until all players have entered the video meeting.'
 
 
+
 class VVC(Page):
     form_model = 'player'
     timeout_seconds = 540
-    form_fields = ['seeHear']
+    form_fields = ['seeHear', 'treatmentNumber']
 
     @staticmethod
     def vars_for_template(player: Player):
         optInConsent = player.participant.vars['optInConsent']
-        return dict(optInConsent=optInConsent)
+        return dict(optInConsent=optInConsent,
+                    randomNumberTreatment =  player.participant.vars['randomNumberTreatment'])
 
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:

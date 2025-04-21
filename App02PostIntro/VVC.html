@@ -47,7 +47,13 @@
     #displaymessage {
         display: none;
     }
-
+    .center-container {
+      display: flex;
+      justify-content: center; /* horizontal center */
+      align-items: center;     /* vertical center */
+        text-align: center;
+          line-height: 1.5;
+    }
 
 
      label {
@@ -119,6 +125,9 @@
         .right {
             margin-top: 20px;
             border: none;
+             display: flex;
+            justify-content: center; /* horizontal center */
+            align-items: center;
         }
     }
 
@@ -159,7 +168,46 @@
         <div class="column left">
             <div id="meet"></div>
         </div>
-        <div id="container" class="column right"></div>
+        <div id="container" class="column right">
+            {{ if player.treatmentNumber == 3 }}
+              <div id = "messageTreatment" class="center-container">
+
+                  In this meeting, focus on engaging with others by actively communicating with them.
+
+              </div>
+            {{ endif }}
+        </div>
+        <script>
+            {{ if player.treatmentNumber == 3 }}
+            const box = document.getElementById("messageTreatment");
+            const computedStyles = window.getComputedStyle(box);
+
+            const totalHeight = box.clientHeight; // Includes padding but not border
+            console.log(totalHeight);
+            const lineHeight = 4
+            console.log(lineHeight);
+            const numLines = Math.floor(totalHeight / lineHeight); // Number of lines in the box
+            console.log(numLines);
+            const modifiedLineCount = numLines - 5; // Subtract 4 from the number of lines
+            console.log(modifiedLineCount);
+            const brCount = Math.floor(modifiedLineCount / 2); // Half of the remaining lines
+            console.log(brCount);
+
+                    // Create the <br> tags to add before the content
+            let brTags = "";
+            for (let i = 0; i < brCount; i++) {
+              brTags += "<br/>";
+            }
+
+            // Add the <br> tags before the current content of the box
+            let modifiedText = brTags + box.innerHTML;
+
+
+            // Insert the modified text into the DOM
+            document.getElementById("messageTreatment").innerHTML = modifiedText;
+             {{ endif }}
+  </script>
+
     </div>
 
 
@@ -248,7 +296,10 @@
     let TN_name="O";
 
     // adjust information to display
-
+    const treatment = {{ player.treatmentNumber}};
+    // treatment = 1: control
+    // treatment = 2: self-view
+    // treatment = 3: message
     const options = {
         roomName: "Video Meeting" + {{player.group_id}}, //This is the name of the room, with player's group ID
         parentNode: document.querySelector('#meet'), //Now, you declare here which element should parent your stream.
@@ -256,7 +307,7 @@
             prejoinConfig: {
                 enabled: false
             },
-            disableSelfView: false,
+            disableSelfView: treatment===2,
             startWithAudioMuted: false,
             startWithVideoMuted: false,
             filmstrip: {
