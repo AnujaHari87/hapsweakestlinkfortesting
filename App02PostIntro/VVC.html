@@ -178,21 +178,19 @@
             {{ endif }}
         </div>
         <script>
-            {{ if player.treatmentNumber == 3 }}
+
+             const treatment1 = {{ player.treatmentNumber}};
+ 	    if (treatment1 === 3) {
+
             const box = document.getElementById("messageTreatment");
             const computedStyles = window.getComputedStyle(box);
 
             const totalHeight = box.clientHeight; // Includes padding but not border
-            console.log(totalHeight);
             const lineHeight = 4
-            console.log(lineHeight);
             const numLines = Math.floor(totalHeight / lineHeight); // Number of lines in the box
-            console.log(numLines);
             const modifiedLineCount = numLines - 5; // Subtract 4 from the number of lines
-            console.log(modifiedLineCount);
             const brCount = Math.floor(modifiedLineCount / 2); // Half of the remaining lines
-            console.log(brCount);
-
+          
                     // Create the <br> tags to add before the content
             let brTags = "";
             for (let i = 0; i < brCount; i++) {
@@ -205,7 +203,8 @@
 
             // Insert the modified text into the DOM
             document.getElementById("messageTreatment").innerHTML = modifiedText;
-             {{ endif }}
+	   }
+         
   </script>
 
     </div>
@@ -254,7 +253,8 @@
                 seeHear.value = 2;
             } else {
                 seeHear.value = 1;
-            }
+            } 
+
         }
     </script>
 </div>
