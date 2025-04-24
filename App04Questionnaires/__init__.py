@@ -77,31 +77,19 @@ class Player(BasePlayer):
     attention_check = models.IntegerField(initial=0)
     social_cohesion_short = make_field7('')
 
-    time_1 = make_field2(
-        'How willing are you to give up something that is beneficial for you today in order to benefit more from that in the future?')
 
     negative_rp_1 = make_field2(
         'How willing are you to punish someone who treats you unfairly, even if there may be costs for you?')
     negative_rp_2 = make_field2(
         'How willing are you to punish someone who treats others unfairly,even if there may be costs for you?')
-    altruism_1 = make_field2(
-        'How willing are you to give to good causes without expecting anything in return?')
     attention2 = make_field('Please select the option "4" to show that you are answering the questions attentively.')
     attention1 = make_field('Please select the option "1" to show that you are answering the questions attentively.')
 
     positive_rp_1 = make_field2('When someone does me a favor, I am willing to return it.')
     negative_rp_3 = make_field2(
         'If I am treated very unjustly, I will take revenge at the first occasion, even if there is a cost to do so.')
-    trust_1_positive = make_field2('I assume that people have only the best intentions.')
-    trust_2_negative = make_field2("You can't rely on anyone nowadays.")
-    trust_3_positive = make_field2('In general, people can be trusted.')
-    math = make_field2('I am good at math.')
-    time_2 = make_field2('I tend to postpone tasks even if I know it would be better to do them right away.')
     attention3 = make_field2('Please select the option "3" to show that you are answering the questions attentively.')
     positive_rp_2 = make_field3("")
-    altruism_2 = models.IntegerField(label="", min=0, max=1000)
-    attention4 = make_field(
-        'Please select the option "strongly agree" to show that you are answering the questions attentively.')
 
     big5_1 = make_field(
         'I see myself as someone who is reserved.')

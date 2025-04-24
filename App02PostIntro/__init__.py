@@ -80,7 +80,6 @@ def make_field20(label):
     )
 
 class Player(BasePlayer):
-    ProlificId = models.StringField(label='Prolific ID')
     self_cons_1 = make_field4('I am always trying to figure myself out.')
     self_cons_2 = make_field4('I think about myself a lot.')
     self_cons_3 = make_field4('I often daydream about myself.')
@@ -164,17 +163,6 @@ class Player(BasePlayer):
         label='',
         blank=True
     )
-    micCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
-
-    cameraCheck = models.BooleanField(
-        blank=True,
-        label='',
-        widget=widgets.CheckboxInput
-    )
 
 
     seeHear = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
@@ -185,7 +173,7 @@ class Player(BasePlayer):
         label='',
         blank=True
     )
-    treatmentNumber = models.IntegerField(initial=0)
+    treatmentNumber = models.IntegerField(initial=0, blank=True)
 
     nasatlx1 = make_field20('How mentally demanding was the task?')
     nasatlx2 = make_field20('How hurried or rushed was the pace of the task?')
@@ -196,10 +184,6 @@ class Player(BasePlayer):
     vcSelfFocAtt4 = make_field5('I was focusing on my internal bodily reactions (for example, heart rate).')
     vcSelfFocAtt5 = make_field5('I was focusing on past social failures.')
 
-def ProlificId_error_message(player: Player, value):
-    if not re.fullmatch(r'^[A-Za-z0-9]{24}$', value):
-        return "Prolific ID must be exactly 24 alphanumeric characters (letters and numbers only)."
-    return None
 
 def comprehension1_error_message(player: Player, value):
     if value != 200:

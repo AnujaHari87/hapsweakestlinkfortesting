@@ -22,17 +22,12 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    ProlificId = models.StringField(label='Please enter your Prolific ID so that we can pay you.')
     consent = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1']], label='Consent',
                                   attrs={"invisible": True})
     eligibility = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1']], label='Eligibility',
                                   attrs={"invisible": True})
     optInConsent = models.IntegerField(blank=True, initial=0, choices=[[0, '0'], [1, '1']], label='Opt-In Consent',
                                        attrs={"invisible": True})
-    colorVideo = models.IntegerField(blank=False, label="What color was mentioned in the video?",
-                                     choices=[[0, 'Red'], [1, 'Blue'], [2, 'Green'], [3, 'Yellow']])
-    numberVideo = models.IntegerField(blank=False, label="Which number was shown in the video?",
-                                      choices=[[1, '1'], [2, '2'], [3, '3'], [4, '4'], [5, '5']])
 
 
 def wait_for_all(group: Group):
