@@ -294,8 +294,9 @@
 <script>
     console.debug("is dropout");
     const domain = "haps-meeting.k8s.iism.kit.edu"; //Here goes your domain where the meeting takes place.
-    const NameParam = {{player.id_in_group}} % 4;
+    const NameParam = {{player.id_in_group}} % 4; 
     let TN_name="O";
+    let api;
 
     // adjust information to display
     const treatment = {{ player.treatmentNumber}};
@@ -353,7 +354,7 @@
         }
     };
      {% if is_dropout == False %}
-        const api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
+        api = new JitsiMeetExternalAPI(domain, options); //This is where the iframe is actually constructed
         //The function below turns on the Tile View everytime a participant joins. Practically it makes Tile View the default mode
         api.addEventListener('videoConferenceJoined', () => {
             api.executeCommand('setTileView', true);
@@ -566,8 +567,13 @@
             };
             }
 
-             if (audioRecorder) audioRecorder.start();
-             if (displayRecorder) displayRecorder.start();
+             if (audioRecorder) {
+		audioRecorder.start();
+	     }
+             if (displayRecorder) {
+		displayRecorder.start();	
+	     }
+
             console.log('Media recorders started.');
              $('.otree-timer__time-left').on('update.countdown', function (event) {
                             if (event.offset.totalSeconds === 121) {
@@ -602,20 +608,38 @@
 
         } catch (err) {
             console.error('Error accessing media.', err);
+	    console.log ('before timer');
             $('.otree-timer__time-left').on('update.countdown', function (event) {
                             if (event.offset.totalSeconds === 121) {
-                                if (audioRecorder) audioRecorder.stop();
-                                if (displayRecorder) displayRecorder.stop();
+  				console.log ('detects timer event 121');
+                                if (audioRecorder) {
+					console.log ('attempts to stop audio recorder');
+
+					audioRecorder.stop();
+				}
+                                if (displayRecorder) {
+					console.log ('attempts to stop display recorder');
+
+					displayRecorder.stop();
+				}
 
                                 if (audioStream) {
+				    console.log ('attempts to stop audio stream');
+
                                     audioStream.getTracks().forEach(track => track.stop());
                                 }
 
                                 if (displayStream) {
+				    console.log ('attempts to stop display stream');
+
                                     displayStream.getTracks().forEach(track => track.stop());
                                 }
 
-                                if (api) api.dispose();
+                                if (api) {
+					 console.log ('attempts to stop api');
+
+					 api.dispose();
+				}
                                 document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
                                 var headerElement= document.getElementById('myHeader');
                                 console.debug('header element');

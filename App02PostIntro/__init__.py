@@ -165,7 +165,7 @@ class Player(BasePlayer):
     )
 
 
-    seeHear = models.IntegerField(blank=False, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
+    seeHear = models.IntegerField(blank=True, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
                                          attrs={"invisible": True},  default = 1)
 
     groupExit = models.BooleanField(
