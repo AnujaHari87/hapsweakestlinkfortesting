@@ -327,6 +327,14 @@ class MyWaitPage_PreVirtualMeeting(WaitPage):
         for p in group.get_players():
             p.treatmentNumber = group.randomNumberTreatment
 
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts>0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
+
 
 
 class PartsRoundsGroups(Page):
@@ -354,6 +362,14 @@ class PartsRoundsGroups(Page):
         else:
             is_dropout = False
         return dict(is_dropout=is_dropout)
+
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
 
 
 def waiting_too_long(player):
@@ -411,6 +427,14 @@ class DescriptionVideoCommunication(Page):
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
+
 class GenInstructions1(Page):
     form_model = 'player'
     def get_timeout_seconds(player):
@@ -432,6 +456,14 @@ class GenInstructions1(Page):
             print('Setting to true in GenInstructions1')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
 
 
 class WaitBeforeVideoTest(WaitPage):
@@ -461,7 +493,7 @@ class VVC0(Page):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 1 * 60
+            return 2 * 60
 
 
     def vars_for_template(player: Player):
@@ -470,6 +502,14 @@ class VVC0(Page):
         else:
             is_dropout = False
         return dict(is_dropout=is_dropout)
+
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
 
 
 
@@ -495,6 +535,14 @@ class DescriptionVideoCommunication1(Page):
         else:
             is_dropout = False
         return dict(is_dropout=is_dropout)
+
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
 
 class PreVideoQuestionnaire1(Page):
     form_model = 'player'
@@ -524,6 +572,14 @@ class PreVideoQuestionnaire1(Page):
             is_dropout = False
         return dict(is_dropout=is_dropout)
 
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
+
 class PreVideoQuestionnaire1a(Page):
     form_model = 'player'
     form_fields = [
@@ -552,6 +608,14 @@ class PreVideoQuestionnaire1a(Page):
             is_dropout = False
         return dict(is_dropout=is_dropout)
 
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts > 0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
+
 class PreVideoQuestionnaire2(Page):
         form_model = 'player'
         form_fields = ['risk']
@@ -574,6 +638,14 @@ class PreVideoQuestionnaire2(Page):
             else:
                 is_dropout = False
             return dict(is_dropout=is_dropout)
+
+        def app_after_this_page(player: Player, upcoming_apps):
+            num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+            if num_dropouts > 0:
+                for p in player.group.get_players():
+                    p.payoff = 50.00
+                    p.participant.payoff_ppg = 50.00
+                return 'App10TeamExitThankYou'
 
 class WaitBeforeVideo(WaitPage):
     after_all_players_arrive = goal_wait_for_all
@@ -598,6 +670,18 @@ class VVC(Page):
         else:
             is_dropout = False
         return dict(is_dropout=is_dropout)
+
+    def is_displayed(player: Player):
+      num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+      return num_dropouts <2
+
+    def app_after_this_page(player: Player, upcoming_apps):
+        num_dropouts = sum(p.is_dropout for p in player.group.get_players())
+        if num_dropouts>0:
+            for p in player.group.get_players():
+                p.payoff = 50.00
+                p.participant.payoff_ppg = 50.00
+            return 'App10TeamExitThankYou'
 
 
 class StudyIntroduction1(Page):

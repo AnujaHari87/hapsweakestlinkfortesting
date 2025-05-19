@@ -1,11 +1,13 @@
 from os import environ
 
+from otree.settings import AUTH_LEVEL
+
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fee=0)
 SESSION_CONFIGS = [dict(name='weakestlinkdemo', num_demo_participants=6,
                         app_sequence=  ['App01ConsentAndCheck', 'App01bConsentAndCheck', 'App01cConsentAndCheck',
                                       'App02PostIntro',
                                       'App03WeakestLink', 'App04Questionnaires',  'App06ThankYou',
-                                      'App07ConsentThankYou','App07bEligibilityThankYou','App08DropoutThankYou', 'App09TeamExitThankYou'])]
+                                      'App07ConsentThankYou','App07bEligibilityThankYou','App08DropoutThankYou', 'App09TeamExitThankYou','App10TeamExitThankYou'])]
 LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = ''
 USE_POINTS = False
@@ -20,8 +22,8 @@ ROOMS = [
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
-ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
-
+ADMIN_PASSWORD = 'otreehapsserver3'
+AUTH_LEVEL = 'STUDY'
 SECRET_KEY = 'blahblah'
 OTREE_REST_KEY = 'otreehapsserverrest3'
 
@@ -29,3 +31,4 @@ OTREE_REST_KEY = 'otreehapsserverrest3'
 INSTALLED_APPS = ['otree']
 
 OTREE_PRODUCTION=1
+DEBUG = False

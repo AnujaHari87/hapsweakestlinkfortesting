@@ -81,7 +81,7 @@ class Player(BasePlayer):
     negative_rp_1 = make_field2(
         'How willing are you to punish someone who treats you unfairly, even if there may be costs for you?')
     negative_rp_2 = make_field2(
-        'How willing are you to punish someone who treats others unfairly,even if there may be costs for you?')
+        'How willing are you to punish someone who treats others unfairly, even if there may be costs for you?')
     attention2 = make_field('Please select the option "4" to show that you are answering the questions attentively.')
     attention1 = make_field('Please select the option "1" to show that you are answering the questions attentively.')
 
@@ -220,7 +220,7 @@ class Quest02(Page):
 
 class Quest03(Page):
     form_model = 'player'
-    form_fields = ['interperstrust1','interperstrust2','interperstrust3', 'attention2']
+    form_fields = ['interperstrust1','attention2','interperstrust2','interperstrust3' ]
 
     def before_next_page(player: Player, timeout_happened):
         if player.attention2 != 4:
@@ -249,8 +249,8 @@ class Quest07(Page):
 
 class Quest07a(Page):
     form_model = 'player'
-    form_fields = ['big5_1', 'big5_2', 'big5_3', 'big5_4', 'big5_5',
-                   'big5_6', 'big5_7', 'big5_8', 'big5_9', 'big5_10', 'attention1']
+    form_fields = ['big5_1', 'big5_2', 'big5_3', 'big5_4', 'big5_5', 'attention1',
+                   'big5_6', 'big5_7', 'big5_8', 'big5_9', 'big5_10' ]
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
