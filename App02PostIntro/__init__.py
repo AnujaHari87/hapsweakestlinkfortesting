@@ -273,7 +273,7 @@ class MyWaitPageStage2Instructions(WaitPage):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 15 * 60
+            return 2 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -377,7 +377,7 @@ def waiting_too_long(player):
 
     import time
     # assumes you set wait_page_arrival in PARTICIPANT_FIELDS.
-    return time.time() - participant.vars['wait_page_arrival'] > 15 * 60
+    return time.time() - participant.vars['wait_page_arrival'] > 2 * 60
 
 
 def group_by_arrival_time_method(subsession, waiting_players):

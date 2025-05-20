@@ -194,10 +194,24 @@ class IntroPart3(Page):
         group_matrix_comm = player.session.vars.get('group_matrix')
         player.in_round(1).group.subsession.set_group_matrix(group_matrix_comm)
 
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
+
 
 class Quest01(Page):
     form_model = 'player'
     form_fields = ['team_cohesion']
+
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
     def vars_for_template(self: Player):
         image_names = [
@@ -216,6 +230,12 @@ class Quest02(Page):
     form_model = 'player'
     form_fields = ['social_cohesion_short']
     # usability, satisfaction, intention to use
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
 
 class Quest03(Page):
@@ -226,11 +246,24 @@ class Quest03(Page):
         if player.attention2 != 4:
             player.attention_check += 1
 
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
+
 
 
 class Quest05(Page):
     form_model = 'player'
     form_fields = ['positive_rp_1', 'negative_rp_3' ]
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
 
 
@@ -238,6 +271,12 @@ class Quest05(Page):
 class Quest04(Page):
     form_model = 'player'
     form_fields = [ 'negative_rp_1', 'negative_rp_2']
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
 
 
@@ -245,6 +284,12 @@ class Quest04(Page):
 class Quest07(Page):
     form_model = 'player'
     form_fields = ['positive_rp_2']
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
 
 class Quest07a(Page):
@@ -256,6 +301,13 @@ class Quest07a(Page):
     def before_next_page(player: Player, timeout_happened):
         if player.attention1 != 1:
             player.attention_check += 1
+
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
 
 class Quest08(Page):
@@ -269,6 +321,13 @@ class Quest08(Page):
         else:
             player.payoff_quests = 0
 
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
+
 
 
 
@@ -277,18 +336,29 @@ class QuestDemographics(Page):
     form_fields = [ 'prolificdays_month',
                    'prolifichours_day', 'prolificprimary_income', 'other_income_specify',
                      'us_state',  'gender', 'age', 'education', 'ethnicity', 'other_ethnicity_specify', 'other_gender_specify']
-
+    def is_displayed(player: Player):
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
+        return is_dropout == False
 
 class QuestEnd(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
         participant = player.participant
+        if 'is_dropout' in player.participant.vars:
+            is_dropout = player.participant.vars['is_dropout']
+        else:
+            is_dropout = False
 
         return dict(
             total_payoff_ecu=(200 + participant.payoff_ppg),
             payoff_bonus = (participant.payoff_ppg * 0.02),
-            total_payoff=6 + (participant.payoff_ppg) * 0.02
+            total_payoff=6 + (participant.payoff_ppg) * 0.02,
+            dropout_payoff = 4,
+            is_dropout=is_dropout
         )
 
 
