@@ -273,7 +273,7 @@ class MyWaitPageStage2Instructions(WaitPage):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 2 * 60
+            return 15 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -377,7 +377,7 @@ def waiting_too_long(player):
 
     import time
     # assumes you set wait_page_arrival in PARTICIPANT_FIELDS.
-    return time.time() - participant.vars['wait_page_arrival'] > 2 * 60
+    return time.time() - participant.vars['wait_page_arrival'] > 15 * 60
 
 
 def group_by_arrival_time_method(subsession, waiting_players):
@@ -661,19 +661,18 @@ class VVC(Page):
     @staticmethod
     def vars_for_template(player: Player):
         optInConsent = player.participant.vars['optInConsent']
-        return dict(optInConsent=optInConsent,
-                    randomNumberTreatment =  player.participant.vars['randomNumberTreatment'])
 
-    def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
         else:
             is_dropout = False
-        return dict(is_dropout=is_dropout)
+        return dict(optInConsent=optInConsent,
+                    is_dropout=is_dropout)
+
 
     def is_displayed(player: Player):
       num_dropouts = sum(p.is_dropout for p in player.group.get_players())
-      return num_dropouts <2
+      return num_dropouts < 2
 
     def app_after_this_page(player: Player, upcoming_apps):
         num_dropouts = sum(p.is_dropout for p in player.group.get_players())
@@ -682,7 +681,6 @@ class VVC(Page):
                 p.payoff = 50.00
                 p.participant.payoff_ppg = 50.00
             return 'App10TeamExitThankYou'
-
 
 class StudyIntroduction1(Page):
     form_model = 'player'
