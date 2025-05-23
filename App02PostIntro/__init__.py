@@ -762,7 +762,7 @@ class Comprehension1(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -786,7 +786,7 @@ class Comprehension2(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -811,7 +811,7 @@ class Comprehension3(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -836,7 +836,7 @@ class Comprehension4(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:

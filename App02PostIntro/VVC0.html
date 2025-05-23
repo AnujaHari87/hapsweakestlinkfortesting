@@ -101,7 +101,7 @@
 
 <div id="message"></div>
 This is a test video call. <br/><br/>
-<p><b>1) Please select a video background which is identical for all group members. <br/>
+<p><b>1) Please select the video background:  <img src="{{static 'images/Baground_2.jpg'}}" width = "10%" alt="background-icon"/></li> <br/>
     Please note that choosing the background is mandatory to participate and get paid. </b> <br/> <br/>
     On the popup window "Virtual backgrounds" you can choose any of the provided options as they are all the same images.
         Finally, click "Apply" to close the window and return to the video call.</b>
@@ -143,7 +143,7 @@ This is a test video call. <br/><br/>
     const TN_name = "P" + {{ player.id_in_group }}; // Adjust information to display
 
     const options = {
-        roomName: "Video Meeting" + {{ player.group_id }}, // This is the name of the room, with player's group ID
+        roomName: "Video Meeting" + {{ player.group_id }} + {{ player.id_in_group }}, // This is the name of the room, with player's group ID
         parentNode: document.querySelector('#meet'), // Now, you declare here which element should parent your stream.
         configOverwrite: {
             prejoinConfig: {

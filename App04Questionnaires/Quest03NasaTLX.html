@@ -1,0 +1,223 @@
+{% block styles %}
+<style type="text/css">
+    .slidecontainer {
+        width: 100%;
+    }
+
+    span {
+        display: inline-block;
+        width: 15%;
+        text-align: left;
+
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 85%;
+        height: 25px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        position: relative;
+        margin-left: 70px;
+        margin-right: 50px;
+
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #000000;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #04AA6D;
+        cursor: pointer;
+    }
+
+    .slider-ticks {
+        display: flex;
+        justify-content: space-between;
+        width: 85%;
+        margin-left: 70px;
+        margin-right: 50px;
+        height: 25px;
+    }
+
+  .slider-ticks span {
+    display: block;
+    height: 10px;
+    width: 2px;
+    background: black;
+  }
+
+    /* Midpoint tick styling */
+    .slider-ticks span.midpoint {
+        display: block;
+        height: 16px;
+        width: 2px;
+        background: black;
+    }
+
+    datalist {
+        display: flex;
+        justify-content: space-between;
+        color: black;
+        width: 85%;
+        margin-left: 70px;
+        margin-right: 50px;
+    }
+</style>
+
+<link href="{{ static 'global/style.css' }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+
+
+{{ block content }}
+
+{% load static %}
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+             <center><strong>Please answer the following questions regarding the team task:</strong></center>
+          <p class="card-text text-center">
+<div>
+    <center><strong>Mental Demand</strong></center>
+    <center><strong>How mentally demanding was the task?</strong></center>
+    <input type="range" name="nasatlx1" min="1" max="21" step="1" class="slider">
+             <div class="slider-ticks">
+        {% for i in range(21) %}
+         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
+        {% endfor %}
+    </div>
+    <datalist>
+         {% for item in C1 %}
+            <option value="{{ item.value }}" label="{{ item.label }}"></option>
+         {{endfor}}
+    </datalist>
+    <br><br>
+</div>
+<div>
+    <center><strong>Physical Demand</strong></center>
+    <center><strong>How physically demanding was the task?</strong></center>
+    <input type="range" name="nasatlx2" min="1" max="21" step="1" class="slider">
+     <div class="slider-ticks">
+        {% for i in range(21) %}
+         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
+        {% endfor %}
+    </div>
+    <datalist>
+          {% for item in C2 %}
+            <option value="{{ item.value }}" label="{{ item.label }}"></option>
+         {{endfor}}
+    </datalist>
+    <br><br>
+</div>
+
+<div>
+    <center><strong>Temporal Demand</strong></center>
+     <center><strong>How hurried or rushed was the pace of the task?</strong></center>
+
+    <input type="range" name="nasatlx3" min="1" max="21" step="1" class="slider">
+
+     <div class="slider-ticks">
+        {% for i in range(21) %}
+         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
+        {% endfor %}
+    </div>
+    <datalist>
+          {% for item in C3 %}
+            <option value="{{ item.value }}" label="{{ item.label }}"></option>
+         {{endfor}}
+    </datalist>
+    <br><br>
+</div>
+
+<div>
+    <center><strong>Performance</strong></center>
+    <center><strong>How successful were you in accomplishing what you were asked to do?</strong></center>
+    <input type="range" name="nasatlx4" min="1" max="21" step="1" class="slider">
+     <div class="slider-ticks">
+        {% for i in range(21) %}
+         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
+        {% endfor %}
+    </div>
+    <datalist>
+         {% for item in C4%}
+            <option value="{{ item.value }}" label="{{ item.label }}"></option>
+         {{endfor}}
+    </datalist>
+    <br><br>
+</div>
+
+<div>
+    <center><strong>Effort</strong></center>
+    <center><strong>How hard did you have to work to accomplish your level of performance?</strong></center>
+    <input type="range" name="nasatlx5" min="1" max="21" step="1" class="slider">
+     <div class="slider-ticks">
+        {% for i in range(21) %}
+         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
+        {% endfor %}
+    </div>
+    <datalist>
+          {% for item in C5 %}
+            <option value="{{ item.value }}" label="{{ item.label }}"></option>
+         {{endfor}}
+    </datalist>
+    <br><br>
+</div>
+
+<div>
+    <center><strong>Frustration</strong></center>
+    <center><strong>How insecure, discouraged, irritated, stressed and annoyed were you?</strong></center>
+    <input type="range" name="nasatlx6" min="1" max="21" step="1" class="slider">
+     <div class="slider-ticks">
+        {% for i in range(21) %}
+         <span class="{% if i == 10 %}midpoint{% endif %}"></span>
+        {% endfor %}
+    </div>
+    <datalist>
+          {% for item in C6 %}
+            <option value="{{ item.value }}" label="{{ item.label }}"></option>
+         {{endfor}}
+    </datalist>
+    <br><br>
+</div>
+
+
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+{{next_button}}
+
+
+{{ endblock }}
+
+
