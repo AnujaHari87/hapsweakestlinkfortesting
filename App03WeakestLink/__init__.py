@@ -12,6 +12,19 @@ def make_field(label):
         label=label,
         widget=widgets.RadioSelect,
     )
+def make_field_h(label):
+    return models.IntegerField(
+        choices=[0, 10, 20, 30, 40],
+        label=label,
+        widget=widgets.RadioSelectHorizontal
+    )
+
+def make_field7(label):
+    return models.IntegerField(
+        choices=[1, 2, 3, 4, 5, 6, 7],
+        label=label,
+        widget=widgets.RadioSelectHorizontal
+    )
 
 
 class C(BaseConstants):
@@ -41,6 +54,10 @@ class Player(BasePlayer):
         label='',
         blank=True
     )
+    belief1_1 = make_field_h("What is your best guess on the minimum hours that your team members contributed to Project A in this round?")
+    belief2_1 = make_field7("How confident are you in your guess? <br/>(1: not all, 7: very much so)")
+    belief1_10 = make_field_h("What is your best guess on the minimum hours that your team members contributed to Project A in this round?")
+    belief2_10 = make_field7("How confident are you in your guess? <br/>(1: not all, 7: very much so)")
     # ANUJA: I'm not sure where in the code exactly, but the calculation of the payout for the participant will need to be changed to match the new compensation table.
 
 
@@ -77,6 +94,67 @@ class Decision(Page):
         dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
         return dict(round_num=player.round_number, dropout_count = dropout_count)
 
+class Beliefs1(Page):
+    form_model = 'player'
+    form_fields = ['belief1_1','belief2_1']
+
+    def is_displayed(player):
+        return player.group.round_number == 1
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        if ('is_dropout' in player.participant.vars):
+            print(player.participant.vars['is_dropout'])
+        print('In Decision')
+        if 'is_dropout' in player.participant.vars and player.participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 3 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+        group_matrix_comm = player.session.vars.get('group_matrix')
+        player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
+
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        return dict(round_num=player.round_number, dropout_count = dropout_count,horizontal_radio_buttons=True)
+
+
+class Beliefs10(Page):
+    form_model = 'player'
+    form_fields = ['belief1_10', 'belief2_10']
+
+    def is_displayed(player):
+        return player.group.round_number == 10
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        if ('is_dropout' in player.participant.vars):
+            print(player.participant.vars['is_dropout'])
+        print('In Decision')
+        if 'is_dropout' in player.participant.vars and player.participant.vars['is_dropout'] is True:
+            return 1  # instant timeout, 1 second
+        else:
+            return 3 * 60
+
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            player.participant.vars['is_dropout'] = True
+            player.is_dropout = True
+
+        group_matrix_comm = player.session.vars.get('group_matrix')
+        player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        return dict(round_num=player.round_number, dropout_count=dropout_count)
 
 class CalculatePayoff(WaitPage):
     body_text = "Please wait until your team members have made their decision."
@@ -141,9 +219,9 @@ class CalculatePayoff(WaitPage):
                 else:
                     p_past = p.in_round(group.randomNumber)
                     g_past = group.in_round(group.randomNumber)
-                    p.payoff = C.ENDOWMENT + (10 * g_past.groupMin) - (5 * p_past.ownDecision)
+                    p.payoff = C.ENDOWMENT + (10 * g_past.groupMin) - (5 * p_past.ownDecision) + 300
                     part = p.participant
-                    part.payoff_ppg = p.payoff
+                    part.payoff_ppg = p.payoff - 300
                     part.payoff_round = group.randomNumber
 
 
@@ -182,7 +260,7 @@ class Results(Page):
 
 
 
-page_sequence = [Decision, CalculatePayoff, Results]
+page_sequence = [Decision, CalculatePayoff, Beliefs1, Beliefs10, Results]
 
 
 # NOTES FOR ANUJA FROM BELLA:

@@ -73,7 +73,6 @@ def make_image_data(image_names):
 
 class Player(BasePlayer):
     team_cohesion = models.StringField()
-    payoff_quests = models.IntegerField()
     attention_check = models.IntegerField(initial=0)
     social_cohesion_short = make_field7('')
 
@@ -314,13 +313,6 @@ class Quest08(Page):
     form_model = 'player'
     form_fields = ['appearance']
 
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        if player.attention_check <= 1:
-            player.payoff_quests = 100
-        else:
-            player.payoff_quests = 0
-
     def is_displayed(player: Player):
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
@@ -350,11 +342,12 @@ class QuestEnd(Page):
         participant = player.participant
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
+            player.payoff = 200
+            player.participant.payoff_ppg = 200
         else:
             is_dropout = False
 
         return dict(
-            total_payoff_ecu=(200 + participant.payoff_ppg),
             payoff_bonus = (participant.payoff_ppg * 0.02),
             total_payoff=6 + (participant.payoff_ppg) * 0.02,
             dropout_payoff = 4,

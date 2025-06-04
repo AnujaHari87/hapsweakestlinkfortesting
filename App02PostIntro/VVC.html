@@ -1,14 +1,11 @@
 {{ extends 'global/Page.html' }}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'global.css' %}">
-{% endblock %}
-{{ block title }} Virtual Team Meeting {{ endblock }}
-{{ block content }}
-<style>
+    <style>
     .column {
         float: left;
         height: 80vh; /* Responsive height */
-        box-sizing: border-box;
+
     }
     .left {
         width: 80%;
@@ -19,11 +16,24 @@
         border: 1px solid #000;
     }
 
+
+    .top {
+        height: 5vh;
+        border: 1px solid #000; /* Optional styling */
+        box-sizing: border-box;
+        width: 100%;
+ 	padding-bottom: 3%;
+       }
+
+    .bottom {
+        height: 80vh;
+        width: 100%;
+    }
     /* Row style with maximum width and responsive adjustments */
     .row {
         width: 100%;
         max-width: 100%;
-        margin: 0 auto; /* Center align the row */
+	margin: 0 auto;
     }
 
     /* Clear floats after the columns */
@@ -62,8 +72,9 @@
       display: flex;
       justify-content: center; /* horizontal center */
       align-items: center;     /* vertical center */
-        text-align: center;
-          line-height: 1.5;
+      text-align: center;
+      line-height: 1.5;
+      width: 100%;
     }
 
 
@@ -102,25 +113,25 @@
     /* Responsive layout */
     @media (max-width: 1200px) {
         .row {
-            max-width: 1000px;
+            max-width: 1200px;
         }
     }
 
     @media (max-width: 1000px) {
         .row {
-            max-width: 800px;
+            max-width: 1000px;
         }
     }
 
     @media (max-width: 800px) {
         .row {
-            max-width: 600px;
+            max-width: 800px;
         }
     }
 
     @media (max-width: 600px) {
         .row {
-            max-width: 100%;
+            max-width: 600px;
         }
 
         .column {
@@ -175,98 +186,75 @@
       border-left: 3px solid #ccc;
     }
 
+     #progressBar {
+        width: 0%;
+        height: 30px;
+        background-color: #4CAF50;
+        transition: width 0.5s ease-in-out; /* Smooth transition for the width change */
+    }
+
 </style>
+{% endblock %}
+{{ block title }} Virtual Team Meeting {{ endblock }}
+{{ block content }}
+
 <div id="myHeader" class="otree-title page-header"></div>
 
 <div id = "box1" class="my-box">
     <div id="message">
     The virtual team meeting has started and you have a total of <b>7 minutes to discuss types of holidays. In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
-    <br/><br/>
+        <br/>Please <b><u>do not</u></b> refresh this page.<br/>
 
      <div class="collapsible-container" onclick="toggleContent()">
       <span id="icon" class="icon">+</span>
       <span>Note:</span>
     </div>
-
-
-
-
         <div id="collapsible-content"  style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;" class="content">
 
 
             <ul>
                 <li>You can click on <b>^ above the "Mute / Unmute" (microphone) icon </b>to select the microphone and speaker you want to use. This might help if your <b>currently selected microphone or speaker do not work</b>.
-                <br/>"Mute / Unmute" (microphone) icon:
+                "Mute / Unmute" (microphone) icon:
                     <img src="{% static 'Picture_Microphone.jpg' %}" alt="microphone-icon"/></li>
 
                 <li>If you have several cameras, you can choose which camera is used by clicking on <b>^ above the "Start/Stop camera" icon</b>. It is mandatory to keep the camera turned on during the meeting.
-                <br/>"Start/Stop camera" icon:
+                "Start/Stop camera" icon:
                     <img src="{% static 'Picture_Camera.jpg' %}" alt="camera-icon"/></li>
-      		<li>If your camera or microphone is not functioning properly, please make sure you have allowed microhone and camera access in your browser settings (Click Browser Settings or to the Left of the address bar) .
+      		<li>If your camera or microphone is not functioning properly, please make sure you have allowed microhone and camera access in your browser settings (Click Browser Settings or to the Left of the address bar).
                 <br/></li>
-
-               <li> Each team member is given a name "O" during <b>Stage 2 and Stage 3</b>.
                 <br/>
+               <li> Each team member is given a name "O" during <b>Stage 2 and Stage 3</b>.
                 There is <b>no hierarchy</b> based on the names. In the Jitsi meeting, you can see the names of each team member in the <b>bottom left corner of each screen</b>.
                 </li>
                 </ul>
 
         </div>
-
     </div>
+    <br/>
+    <br/>
+    <div id="progressBarContainer" style="width: 100%; background-color: #ddd; margin-top: -50px;">
+    <div id="progressBar" style="width: 0%; height: 30px; background-color: cornflowerblue;"></div>
 </div>
-
+</div>
+<br/>
+<br/>
 
     <div id="videopanel" class="row">
-        <div class="column left">
-            <div id="meet"  {% if player.treatmentNumber == 2 %} style="height: 40vh;" {% else %} style="height: 80vh;" {% endif %} ></div>
-        </div>
-        <div id="container" class="column right" {% if player.treatmentNumber == 2 %} style="height: 40vh;" {% else %} style="height: 80vh;" {% endif %}>
-            {{ if player.treatmentNumber == 3 }}
+	{% if player.treatmentNumber == 3 %}
+        <div id="container" class="column top">
+		
               <div id = "messageTreatment" class="center-container">
-                  In this meeting, focus on engaging with others by actively communicating with them.
+                  <br/> <b><h2>Focus on engaging with others in the meeting, and communicate with them.</h2></b><br/>
               </div>
-            {{ endif }}
+		
         </div>
-        <script>
-
-             const treatment1 = {{ player.treatmentNumber}};
- 	    if (treatment1 === 3) {
-
-            const box = document.getElementById("messageTreatment");
-            const computedStyles = window.getComputedStyle(box);
-
-            const totalHeight = box.clientHeight; // Includes padding but not border
-            const lineHeight = 3;
-            const numLines = Math.floor(totalHeight / lineHeight); // Number of lines in the box
-            const modifiedLineCount = numLines; // Subtract 3 from the number of lines
-            const brCount = Math.floor(modifiedLineCount); // Half of the remaining lines
-             console.log("numLines");
-            console.log(numLines);
-            console.log("modifiedLineCount");
-            console.log(modifiedLineCount);
-                    // Create the <br> tags to add before the content
-            let brTags = "";
-            for (let i = 0; i < brCount; i++) {
-              brTags += "<br/>";
-            }
-            console.log("brcount");
-            console.log(brCount);
-            // Add the <br> tags before the current content of the box
-            let modifiedText = brTags + box.innerHTML;
-             console.log(modifiedText);
-
-            // Insert the modified text into the DOM
-            document.getElementById("messageTreatment").innerHTML = modifiedText;
-	   }
-         
-  </script>
-
-    </div>
+	{% endif %}
 
 
-    <div id="nextButtonContainer" style="display:none;">
-        <button id="nextButton">Next</button>
+	<div id="meet"  {% if player.treatmentNumber == 2 %} style="height: 40vh;border: 1px solid #000;" {% else %} style="height: 80vh;border: 1px solid #000" {% endif %} ></div>
+        
+
+
     </div>
 
 
@@ -294,7 +282,7 @@
                 <input type="radio" id="no" name="seehearyes" value="no" onchange="updateSeeHear(this.value)">
                 <label for="no">No, I could not hear and see one or both of the other two team members throughout the call.</label>
             </div>
-            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="1"/>
+            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="0"/>
         </div>
     </form>
     <script>
@@ -307,7 +295,7 @@
             } else if (selectedValue === 'maybe') {
                 seeHear.value = 2;
             } else {
-                seeHear.value = 1;
+                seeHear.value = 0;
             } 
 
         }
@@ -334,7 +322,6 @@
             You will find detailed information on individual payoff on the next page.
          </div>-->
 </div>
-
 
 
 <script src="https://haps-meeting.k8s.iism.kit.edu/external_api.js"></script>
@@ -539,6 +526,11 @@
                             nextBtn.style.display = "block";
                             document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
 
+                            document.getElementById('progressBarContainer').style.visibility = 'hidden';
+                            document.getElementById('progressBarContainer').style.display = 'none';
+                            document.getElementById('progressBar').style.visibility = 'hidden';
+                            document.getElementById('progressBar').style.display = 'none';
+
                             var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                             for (var i = 0; i < timerElements.length; i++) {
                                timerElements[i].style.visibility = 'hidden';
@@ -548,6 +540,10 @@
                             console.error('Failed to upload audio.');
                             nextBtn.style.display = "block";
                             document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                            document.getElementById('progressBarContainer').style.visibility = 'hidden';
+                            document.getElementById('progressBarContainer').style.display = 'none';
+                            document.getElementById('progressBar').style.visibility = 'hidden';
+                            document.getElementById('progressBar').style.display = 'none';
                             var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                             for (var i = 0; i < timerElements.length; i++) {
                                 timerElements[i].style.visibility = 'hidden';
@@ -595,6 +591,10 @@
 
                         nextBtn.style.display = "block";
                             document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                        document.getElementById('progressBarContainer').style.visibility = 'hidden';
+                            document.getElementById('progressBarContainer').style.display = 'none';
+                            document.getElementById('progressBar').style.visibility = 'hidden';
+                            document.getElementById('progressBar').style.display = 'none';
 
                             var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                             for (var i = 0; i < timerElements.length; i++) {
@@ -607,6 +607,10 @@
                             console.error('Failed to upload display audio.');
                             nextBtn.style.display = "block";
                             document.getElementById('message').innerHTML = '<p><b> The video meeting is now terminated. <br/> We will now proceed to Part 2. </b></p>';
+                            document.getElementById('progressBarContainer').style.visibility = 'hidden';
+                            document.getElementById('progressBarContainer').style.display = 'none';
+                            document.getElementById('progressBar').style.visibility = 'hidden';
+                            document.getElementById('progressBar').style.display = 'none';
                             var timerElements = document.getElementsByClassName('otree-timer alert alert-warning');
                             for (var i = 0; i < timerElements.length; i++) {
                                 timerElements[i].style.visibility = 'hidden';
@@ -644,7 +648,12 @@
                                 }
 
                                 if (api) api.dispose();
-                                document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
+                                document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. Please <u><b>do not refresh </b></u> the page during this time. <br/><br/>While uploading, please provide feedback on the virtual team meeting below.<br/><br/> <b>If you do not choose any of the options below, you and your team will not be able to proceed further.</b> <br/><br/> Once the upload is finished, please answer the question below and click next.<br/><br/><b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at most</b>.</p> </div>';
+                                  document.getElementById('progressBarContainer').style.visibility = 'hidden';
+                                    document.getElementById('progressBarContainer').style.display = 'none';
+                                    document.getElementById('progressBar').style.visibility = 'hidden';
+                                    document.getElementById('progressBar').style.display = 'none';
+
                                 var headerElement= document.getElementById('myHeader');
                                 console.debug('header element');
                                 console.debug(headerElement);
@@ -696,6 +705,10 @@
 					 api.dispose();
 				}
                                 document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
+                                document.getElementById('progressBarContainer').style.visibility = 'hidden';
+                                document.getElementById('progressBarContainer').style.display = 'none';
+                                document.getElementById('progressBar').style.visibility = 'hidden';
+                                document.getElementById('progressBar').style.display = 'none';
                                 var headerElement= document.getElementById('myHeader');
                                 console.debug('header element');
                                 console.debug(headerElement);
@@ -729,8 +742,67 @@ function toggleContent() {
     }
   }
 
+</script>
+
+
+<script>
+    const duration = 7 * 60;
+
+    /// Start Time Log
+    document.addEventListener("DOMContentLoaded", function() {
+
+        startProgressBar(duration);
+
+
+    });
+
+    function startProgressBar(duration) {
+        var elem = document.getElementById("progressBar");
+
+        var totalTime = duration * 1000; // Total time in milliseconds
+        var intervalTime = 500; // Update interval in milliseconds
+        var increments = totalTime / intervalTime; // Total number of increments
+        var widthIncrement = 100 / increments; // Width increment per interval
+
+        var width = widthIncrement;
+
+        var id = setInterval(frame, intervalTime);
+        function frame() {
+            if (width > 100) {
+                clearInterval(id);
+            } else {
+                width += widthIncrement;
+                elem.style.width = width + '%';
+            }
+        }
+    }
+
 
 </script>
 <br/>
+<script>
+    window.onload = function () {
+        preventRefreshAndReload();
+    };
+function preventRefreshAndReload() {
+    // Prevent F5 and Ctrl+R / Cmd+R
+    window.addEventListener('keydown', function (e) {
+        // F5
+        if (e.key === 'F5') {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Ctrl+R or Cmd+R
+        if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
+  
+}
+</script>
 {{ next_button }}
 {{ endblock }}
+
