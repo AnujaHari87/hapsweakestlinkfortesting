@@ -45,6 +45,7 @@
 {% block content %}
  <div class="my-box">
 
+  <input name="closed_early" id="hidden_closed_early" value="0" type="hidden"/>
 
         <!-- The following <div> displayed in addition to the rest of the content that is currently present on the page
         if the user has waited for more than 5 minutes for other participants to join. This <div> is taken from the
@@ -80,6 +81,7 @@
             <br>
             If you leave the study now, you still might have the opportunity to participant in Part 2 of this study at a later time.
             <br>
+             <script>unloadPage()</script>
         </div>
 
 
@@ -109,5 +111,18 @@
         }, 5000); // Reload interval from js_vars
     }
     window.onload = reloadPage;
+
+    window.onbeforeunload = unloadPage;
+    window.onunload = unloadPage;
+
+     function unloadPage() {
+          console.log('Page is about to be closed or refreshed');
+          const closed_early = document.getElementById('hidden_closed_early');
+          closed_early.value = 1;
+          liveSend({
+                "closed_early": 1
+            });
+    }
+
 </script>
 {% endblock %}
