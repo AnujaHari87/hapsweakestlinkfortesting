@@ -1,0 +1,18 @@
+recreates group
+timeoutworker is listening for messages through DB
+Traceback (most recent call last):
+  File "/usr/local/bin/otree", line 8, in <module>
+    sys.exit(execute_from_command_line())
+  File "/usr/local/lib/python3.8/dist-packages/otree/main.py", line 112, in execute_from_command_line
+    call_command(cmd, *argv[2:])
+  File "/usr/local/lib/python3.8/dist-packages/otree/cli/base.py", line 32, in call_command
+    module.Command().outer_handle(args)
+  File "/usr/local/lib/python3.8/dist-packages/otree/cli/base.py", line 10, in outer_handle
+    return self.handle(**vars(options))
+  File "/usr/local/lib/python3.8/dist-packages/otree/cli/timeoutsubprocess.py", line 12, in handle
+    Worker(port).listen()
+  File "/usr/local/lib/python3.8/dist-packages/otree/tasks.py", line 63, in listen
+    sleep(3)
+KeyboardInterrupt
+recreates group
+Running prodserver

@@ -1,0 +1,22 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Thank You{{ endblock }}
+
+{{ block content }}
+<style>
+.my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+</style>
+<div class="my-box">
+ <div id="dropout" class="dropout">
+            <p> Unfortunately, the <b>both members from the team</b> dropped out after the video call and you cannot proceed with this study.
+                <br/><br/>
+                Please <b>return your submission</b> and, afterwards, we will <b>send you a bonus payment of <u>£4.00</u> for your time</b>.
+                <br/><br/>
+                <b>Click <a href="https://app.prolific.com/submissions/complete?cc=CJDZFR50" target="_blank" onclick="window.open(this.href, '_blank'); window.close(); return false;">here</a> to be redirected to Prolific.</b>
+            </p>
+        </div>
+</div>
+{{ endblock }}

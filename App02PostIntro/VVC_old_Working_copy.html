@@ -22,8 +22,7 @@
         border: 1px solid #000; /* Optional styling */
         box-sizing: border-box;
         width: 100%;
- 	padding-bottom: 3%;
-       }
+    }
 
     .bottom {
         height: 80vh;
@@ -33,7 +32,7 @@
     .row {
         width: 100%;
         max-width: 100%;
-	margin: 0 auto;
+        margin: 0 auto; /* Center align the row */
     }
 
     /* Clear floats after the columns */
@@ -72,9 +71,8 @@
       display: flex;
       justify-content: center; /* horizontal center */
       align-items: center;     /* vertical center */
-      text-align: center;
-      line-height: 1.5;
-      width: 100%;
+        text-align: center;
+          line-height: 1.5;
     }
 
 
@@ -113,25 +111,25 @@
     /* Responsive layout */
     @media (max-width: 1200px) {
         .row {
-            max-width: 1200px;
+            max-width: 1000px;
         }
     }
 
     @media (max-width: 1000px) {
         .row {
-            max-width: 1000px;
+            max-width: 800px;
         }
     }
 
     @media (max-width: 800px) {
         .row {
-            max-width: 800px;
+            max-width: 600px;
         }
     }
 
     @media (max-width: 600px) {
         .row {
-            max-width: 600px;
+            max-width: 100%;
         }
 
         .column {
@@ -202,7 +200,7 @@
 
 <div id = "box1" class="my-box">
     <div id="message">
-    The virtual team meeting has started and you have a total of <b>7 minutes to discuss types of vacation (camping, beach, city trips etc.). In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
+    The virtual team meeting has started and you have a total of <b>7 minutes to discuss types of holidays. In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
         <br/>Please <b><u>do not</u></b> refresh this page.<br/>
 
      <div class="collapsible-container" onclick="toggleContent()">
@@ -240,19 +238,18 @@
 <br/>
 
     <div id="videopanel" class="row">
-	{% if player.treatmentNumber == 3 %}
+     {{ if player.treatmentNumber == 3 }}
         <div id="container" class="column top">
-		
+
               <div id = "messageTreatment" class="center-container">
-                  <br/> <b><h2>Focus on engaging with others in the meeting, and communicate with them.</h2></b><br/>
+                  <br/> <b>Focus on engaging with others in the meeting and communicate with them.</b><br/>
               </div>
-		
+
         </div>
-	{% endif %}
-
-
-	<div id="meet"  {% if player.treatmentNumber == 2 %} style="height: 40vh;border: 1px solid #000;" {% else %} style="height: 80vh;border: 1px solid #000" {% endif %} ></div>
-        
+      {{ endif }}
+        <div class="column bottom">
+            <div id="meet"  {% if player.treatmentNumber == 2 %} style="height: 40vh;" {% else %} style="height: 80vh;" {% endif %} ></div>
+        </div>
 
 
     </div>
@@ -261,7 +258,7 @@
 <div id = "description"  type = "hidden" class="my-box1">
  <div class="my-box">
 
-    <p>Please choose the closest option about the quality of the virtual team meeting and click next:</b></p>
+    <p>During the virtual team meeting, could you <b>hear and see both of the other two team members?</b></p>
 
     <form>
         <div class="radio-container">
@@ -269,20 +266,20 @@
 
             <div class="radio-option">
                 <input type="radio" id="yes" name="seehearyes" value="yes" onchange="updateSeeHear(this.value)">
-                <label for="yes">I could hear and see both of the other two team members.</label>
+                <label for="yes">Yes, I could hear and see both of the other two team members.</label>
             </div>
 
 
             <div class="radio-option">
                 <input type="radio" id="maybe" name="seehearyes" value="maybe" onchange="updateSeeHear(this.value)">
-                <label for="maybe">I could hear and understand the others mostly, despite minor audio or video interruptions.</label>
+                <label for="maybe">I could hear and understand the others overall, despite microphone or connection interruptions.</label>
             </div>
 
             <div class="radio-option">
                 <input type="radio" id="no" name="seehearyes" value="no" onchange="updateSeeHear(this.value)">
-                <label for="no">I could not hear and see one or both of the other two team members throughout the call.</label>
+                <label for="no">No, I could not hear and see one or both of the other two team members throughout the call.</label>
             </div>
-            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="2"/>
+            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="1"/>
         </div>
     </form>
     <script>
@@ -295,7 +292,7 @@
             } else if (selectedValue === 'maybe') {
                 seeHear.value = 2;
             } else {
-                seeHear.value = 2;
+                seeHear.value = 1;
             } 
 
         }
@@ -365,25 +362,25 @@
             },
 	        disableAEC: false, // Acoustic Echo Cancellation
             disableNS: false,  // Noise Suppression
-            resolution: 360,
+            resolution: 480,
                 constraints: {
                     video: {
                         height: {
-                            ideal: treatment === 2 ? 180 : 360,
-                            max: treatment === 2 ? 180 : 360,
-                            min: 180
+                            ideal: treatment === 2 ? 240 : 480,
+                            max: treatment === 2 ? 240 : 480,
+                            min: 240
                         }
                     }
                 },
-                disableSimulcast: true,
-                enableLayerSuspension: false,
+                disableSimulcast: false,
+                enableLayerSuspension: true,
                 toolbarButtons: [
-                    'microphone', 'camera' // Custom button added
+                    'microphone', 'camera', 'tileview' // Custom button added
                 ]
 
         },
         interfaceConfigOverwrite: {
-            TOOLBAR_BUTTONS: ['microphone', 'camera', 'fodeviceselection'],
+            TOOLBAR_BUTTONS: ['microphone', 'camera', 'fodeviceselection', 'tileview'],
             SHOW_JITSI_WATERMARK: false,
             TILE_VIEW_MAX_COLUMNS: 2,
             TILE_VIEW_ENABLED: true,
@@ -648,7 +645,7 @@
                                 }
 
                                 if (api) api.dispose();
-                                document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;"> <p style="color: #C9224A;">Uploading recording... Please wait until the upload is finished. Please <u><b>do not refresh </b></u>the page during this time. <br/><br/>While uploading, please provide feedback on the virtual team meeting below.<br/><br/> <b>Please make sure to select atleast one of the options below.</b> <br/><br/> Once the upload is finished, please answer the question below and click next.<br/><br/><b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at most</b>.</p> </div>';
+                                document.getElementById('message').innerHTML = '<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">  <p style="color: #C9224A;"> Uploading recording...  Please wait until the upload is finished. While uploading, you can provide feedback on the virtual team meeting below. <br/><br/> Once the upload is finished, you will automatically proceed to the next page. <br/><br/>  <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>. </p> </div>';
                                   document.getElementById('progressBarContainer').style.visibility = 'hidden';
                                     document.getElementById('progressBarContainer').style.display = 'none';
                                     document.getElementById('progressBar').style.visibility = 'hidden';

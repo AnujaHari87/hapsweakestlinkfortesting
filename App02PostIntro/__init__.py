@@ -104,14 +104,14 @@ class Player(BasePlayer):
     self_cons_22 = make_field4('Large groups make me nervous.')
 
     risk = make_field2("")
-    holidays_1 = make_field('Sun, sea, and beach holiday.')
-    holidays_2 = make_field('Party holiday.')
-    holidays_3 = make_field('Winter sports holiday.')
+    holidays_1 = make_field('Sun, sea, and beach vacation.')
+    holidays_2 = make_field('Party vacation.')
+    holidays_3 = make_field('Winter sports vacation.')
     holidays_4 = make_field('City trip.')
-    holidays_5 = make_field('Backpacking holiday.')
+    holidays_5 = make_field('Backpacking vacation.')
     holidays_6 = make_field('Excursion.')
-    holidays_7 = make_field('Camping holiday.')
-    holidays_8 = make_field('Cruise holiday.')
+    holidays_7 = make_field('Camping vacation.')
+    holidays_8 = make_field('Cruise vacation.')
     comp1_check = models.IntegerField(initial=0)
     comp2_check = models.IntegerField(initial=0)
     comp3_check = models.IntegerField(initial=0)
@@ -166,7 +166,7 @@ class Player(BasePlayer):
 
 
     seeHear = models.IntegerField(blank=True, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
-                                         attrs={"invisible": True},  default = 0)
+                                         attrs={"invisible": True},  default = 2)
 
     groupExit = models.BooleanField(
         default=False,
@@ -334,8 +334,6 @@ class MyWaitPage_PreVirtualMeeting(WaitPage):
                 p.payoff = 75.00
                 p.participant.payoff_ppg = 75.00
             return 'App10TeamExitThankYou'
-
-
 
 class PartsRoundsGroups(Page):
     form_model = 'player'
@@ -705,6 +703,7 @@ class StudyIntroduction1(Page):
             is_dropout = False
         return dict(is_dropout=is_dropout)
 
+
 class StudyIntroduction2(Page):
     form_model = 'player'
 
@@ -727,7 +726,6 @@ class StudyIntroduction2(Page):
         else:
             is_dropout = False
         return dict(is_dropout=is_dropout)
-
 
 class StudyIntroduction3(Page):
     form_model = 'player'
@@ -946,8 +944,7 @@ class MyWaitPage_PostTechCheck(WaitPage):
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
-            print('Setting to true in MyWaitPagePostVVC')
-            print('Setting dropout to true in MyWaitPagePostVVC')
+            print('Setting dropout to true in MyWaitPage_PostTechCheck')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
@@ -977,8 +974,6 @@ class VideoConSelfFocAttn(Page):
             player.is_dropout = True
 
 
-
-
 class NasaTLX(Page):
     form_model = 'player'
     form_fields = ['nasatlx1','nasatlx2']
@@ -1006,6 +1001,7 @@ class NasaTLX(Page):
             print('Setting to true in NasaTLX')
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
 
 
 class DescriptionThankYou(Page):
