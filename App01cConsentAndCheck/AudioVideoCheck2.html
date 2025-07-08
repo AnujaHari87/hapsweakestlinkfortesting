@@ -15,14 +15,27 @@
      <div class="my-box">
 
     <p>
-        You can only participate in Stage 2 of this study if you use <b>a Chrome, an Edge, or an Opera browser</b>.
+        You can only participate in Stage 2 of this study if you use <b> a Chrome, an Edge, or an Opera browser</b>.
         <br/> <br/>
-        If you are currently <b>not</b> using a Chrome, an Edge, or an Opera browser,
         <ul>
-         <li><b>Please copy the link of the current page, and open it in a Chrome, an Edge, or an Opera browser</b>. <br/>Otherwise, you cannot proceed with this study.</li>
+         <li>If you are currently <b>not</b> using a Chrome, an Edge, or an Opera browser,</li><br/>
+         <ul>
+         <li><b>Please copy the link of the current page, and open it in a Chrome, an Edge, or an Opera browser</b>. <br/><br/>Otherwise, you cannot proceed with this study.</li><br/>
+          <li>Please remember to <b><u>close</u></b> this current tab. </li><br/>
+             <br/>
+        </ul>
+
+
+       <li>For Chrome users, if you are currently <b>not</b> using the latest update (137.0.xx.xx), <br/><br/></li>
+        <ul>
+            <li>Please copy the link of the current page on your clipboard, <b>update your Chrome version by clicking on Chrome's settings </b> and open it in a new Chrome browser window after the update.
+             <br/><br/>Otherwise, you cannot proceed with this study.</li>
         <br/>
-         <li>Please remember to <b>close</b> this current tab. </li><br/>
-         <li>Afterwards, please click on the "Next" button in the permitted browser to proceed with the study.</li>
+              <li>Please remember to <b><u>close</u></b> this current tab. </li><br/>
+        </ul>
+
+         <li>Afterwards, please click on the "Next" button in the <b><u>permitted</u></b> browser to proceed with the study.</li>
+            </ul>
     </p>
 
     </div>
@@ -36,6 +49,15 @@
                 const userAgent = navigator.userAgent.toLowerCase();
                 // Check if the browser is Chrome, Opera, or Edge
                   if (userAgent.indexOf("chrome") > -1 || userAgent.indexOf("opr") > -1 || userAgent.indexOf("edg") > -1) {
+                      if (userAgent.indexOf("chrome") > -1) {
+                            // Extract Chrome version number
+                            let match = userAgent.match(/chrome\/(\d+)\./); // Extracts major version like 137
+                            if (match && parseInt(match[1]) >= 137) {
+                                return true; // Chrome version is supported
+                            } else {
+                                return false; // Chrome version is too old
+                            }
+                        }
                       return true; // Supported browser
                 } else {
                       return false; // Not a supported browser
@@ -50,4 +72,3 @@
   <br/>
 {{next_button}}
 {{ endblock }}
-

@@ -204,17 +204,19 @@
     <div id="message">
     The virtual team meeting has started and you have a total of <b>7 minutes to discuss types of vacation (camping, beach, city trips etc.). In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
         <br/>Please <b><u>do not</u></b> refresh this page.<br/>
-	
 
      <div class="collapsible-container" onclick="toggleContent()">
       <span id="icon" class="icon">+</span>
       <span>Note:</span>
     </div>
         <div id="collapsible-content"  style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;" class="content">
+
+
             <ul>
                 <li>You can click on <b>^ above the "Mute / Unmute" (microphone) icon </b>to select the microphone and speaker you want to use. This might help if your <b>currently selected microphone or speaker do not work</b>.
                 "Mute / Unmute" (microphone) icon:
                     <img src="{% static 'Picture_Microphone.jpg' %}" alt="microphone-icon"/></li>
+
                 <li>If you have several cameras, you can choose which camera is used by clicking on <b>^ above the "Start/Stop camera" icon</b>. It is mandatory to keep the camera turned on during the meeting.
                 "Start/Stop camera" icon:
                     <img src="{% static 'Picture_Camera.jpg' %}" alt="camera-icon"/></li>
@@ -225,14 +227,16 @@
                 There is <b>no hierarchy</b> based on the names. In the Jitsi meeting, you can see the names of each team member in the <b>bottom left corner of each screen</b>.
                 </li>
                 </ul>
+
         </div>
     </div>
-   <br/>
+    <br/>
     <br/>
     <div id="progressBarContainer" style="width: 100%; background-color: #ddd; margin-top: -50px;">
     <div id="progressBar" style="width: 0%; height: 30px; background-color: cornflowerblue;"></div>
 </div>
 </div>
+<br/>
 <br/>
 
     <div id="videopanel" class="row">
@@ -253,37 +257,33 @@
 
     </div>
 
+
 <div id = "description"  type = "hidden" class="my-box1">
  <div class="my-box">
-    <p><b>Please choose the closest option about the quality of the virtual team meeting:</b></p>
+
+    <p>Please choose the closest option about the quality of the virtual team meeting, and confirm you will continue the experiment:</b></p>
+
     <form>
         <div class="radio-container">
+
 
             <div class="radio-option">
                 <input type="radio" id="yes" name="seehearyes" value="yes" onchange="updateSeeHear(this.value)">
                 <label for="yes">I could hear and see both of the other two team members.</label>
             </div>
+
+
             <div class="radio-option">
                 <input type="radio" id="maybe" name="seehearyes" value="maybe" onchange="updateSeeHear(this.value)">
-                <label for="maybe">I could <i>mostly</i> hear and understand the others, despite minor audio or video interruptions.</label>
+                <label for="maybe">I could hear and understand the others mostly, despite minor audio or video interruptions.</label>
             </div>
 
             <div class="radio-option">
                 <input type="radio" id="no" name="seehearyes" value="no" onchange="updateSeeHear(this.value)">
                 <label for="no">I could not hear and see one or both of the other two team members throughout the call.</label>
             </div>
-		<br/><br/>
- 	    <b>Please confirm the following statement:</b>
-
- 	    <div class="radio-option">
-                <input type="radio" id="attnCheck" name="attentionCheckYes" value="yes" onchange="updateAttentionCheck(this.value)">
-                <label for="attnCheck">I confirm that I am human, and will continue participating in this experiment.</label>
-
-            </div>
             <input id="hiddenSeeHear" type="hidden" name="seeHear" value="2"/>
-	    <input id="hiddenAttentionCheck" type="hidden" name="attentionCheck" value="0"/>
         </div>
-
     </form>
     <script>
         function updateSeeHear(selectedValue) {
@@ -300,6 +300,18 @@
 
         }
     </script>
+
+
+     <form>
+          <div class="radio-container">
+              <div class="radio-option">
+                <input type="radio" id="attnCheck" name="attentionCheckYes" value="yes" onchange="updateAttentionCheck(this.value)">
+                <label for="attnCheck">I confirm that I am human, and will continue participating in this experiment.</label>
+            </div>
+              <input id="hiddenAttentionCheck" type="hidden" name="attentionCheck" value="0"/>
+         </div>
+     </form>
+
      <script>
         function updateAttentionCheck(selectedValue) {
             var attentionCheck = document.getElementById("hiddenAttentionCheck");
@@ -312,9 +324,27 @@
         }
     </script>
 </div>
+</div>
 
 
 
+      <!--  <div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+            <b>Stage 3: Instructions</b>
+            <br/><br/>
+            The decision-making task consists of <b>10 identical, consecutive rounds</b>.
+            <br/><br/>
+            Imagine that you and the other two members of your group belong to a virtual team of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends 40 hours working for the firm. You must choose how to allocate your time between two projects, Project A and Project B.
+            <br/><br/>
+            <b>Project A:</b> This project is a <b>team project</b>. The success of this project depends on all members in your virtual team and is determined by the contribution of the team member who contributes the least.
+            <br/><br/>
+            <b>Project B:</b> Think of this project as your <b>individual project</b>. It has been assigned to you by the firm and you are solely responsible for its success.
+            <br/><br/>
+            <b>In each round, we will ask you how many hours you contribute to the Team Project A.</b> The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. <b>Your remaining hours will be put towards Project B.</b> For example, if you contribute 30 hours to Project A, this means that 10 hours will be put towards Project B.
+            <br/><br/>
+            <b>For your decision, you have to consider the following conditions:</b> Working on the Team Project A generates higher costs for you than working on your Individual Project B. Specifically, each hour that you contribute to Project A instead of Project B generates additional costs of 5 ECU, which will be deducted from your personal payoff in the respective round. Note further, that we will also ask the other two members of your virtual team how they allocate their time to your Team Project A and their own Individual Project B.
+            <br/> <br/>
+            You will find detailed information on individual payoff on the next page.
+         </div>-->
 </div>
 
 
@@ -659,7 +689,7 @@
                                     console.error('Header element not found');
                                 }
                                 document.getElementById('description').style.display = 'block';
-                                document.getElementById('videopanel').style.display = 'none';
+			        document.getElementById('videopanel').style.display = 'none';
                             }
                         });
 
@@ -714,7 +744,7 @@
                                     console.error('Header element not found');
                                 }
                                 document.getElementById('description').style.display = 'block';
-                                document.getElementById('videopanel').style.display = 'none';
+			        document.getElementById('videopanel').style.display = 'none';
                             }
                         });
         }

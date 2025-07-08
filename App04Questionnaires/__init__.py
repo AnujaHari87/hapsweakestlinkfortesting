@@ -342,15 +342,15 @@ class QuestEnd(Page):
         participant = player.participant
         if 'is_dropout' in player.participant.vars:
             is_dropout = player.participant.vars['is_dropout']
-            player.payoff = 200
-            player.participant.payoff_ppg = 200
+            player.payoff = 150
+            player.participant.payoff_ppg = 150
         else:
             is_dropout = False
 
         return dict(
             payoff_bonus = (participant.payoff_ppg * 0.02),
             total_payoff=6 + (participant.payoff_ppg) * 0.02,
-            dropout_payoff = 4,
+            dropout_payoff = 3,
             is_dropout=is_dropout
         )
 

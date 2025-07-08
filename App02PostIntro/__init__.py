@@ -167,6 +167,8 @@ class Player(BasePlayer):
 
     seeHear = models.IntegerField(blank=True, choices=[[0, '0'], [1, '1'], [2, '2']], label='',
                                          attrs={"invisible": True},  default = 2)
+    attentionCheck = models.IntegerField(blank=True, choices=[[0, '0'], [1, '1']], label='',
+                                  attrs={"invisible": True}, default=0)
 
     groupExit = models.BooleanField(
         default=False,
@@ -491,7 +493,7 @@ class VVC0(Page):
             player.is_dropout = True
             return 1  # instant timeout, 1 second
         else:
-            return 2 * 60
+            return 3 * 60
 
 
     def vars_for_template(player: Player):
@@ -555,7 +557,7 @@ class PreVideoQuestionnaire1(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -591,7 +593,7 @@ class PreVideoQuestionnaire1a(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:
@@ -622,7 +624,7 @@ class PreVideoQuestionnaire2(Page):
             if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
                 return 1  # instant timeout, 1 second
             else:
-                return 3 * 60
+                return 5 * 60
 
         def before_next_page(player, timeout_happened):
             if timeout_happened:
@@ -654,7 +656,7 @@ class WaitBeforeVideo(WaitPage):
 class VVC(Page):
     form_model = 'player'
     timeout_seconds = 540
-    form_fields = ['seeHear', 'treatmentNumber']
+    form_fields = ['seeHear', 'treatmentNumber','attentionCheck']
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -880,13 +882,15 @@ class MyWaitPagePostVVC(WaitPage):
     @staticmethod
     def after_all_players_arrive(group: Group):
         groupReady = all(p.seeHear is not None and (p.seeHear ==1 or p.seeHear ==2) for p in group.get_players())
-        for p in group.get_players():
-            p.groupExit = not groupReady
+        groupAttentionCheck = all(p.attentionCheck is not None and (p.attentionCheck ==1) for p in group.get_players())
 
+        for p in group.get_players():
+            p.groupExit = not groupReady or not groupAttentionCheck
+       
     def app_after_this_page(player: Player, upcoming_apps):
             if player.groupExit:
-                player.payoff = 200
-                player.participant.payoff_ppg = 200
+                player.payoff = 150
+                player.participant.payoff_ppg = 150
                 return 'App09TeamExitThankYou'
 
     def get_timeout_seconds(player):
@@ -958,7 +962,7 @@ class VideoConSelfFocAttn(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def vars_for_template(player: Player):
         if 'is_dropout' in player.participant.vars:
@@ -994,7 +998,7 @@ class NasaTLX(Page):
         if 'is_dropout' in participant.vars and participant.vars['is_dropout'] is True:
             return 1  # instant timeout, 1 second
         else:
-            return 3 * 60
+            return 5 * 60
 
     def before_next_page(player, timeout_happened):
         if timeout_happened:

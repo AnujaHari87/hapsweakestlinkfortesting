@@ -58,6 +58,9 @@ class Player(BasePlayer):
     belief2_1 = make_field7("How confident are you in your guess? <br/>(1: not all, 7: very much so)")
     belief1_10 = make_field_h("What is your best guess on the minimum hours that your team members contributed to Project A in this round?")
     belief2_10 = make_field7("How confident are you in your guess? <br/>(1: not all, 7: very much so)")
+    groupMin =  models.IntegerField()
+    randomRoundNumber =  models.IntegerField()
+
     # ANUJA: I'm not sure where in the code exactly, but the calculation of the payout for the participant will need to be changed to match the new compensation table.
 
 
@@ -204,12 +207,19 @@ class CalculatePayoff(WaitPage):
         group.groupMin = min(p.ownDecision for p in group.get_players())
 
         for p in group.get_players():
+            p.groupMin = group.groupMin
+
+        for p in group.get_players():
             p.payoff_hypo = C.ENDOWMENT + (10 * group.groupMin) - (5 * p.ownDecision)
 
         # Additional logic for round number 5
         if group.round_number == 10:
             print('we are getting here')
             group.randomNumber = random.choice(range(1, 11))
+
+            for p in group.get_players():
+                p.randomRoundNumber = group.randomNumber
+
             for p in group.get_players():
                 if p.is_dropout:
                     p.payoff = 0
@@ -232,7 +242,7 @@ class Results(Page):
         dropout_count = sum(1 for p in group.get_players() if p.participant.vars.get('is_dropout'))
 
         return dict(
-            groupMin=player.group.groupMin,
+            groupMin=player.groupMin,
             payoff=player.payoff_hypo,
             endowment=C.ENDOWMENT,
             ownDecision=player.ownDecision,
