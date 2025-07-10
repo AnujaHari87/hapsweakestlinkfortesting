@@ -94,7 +94,9 @@ class Decision(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+       # dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        print(dropout_count)
         return dict(round_num=player.round_number, dropout_count = dropout_count)
 
 class Beliefs1(Page):
@@ -125,7 +127,9 @@ class Beliefs1(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+       # dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        print(dropout_count)
         return dict(round_num=player.round_number, dropout_count = dropout_count,horizontal_radio_buttons=True)
 
 
@@ -156,7 +160,9 @@ class Beliefs10(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+     #   dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
+        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        print(dropout_count)
         return dict(round_num=player.round_number, dropout_count=dropout_count)
 
 class CalculatePayoff(WaitPage):
@@ -215,7 +221,8 @@ class CalculatePayoff(WaitPage):
         # Additional logic for round number 5
         if group.round_number == 10:
             print('we are getting here')
-            group.randomNumber = random.choice(range(1, 11))
+           # group.randomNumber = random.choice(range(1, 11))
+            group.randomNumber = 1
 
             for p in group.get_players():
                 p.randomRoundNumber = group.randomNumber
@@ -229,9 +236,14 @@ class CalculatePayoff(WaitPage):
                 else:
                     p_past = p.in_round(group.randomNumber)
                     g_past = group.in_round(group.randomNumber)
-                    p.payoff = C.ENDOWMENT + (10 * g_past.groupMin) - (5 * p_past.ownDecision) + 300
+                    print ("comes inside else part")
+                    print(g_past.groupMin)
+                    print(p_past.ownDecision)
+                    p.payoff = C.ENDOWMENT + (10 * p_past.groupMin) - (5 * p_past.ownDecision) + 300
+                    print(p.payoff)
                     part = p.participant
                     part.payoff_ppg = p.payoff - 300
+                    print(part.payoff_ppg)
                     part.payoff_round = group.randomNumber
 
 
@@ -239,7 +251,9 @@ class Results(Page):
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
-        dropout_count = sum(1 for p in group.get_players() if p.participant.vars.get('is_dropout'))
+      #  dropout_count = sum(1 for p in group.get_players() if p.participant.vars.get('is_dropout'))
+        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        print(dropout_count)
 
         return dict(
             groupMin=player.groupMin,
