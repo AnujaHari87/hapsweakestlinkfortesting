@@ -94,7 +94,7 @@ class Decision(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        dropout_count = sum(player.participant.vars['is_dropout'] for p in player.group.get_players())
        # dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
         print(dropout_count)
         return dict(round_num=player.round_number, dropout_count = dropout_count)
@@ -128,7 +128,7 @@ class Beliefs1(Page):
     @staticmethod
     def vars_for_template(player: Player):
        # dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
-        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        dropout_count = sum(p.participant.vars['is_dropout'] for p in player.group.get_players())
         print(dropout_count)
         return dict(round_num=player.round_number, dropout_count = dropout_count,horizontal_radio_buttons=True)
 
@@ -161,7 +161,7 @@ class Beliefs10(Page):
     @staticmethod
     def vars_for_template(player: Player):
      #   dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
-        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        dropout_count = sum(p.participant.vars['is_dropout'] for p in player.group.get_players())
         print(dropout_count)
         return dict(round_num=player.round_number, dropout_count=dropout_count)
 
@@ -248,11 +248,14 @@ class CalculatePayoff(WaitPage):
 
 
 class Results(Page):
+    form_model = 'player'
+
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
       #  dropout_count = sum(1 for p in group.get_players() if p.participant.vars.get('is_dropout'))
-        dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        dropout_count = sum(p.participant.vars['is_dropout'] for p in player.group.get_players())
+
         print(dropout_count)
 
         return dict(
