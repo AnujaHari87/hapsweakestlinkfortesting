@@ -74,7 +74,7 @@
     <br>
 
        <div class="my-box">
-           {{  if dropout_count > 0}}
+           {% if 'dropout_count' in participant.vars and participant.vars.dropout_count > 0 %}
 
             <div style="background-color: #FF7F7F; padding: 10px; margin: 0;">
               <!--  <p>
@@ -87,11 +87,11 @@
                     <b>Decisions (especially number of hours contributed to Project A) or dropout team members are <u>no longer relevant for the calculation of your payoff</u>.</b>
                 </p> -->
 
-                 <p>  {{dropout_count}} team member(s) did not proceed to the next page or did not reach a decision in due time and, thus were tagged as a “dropout”.
+                 <p>  {{participant.vars.dropout_count}} team member(s) did not proceed to the next page or did not reach a decision in due time and, thus were tagged as a “dropout”.
                <b>Decisions (especially number of hours contributed to Project A) of “dropout” team members are <u>no longer relevant for the calculation of your payoff. </u> </b> </p>
 
             </div>
-            {{ endif }}
+            {% endif %}
             <fieldset>
                 <legend><b>Please choose the number of hours you want to contribute to Project A (h<sub>A</sub>). The remaining hours will be contributed to Project B.</b></legend>
                   {{ include_sibling 'PayoffTable.html' }}

@@ -60,13 +60,14 @@ class Player(BasePlayer):
     belief2_10 = make_field7("How confident are you in your guess? <br/>(1: not all, 7: very much so)")
     groupMin =  models.IntegerField()
     randomRoundNumber =  models.IntegerField()
+    dropout_count =  models.IntegerField(default=0,blank=True)
 
     # ANUJA: I'm not sure where in the code exactly, but the calculation of the payout for the participant will need to be changed to match the new compensation table.
 
 
 class Decision(Page):
     form_model = 'player'
-    form_fields = ['ownDecision']
+    form_fields = ['ownDecision','dropout_count']
 
     @staticmethod
     def get_timeout_seconds(player):
@@ -79,10 +80,18 @@ class Decision(Page):
             return 3 * 60
 
     def before_next_page(player, timeout_happened):
+        dropout_count = 0
         if timeout_happened:
             player.ownDecision = 40
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+        for p in player.group.get_players():
+            if p.is_dropout is True:
+                    dropout_count += 1
+        for p in player.group.get_players():
+            p.dropout_count = dropout_count
+        player.participant.vars['dropout_count'] = dropout_count
 
         group_matrix_comm = player.session.vars.get('group_matrix')
         player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
@@ -94,10 +103,15 @@ class Decision(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        dropout_count = sum(player.participant.vars['is_dropout'] for p in player.group.get_players())
-       # dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
-        print(dropout_count)
-        return dict(round_num=player.round_number, dropout_count = dropout_count)
+       dropout_count = player.dropout_count
+       #if player.dropout_count is not None:
+        #   dropout_count = player.dropout_count
+       #else:
+        #   dropout_count = 0
+      #  dropout_count = sum(p.is_dropout ==1 for p in player.group.get_players())
+       print("dropout_count in Decision")
+       print(dropout_count)
+       return dict(round_num=player.round_number, dropout_count = dropout_count)
 
 class Beliefs1(Page):
     form_model = 'player'
@@ -117,9 +131,17 @@ class Beliefs1(Page):
             return 3 * 60
 
     def before_next_page(player, timeout_happened):
+        dropout_count = 0
         if timeout_happened:
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+        for p in player.group.get_players():
+            if p.is_dropout is True:
+                dropout_count += 1
+        for p in player.group.get_players():
+                p.dropout_count = dropout_count
+        player.participant.vars['dropout_count'] = dropout_count
 
         group_matrix_comm = player.session.vars.get('group_matrix')
         player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
@@ -128,9 +150,11 @@ class Beliefs1(Page):
     @staticmethod
     def vars_for_template(player: Player):
        # dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
-        dropout_count = sum(p.participant.vars['is_dropout'] for p in player.group.get_players())
-        print(dropout_count)
-        return dict(round_num=player.round_number, dropout_count = dropout_count,horizontal_radio_buttons=True)
+       # dropout_count = sum(p.is_dropout for p in player.group.get_players())
+       dropout_count = player.dropout_count
+       print("dropout_count in Beliefs1")
+       print(dropout_count)
+       return dict(round_num=player.round_number, dropout_count = dropout_count,horizontal_radio_buttons=True)
 
 
 class Beliefs10(Page):
@@ -151,9 +175,18 @@ class Beliefs10(Page):
             return 3 * 60
 
     def before_next_page(player, timeout_happened):
+        dropout_count = 0
         if timeout_happened:
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+        for p in player.group.get_players():
+            if p.is_dropout is True:
+                dropout_count += 1
+        for p in player.group.get_players():
+            p.dropout_count = dropout_count
+
+        player.participant.vars['dropout_count'] = dropout_count
 
         group_matrix_comm = player.session.vars.get('group_matrix')
         player.in_round(player.round_number).group.subsession.set_group_matrix(group_matrix_comm)
@@ -161,9 +194,11 @@ class Beliefs10(Page):
     @staticmethod
     def vars_for_template(player: Player):
      #   dropout_count = sum(1 for p in player.group.get_players() if p.participant.vars.get('is_dropout'))
-        dropout_count = sum(p.participant.vars['is_dropout'] for p in player.group.get_players())
-        print(dropout_count)
-        return dict(round_num=player.round_number, dropout_count=dropout_count)
+      #  dropout_count = sum(p.is_dropout for p in player.group.get_players())
+         dropout_count = player.dropout_count
+         print("dropout_count in Beliefs10")
+         print(dropout_count)
+         return dict(round_num=player.round_number, dropout_count=dropout_count)
 
 class CalculatePayoff(WaitPage):
     body_text = "Please wait until your team members have made their decision."
@@ -202,10 +237,18 @@ class CalculatePayoff(WaitPage):
             return 3 * 60
 
     def before_next_page(player, timeout_happened):
+        dropout_count = 0
         if timeout_happened:
             player.ownDecision = 40
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
+
+        for p in player.group.get_players():
+            if p.is_dropout is True:
+                dropout_count += 1
+        for p in player.group.get_players():
+                p.dropout_count = dropout_count
+        player.participant.vars['dropout_count'] = dropout_count
 
     @staticmethod
     def after_all_players_arrive(group: Group):
@@ -249,13 +292,16 @@ class CalculatePayoff(WaitPage):
 
 class Results(Page):
     form_model = 'player'
+    form_fields = ['dropout_count']
+
 
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
       #  dropout_count = sum(1 for p in group.get_players() if p.participant.vars.get('is_dropout'))
-        dropout_count = sum(p.participant.vars['is_dropout'] for p in player.group.get_players())
-
+       # dropout_count = sum(p.is_dropout for p in player.group.get_players())
+        dropout_count = player.dropout_count
+        print ("dropout_count in results")
         print(dropout_count)
 
         return dict(
@@ -279,12 +325,18 @@ class Results(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        dropout_count = 0
         if timeout_happened:
             player.ownDecision = 40
             player.participant.vars['is_dropout'] = True
             player.is_dropout = True
 
-
+        for p in player.group.get_players():
+            if p.is_dropout is True:
+                dropout_count += 1
+        for p in player.group.get_players():
+            p.dropout_count = dropout_count
+        player.participant.vars['dropout_count'] = dropout_count
 
 
 page_sequence = [Decision, CalculatePayoff, Beliefs1, Beliefs10, Results]
