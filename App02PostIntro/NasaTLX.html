@@ -105,9 +105,9 @@
           <p class="card-text text-center">
 <div>
     <center><strong>How mentally demanding was the task?</strong></center>
-    <input type="range" name="nasatlx1" min="1" max="20" step="1" class="slider">
+    <input type="range" name="nasatlx1" min="0" max="20" step="1" class="slider">
              <div class="slider-ticks">
-        {% for i in range(20) %}
+        {% for i in range(21) %}
          <span class="{% if i == 10 %}midpoint{% endif %}"></span>
         {% endfor %}
     </div>
@@ -122,10 +122,10 @@
 <div>
      <center><strong>How hurried or rushed was the pace of the task?</strong></center>
 
-    <input type="range" name="nasatlx2" min="1" max="20" step="1" class="slider">
+    <input type="range" name="nasatlx2" min="0" max="20" step="1" class="slider">
 
      <div class="slider-ticks">
-        {% for i in range(20) %}
+        {% for i in range(21) %}
          <span class="{% if i == 10 %}midpoint{% endif %}"></span>
         {% endfor %}
     </div>
