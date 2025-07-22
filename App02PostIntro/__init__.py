@@ -386,9 +386,9 @@ def group_by_arrival_time_method(subsession, waiting_players):
     for player in waiting_players:
         player.waitpage_too_long = waiting_too_long(player)
         if (player.waitpage_too_long):
-            player.payoff = 50
+            player.payoff = 75
           #  player.is_dropout = True
-            player.participant.payoff_ppg = 50
+            player.participant.payoff_ppg = 75
 
     subsession.waitCount = len(waiting_players)
     if len(waiting_players) >= 3:
