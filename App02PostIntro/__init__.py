@@ -93,7 +93,7 @@ class Player(BasePlayer):
     self_cons_11 = make_field4('I care a lot about how I present myself to others.')
     self_cons_12 = make_field4('I am self-conscious about the way I look.')
     self_cons_13 = make_field4('I usually worry about making a good impression.')
-    self_cons_14 = make_field4('Before I leave my house. I check how I look.')
+    self_cons_14 = make_field4('Before I leave my house, I check how I look.')
     self_cons_15 = make_field4('I am concerned about what other people think of me.')
     self_cons_16 = make_field4('I am usually aware of my appearance.')
     self_cons_17 = make_field4('It takes me time to get over my shyness in new situations.')

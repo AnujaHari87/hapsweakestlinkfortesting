@@ -111,16 +111,16 @@ class Player(BasePlayer):
     big5_10 = make_field(
         'I see myself as someone who has an active imagination.')
 
-    age = models.IntegerField(label='What is your <strong>age</strong> (years)? <br/>(Please enter a valid age between 18 and 65.)', min=18, max=66, error_messages = {
+    age = models.IntegerField(label='How old are you? <br/>(Please enter a valid age between 18 and 65.)', min=18, max=66, error_messages = {
         'min_value': 'Please enter an age of at least 18.',
         'max_value': 'Please enter an age of 65 or less.',
         'invalid': 'Please enter a valid age between 18 and 65.',
     }
     )
-    gender = models.IntegerField(label='<br>Which <strong>gender</strong> do you identify with?', blank=False,
+    gender = models.IntegerField(label='<br>How do you identify?', blank=False,
                                  choices=[[1, 'male'], [2, 'female'], [3, 'other']])
     ethnicity = models.IntegerField(
-        label="<br>Which of the following <b>ethnicities</b> best describes you?<br/>", blank=False,
+        label="<br>What ethnic group do you belong to?", blank=False,
         choices=[[1, 'White'], [2, 'Black'], [3, 'Asian'],
                  [4, 'Mixed'], [5, 'Other'], [6, 'Prefer not to say']])
     
