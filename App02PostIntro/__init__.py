@@ -325,7 +325,8 @@ class MyWaitPage_PreVirtualMeeting(WaitPage):
         end_time = time.time()
         duration = end_time - start_time
         print(f"after_all_players_arrive took {duration} seconds")
-        group.randomNumberTreatment = random.choice(range(1, 4))
+        #group.randomNumberTreatment = random.choice(range(1, 4))
+        group.randomNumberTreatment = 2
         for p in group.get_players():
             p.treatmentNumber = group.randomNumberTreatment
 
@@ -885,7 +886,7 @@ class MyWaitPagePostVVC(WaitPage):
         groupAttentionCheck = all(p.attentionCheck is not None and (p.attentionCheck ==1) for p in group.get_players())
 
         for p in group.get_players():
-            p.groupExit = not groupReady or not groupAttentionCheck
+            p.groupExit = not groupReady
        
     def app_after_this_page(player: Player, upcoming_apps):
             if player.groupExit:

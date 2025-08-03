@@ -264,8 +264,8 @@ class CalculatePayoff(WaitPage):
         # Additional logic for round number 5
         if group.round_number == 10:
             print('we are getting here')
-           # group.randomNumber = random.choice(range(1, 11))
-            group.randomNumber = 1
+            group.randomNumber = random.choice(range(1, 11))
+           # group.randomNumber = 1
 
             for p in group.get_players():
                 p.randomRoundNumber = group.randomNumber

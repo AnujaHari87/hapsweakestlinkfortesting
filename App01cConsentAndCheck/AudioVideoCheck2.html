@@ -67,8 +67,43 @@
               nextButton.style.display = "block";
           }
 
-    });
+          measureInternetSpeed();
+
+             function measureInternetSpeed() {
+                const image = new Image();
+                const imageSizeBytes = 54290; // Adjust this to the actual file size
+                const startTime = new Date().getTime();
+
+                    image.onload = () => {
+                        const endTime = new Date().getTime();
+                        const durationSeconds = (endTime - startTime) / 1000;
+                        const bitsLoaded = imageSizeBytes * 8;
+                        const speedBps = bitsLoaded / durationSeconds;
+                        const speedKbps = speedBps / 1024;
+                        const speedMbps = speedKbps / 1024;
+
+                        const roundedSpeed = Math.round(speedMbps * 100) / 100; // Round to 2 decimal places
+
+                        if (roundedSpeed) {
+                            console.log("Speed (Mbps):", roundedSpeed);
+                            liveSend({ internet_speed: roundedSpeed });  // <--- Send speed to oTree server
+                        } else {
+                            console.log("Could not measure speed");
+                        }
+                    };
+
+                    image.onerror = () => {
+                        console.error("Error loading image for speed test");
+                        liveSend({ internet_speed: null });
+                    };
+                    // Avoid caching
+                    image.src = "{% static 'black.jpeg' %}" + "?cache_bust=" + new Date().getTime();
+                }
+            });
+
+
 </script>
+
   <br/>
 {{next_button}}
 {{ endblock }}
