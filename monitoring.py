@@ -17,6 +17,7 @@ if __name__ == '__main__':
     last_page = 'QuestEnd'
     wait_page = 'MyWaitPage_TechProblem'
     wait_page_2 = 'MyWaitPageStage2Instructions'
+    thank_you_exit_page = 'ThankYouExit'
 
     target_columns = [
         "participant.id_in_session",
@@ -36,15 +37,21 @@ if __name__ == '__main__':
     # get data based on pages
     data_of_interest = []
     
-    for page in [last_page, wait_page, wait_page_2]:
+    for page in [last_page, wait_page, wait_page_2, thank_you_exit_page]:
+
         tmp = data_sub[data_sub[page_column] == page]
+
+        if page == thank_you_exit_page:
+            mask = tmp['participant._current_app_name'].isin(['App10TeamExitThankYou', 'App09TeamExitThankYou'])
+            tmp = tmp[mask]
+            
         data_of_interest.append(tmp)
 
     data_of_interest = pd.concat(data_of_interest)
 
     data_of_interest['In GBP'] = data_of_interest['participant.payoff'] * 0.02
 
-    data_of_interest[target_columns + ['In GBP']].to_csv('tmp.csv', sep='\t', index=False)
+    data_of_interest[target_columns + ['In GBP']].to_excel('tmp.xlsx', index=False)
     
     print(data_of_interest[target_columns + ['In GBP']])
 
