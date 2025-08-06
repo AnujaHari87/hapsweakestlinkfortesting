@@ -16,7 +16,7 @@ if __name__ == '__main__':
     date_column = 'participant.time_started_utc'
     last_page = 'QuestEnd'
     wait_page = 'MyWaitPage_TechProblem'
-    wati_page_2 = 'MyWaitPageStage2Instructions'
+    wait_page_2 = 'MyWaitPageStage2Instructions'
 
     target_columns = [
         "participant.id_in_session",
@@ -36,13 +36,15 @@ if __name__ == '__main__':
     # get data based on pages
     data_of_interest = []
     
-    for page in [last_page, wait_page, wati_page_2]:
+    for page in [last_page, wait_page, wait_page_2]:
         tmp = data_sub[data_sub[page_column] == page]
         data_of_interest.append(tmp)
 
     data_of_interest = pd.concat(data_of_interest)
 
     data_of_interest['In GBP'] = data_of_interest['participant.payoff'] * 0.02
+
+    data_of_interest[target_columns + ['In GBP']].to_csv('tmp.csv', sep='\t', index=False)
     
     print(data_of_interest[target_columns + ['In GBP']])
 
