@@ -1,0 +1,22 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Thank you for your valuable participation in the study thus far.{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+    <p>Please click the "Next” button to start the task. Round {{ round_num }} will start as soon as all team members are ready.</p>
+
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}
+

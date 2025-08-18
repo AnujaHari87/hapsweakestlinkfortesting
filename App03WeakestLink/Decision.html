@@ -1,0 +1,185 @@
+{{ block title }}
+    Decision - Round {{ round_num }}
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .slider {
+        appearance: none;
+        width: 100%;
+        background: #d3d3d3;
+        border-radius: 5px;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        width: 25px;
+        height: 25px;
+        background: #0d6efd;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #0d6efd;
+        cursor: pointer;
+        border-radius: 25px;
+    }
+
+    .slider::-ms-thumb {
+        width: 25px;
+        height: 25px;
+        background: #0d6efd;
+        cursor: pointer;
+        border-radius: 25px;
+    }
+
+    .btn-primary {
+        float: left;
+        display: none;
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd
+    }
+
+    datalist {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .selected:not(:first-child) {
+        background-color: #0d6efd;
+        font-weight: bolder;
+        color: white !important;
+    }
+     .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+    <br>
+
+       <div class="my-box">
+           {% if 'dropout_count' in participant.vars and participant.vars.dropout_count > 0 %}
+
+            <div style="background-color: #FF7F7F; padding: 10px; margin: 0;">
+              <!--  <p>
+                    The following team member(s) did not proceed to the next page or did not reach a decision in due time and, thus, were tagged as a dropout.
+                    <br/><br/>
+                    <b>Team Member o</b> <!-- ANUJA: The team member's ID is only displayed if they're a dropout. -->
+                  <!--  <br/><br/>
+                    <b>Team Member U</b> <!-- ANUJA: The team member's ID is only displayed if they're a dropout. -->
+               <!--     <br/><br/>
+                    <b>Decisions (especially number of hours contributed to Project A) or dropout team members are <u>no longer relevant for the calculation of your payoff</u>.</b>
+                </p> -->
+
+                 <p>  {{participant.vars.dropout_count}} team member(s) did not proceed to the next page or did not reach a decision in due time and, thus were tagged as a “dropout”.
+               <b>Decisions (especially number of hours contributed to Project A) of “dropout” team members are <u>no longer relevant for the calculation of your payoff. </u> </b> </p>
+
+            </div>
+            {% endif %}
+            <fieldset>
+                <legend><b>Please choose the number of hours you want to contribute to Project A (h<sub>A</sub>). The remaining hours will be contributed to Project B.</b></legend>
+                  {{ include_sibling 'PayoffTable.html' }}
+                <br/>
+                <label for="ownDecision0">
+                    <input type="radio" id="ownDecision0" name="ownDecision" value="0"> 0 &nbsp;&nbsp;
+                </label>
+                <label for="ownDecision10">
+                    <input type="radio" id="ownDecision10" name="ownDecision" value="10"> 10 &nbsp;&nbsp;
+                </label>
+                <label for="ownDecision20">
+                    <input type="radio" id="ownDecision20" name="ownDecision" value="20"> 20 &nbsp;&nbsp;
+                </label>
+                <label for="ownDecision30">
+                    <input type="radio" id="ownDecision30" name="ownDecision" value="30"> 30 &nbsp;&nbsp;
+                </label>
+                <label for="ownDecision40">
+                    <input type="radio" id="ownDecision40" name="ownDecision" value="40"> 40 &nbsp;&nbsp;
+                </label>
+            </fieldset>
+
+
+       </div>
+    <br/>
+ {{ next_button }}
+
+
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+
+ document.addEventListener("DOMContentLoaded", function() {
+    const nextBtn = document.querySelector(".btn-primary");
+    let row = document.querySelector("tbody").children[3];
+    let rowA = Array.from(row.children);
+    rowA.shift();
+    const radioButtons = document.querySelectorAll('input[name="ownDecision"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener("change", function() {
+            const val = this.value;
+            switch (val) {
+                case "0":
+                    updateSelection(1);
+                    break;
+                case "10":
+                    updateSelection(2);
+                    break;
+                case "20":
+                    updateSelection(3);
+                    break;
+                case "30":
+                    updateSelection(4);
+                    break;
+                case "40":
+                    updateSelection(5);
+                    break;
+                default:
+                    nextBtn.style.display = "none";
+            }
+        });
+
+    });
+
+    function updateSelection(rowIndex) {
+        rowA.forEach(el => el.classList.remove("selected"));
+        row = document.querySelector("tbody").children[rowIndex];
+        rowA = Array.from(row.children);
+        rowA.shift();
+        rowA.forEach(el => el.classList.add("selected"));
+        nextBtn.style.display = "block";
+    }
+});
+     document.onsubmit = () => {
+            console.log("Next button clicked 2");
+            const radios = document.getElementsByName("ownDecision");
+            let selectedValue;
+            for (const radio of radios) {
+                if (radio.checked) {
+                    selectedValue = radio.value;
+                    break;
+                }
+            }
+
+            liveSend({
+                "ownDecision": parseInt(selectedValue)
+            });
+            }
+</script>
+
+{{ endblock }}

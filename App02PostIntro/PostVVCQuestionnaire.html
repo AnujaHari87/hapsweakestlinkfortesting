@@ -1,0 +1,66 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Questionnaire{{ endblock }}
+
+{{ block content }}
+<style>
+    label {
+        display: inline-block;
+    }
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+    .checkbox-container {
+        display: flex;
+        align-items: flex-start;
+    }
+    .checkbox-container input {
+        margin-right: 10px;
+        align-self: center;
+    }
+    .checkbox-label {
+        display: inline-block;
+    }
+    .radio-container {
+        margin-top: 10px;
+    }
+    .radio-option {
+        display: flex;
+        align-items: center;
+        margin-right: 10px; /* 10px left margin for each option */
+    }
+    .radio-option input {
+        margin-right: 10px;
+    }
+</style>
+
+<div class="my-box">
+
+    <p>During the virtual team meeting, could you <b>hear and see both of the other two team members?</b></p>
+
+    <form>
+        <div class="radio-container">
+
+
+            <div class="radio-option">
+                <input type="radio" id="yes" name="seehearyes" value="yes" onchange="updateSeeHear(this.value)">
+                <label for="yes">Yes, I could hear and see both of the other two team members.</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="no" name="seehearyes" value="no" onchange="updateSeeHear(this.value)">
+                <label for="no">No, I could not hear and see one or both of the other two team members.</label>
+            </div>
+            <input id="hiddenSeeHear" type="hidden" name="seeHear" value="0"/>
+        </div>
+    </form>
+    <script>
+        function updateSeeHear(selectedValue) {
+            var seeHear = document.getElementById("hiddenSeeHear");
+            seeHear.value = (selectedValue === 'yes') ? 1 : 0;
+        }
+    </script>
+</div>
+<br/><br/>
+{{next_button}}
+{{ endblock }}

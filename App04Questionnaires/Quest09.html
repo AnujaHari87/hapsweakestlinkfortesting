@@ -1,0 +1,63 @@
+{{ block content }}
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+          <p class="card-text text-center">
+              <b>The following questions relate to whether you feel anxious about making eye contact in different situations.</b><br>
+<table class="table" style="text-align: center; vertical-align: middle;">
+    <tr>
+        <p>Answer the questions based on your experiences from the <strong>past week</strong> – how you felt and behaved in similar situations. If you haven't encountered such situations in the past week, please rate your perceived anxiety about making eye contact.</p>
+        <p>Do not indicate the intensity of your general anxiety in the situation, but only assess the <strong>degree of your fear of making eye contact</strong>.</p>
+
+    </tr>
+            <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">no fear</td>
+        <td style="width: 10%;">little fear</td>
+        <td style="width: 10%;">moderate fear</td>
+        <td style="width: 10%;">strong fear</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">0</td>
+        <td style="width: 10%;">1</td>
+        <td style="width: 10%;">2</td>
+        <td style="width: 10%;">3</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            <td style="text-align: left;">{{ field.label }}</td>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+{{next_button}}
+
+
+{{ endblock }}

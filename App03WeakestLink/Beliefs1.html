@@ -1,0 +1,51 @@
+{% block content %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .horizontal-radios label {
+        display: inline-block;
+        margin-right: 15px;
+    }
+</style>
+
+<div class="my-box">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+                    <div class="card-body">
+                        <p class="card-text text-center">
+                            <b>We now would like you to guess the minimum that your team members contributed to Project A in this round. Please tell us how confident you are about each of your guesses.</b>
+                        </p>
+
+                        <!-- Wrap each formfield in horizontal-radios -->
+
+                            {{ formfield 'belief1_1' }}
+
+
+                            {{ formfield 'belief2_1' }}
+
+
+                        <!-- Optional: Table for visual scale reference -->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+{{ next_button }}
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}
+{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+    .image-container {
+        display: flex;                /* Enables Flexbox */
+        justify-content: center;      /* Centers items horizontally */
+        align-items: flex-start;      /* Aligns items at the start vertically */
+        width: 100%;                  /* Sets the container's width to full screen */
+        flex-wrap: wrap;              /* Allows wrapping to the next line */
+    }
+    .image-label {
+        flex: 1 1 calc(33.333% - 20px); /* Each label takes up to 1/3 of the container's width minus margin */
+        text-align: center;           /* Centers the content of the label */
+        margin: 10px;                 /* Adds some space around each label */
+        box-sizing: border-box;       /* Ensures padding and margin are included in the width */
+    }
+    .image-wrapper {
+        text-align: center;           /* Centers the content of the wrapper */
+    }
+    img {
+        width: auto;                  /* Makes images responsive to their container's width */
+        height: 100px;                /* Sets a fixed height for all images */
+        display: block;               /* Ensures the image is a block element */
+        margin: 0 auto;               /* Centers the image horizontally */
+    }
+    .centered-radio-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;             /* Adds space between the image and radio button */
+    }
+    .radio-buttons input[type="radio"] {
+        margin: 10px;                 /* Adjust margin as needed */
+    }
+    @media (max-width: 768px) {
+        .image-label {
+            flex: 1 1 calc(50% - 20px); /* Each label takes up to 1/2 of the container's width minus margin */
+        }
+    }
+    @media (max-width: 480px) {
+        .image-label {
+            flex: 1 1 calc(100% - 20px); /* Each label takes up full container's width minus margin */
+        }
+    }
+</style>
+
+<div class="my-box">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+            <p class="card-text text-center">
+                Please, look at the circles diagram provided below. <br/>Then, consider which of these pairs of circles would <b>best represent your connection with your team. </b><br/>By selecting the appropriate option below, please indicate to what extent you and your team were connected.
+            <div class="image-container">
+                {{ for image in image_data }}
+                <div class="image-label">
+                    <div class="image-wrapper">
+                        <img src="{{ static image.path }}" alt="{{ image.name }}">
+                        <div class="centered-radio-container">
+                            <input type="radio" name="team_cohesion" value="{{ image.name }}" class="persist">
+                        </div>
+                    </div>
+                </div>
+                {{ endfor }}
+            </div>
+            {{ formfield_errors 'team_cohesion' }}
+            <script>
+                const errorDiv = document.querySelector('.form-control-errors');
+                if (errorDiv) {
+                    errorDiv.textContent = 'Please select an image to proceed.'
+                }
+            </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

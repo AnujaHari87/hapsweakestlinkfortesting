@@ -1,0 +1,68 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Virtual Team Meeting: Recording Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    The virtual team meeting will start on the following page.
+    <br/><br/>
+    <b>Note:</b>
+    <br/>
+    <b>We will record the virtual team meeting (audio only).</b> When the virtual meeting begins, you will see a <b>pop-up window asking for your permission to allow access to your <u>current tab</u></b>.
+    <br/>
+    <b>Please click "Allow" to grant permission</b> so that we can record the virtual team meeting.
+    <br/><br/>
+    <b>Note that you will only get paid if you allow the recording, as this is a necessary requirement of this study.</b>
+
+    <div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+             <p class="card-text text-center">
+                 As already mentioned, remember that you can only proceed with this study if you use <b>  <br/>a Chrome, an Edge, or an Opera browser</b>.
+                 <br/>
+                 If you are currently using a different browser, <b>please copy the link of the current page and open it in a Chrome, an Edge or an Opera browser</b>. Otherwise, you cannot proceed with this study.
+             </p>
+    </div>
+
+</div>
+<br/>
+{{ next_button }}
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+
+    <script>
+     document.addEventListener("DOMContentLoaded", function() {
+          const nextButton = document.querySelector(".otree-btn-next.btn.btn-primary");
+           nextButton.style.display = "none";
+        // Function to detect if the browser is Chrome, Opera, or Edge
+            function isSupportedBrowser() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                // Check if the browser is Chrome, Opera, or Edge
+                  if (userAgent.indexOf("chrome") > -1 || userAgent.indexOf("opr") > -1 || userAgent.indexOf("edg") > -1) {
+                      return true; // Supported browser
+                } else {
+                      return false; // Not a supported browser
+                }
+            }      // Enable the button if the browser is Chrome, Opera, or Edge
+          if (isSupportedBrowser()) {
+              nextButton.style.display = "block";
+          }
+
+    });
+</script>
+
+{{ endblock }}

@@ -1,0 +1,93 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Virtual Team Meeting: General Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    For this study we will be using the video meeting software Jitsi. It is a common meeting software and works like other similar tools such as Zoom, MS Teams, or others.
+    <br/><br/>
+    <b>For this study, Jitsi is hosted on an internal KIT server. Thus, no data is stored on external servers.</b>
+    <br/><br/>
+    <b>On this page, you will find some brief instructions for the meeting software Jitsi.</b>
+    <br/><br/>
+    <b><u>General Instructions:</u></b>
+        <ul>
+            <li>Please give the meeting software <b>all permissions </b>that are asked for.</li>
+            <br/>
+            <li>In total, the virtual team meeting will last <b>7 minutes</b> and will end automatically. First, <b>please test your technical setup and whether you can hear and see the other team members</b>.</li>
+        </ul>
+    <br/><br/>
+    <b><u>Instructions for the technical setup:</u></b>
+        <ul>
+            <li>You can click on <b>^ above the "Mute / Unmute" (microphone) icon </b>to select the microphone and speaker you want to use. This might help if your <b>currently selected microphone or speaker do not work</b>.
+            <br/>"Mute / Unmute" (microphone) icon:
+                <img src="{{static 'images/Picture_Microphone.jpg'}}" alt="microphone-icon"/></li>
+            <br/>
+            <li>If you have several cameras, you can choose which camera is used by clicking on <b>^ above the "Start/Stop camera" icon</b>. It is mandatory to keep the camera turned on during the meeting.
+            <br/>"Start/Stop camera" icon:
+                <img src="{{static 'images/Picture_Camera.jpg'}}" alt="camera-icon"/></li>
+            <br/>
+            <li>In the pop-up message that requires you to select a video background, please select one of the available images as your virtual background.
+            <br/></li>
+            <!-- <li>Optionally, you can click on the "Select background" icon and select one of the <b>gray images (they are all the same)</b> as your virtual background.
+                <br/>"Select background" icon:
+                    <img src="{% static 'Picture_Background.jpg' %}" alt="background-icon"/></li>-->
+        </ul>
+
+    <p>
+        <b>Before you can continue, please confirm the following:</b>
+        <br/>
+        (If you do not confirm the statement, you cannot proceed with this study.)
+        <br/>
+        <!-- The following line is beside a checkbox that is mandatory for the user to check in order to proceed.  -->
+        <!-- Not sure if I implemented it correctly... needs to be checked by Anuja (Done). -->
+        <div class="checkbox-container">
+            <input type="checkbox" id="readMeetInstructions" onchange="updateReadMeetInstructions(this.checked)">
+            <label for="readMeetInstructions" class="checkbox-label"> <b>I HAVE READ AND UNDERSTOOD THE INSTRUCTIONS FOR THE MEETING SOFTWARE.</b></label>
+        </div>
+    </p>
+
+
+        <input id="hiddenReadMeetInstructions" type="hidden" name="readMeetInstructions" value="0"/>
+
+</div>
+
+    <script>
+        function updateReadMeetInstructions(isChecked) {
+            var hiddenReadMeetInstructions = document.getElementById("hiddenReadMeetInstructions");
+            hiddenReadMeetInstructions.value = isChecked ? 1 : 0;
+            checkCheckboxes();
+
+        }
+
+        function checkCheckboxes() {
+            const checkbox1 = document.getElementById("hiddenReadMeetInstructions");
+            const nextButton = document.querySelector(".otree-btn-next.btn.btn-primary");
+        // Attach change event listeners to checkboxes
+             if (checkbox1.value==="1" ) {
+                   nextButton.style.display = "block";
+             } else {
+                  nextButton.style.display = "none";
+             }
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            checkCheckboxes();
+
+            // Initial check in case any checkbox is pre-selected
+        });
+    </script>
+<br/>
+{{ next_button }}
+{{ endblock }}

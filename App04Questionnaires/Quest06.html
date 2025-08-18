@@ -1,0 +1,59 @@
+{{ block content }}
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+          <p class="card-text text-center">
+              <b>Imagine the following situation:</b><br>
+<table class="table" style="text-align: center; vertical-align: middle;">
+    <tr>
+        <p>Please think about what you would do in the following situation. You are in an area you are not familiar with, and you realize that you lost your way. You ask a stranger for directions. The stranger offers to take you to your destination.</p>
+        <p>Helping you costs the stranger about <strong>40 U.S. dollars</strong> in total. However, the stranger says he or she does not want any money from you. You have six presents with you. The cheapest present costs <strong>10 U.S. dollars</strong>, the most expensive one costs <strong>60 U.S. dollars</strong>. Do you give one of the presents to the stranger as a “thank you” gift?</p>
+        <p>Which present do you give?</p>
+
+
+    </tr>
+    <tr>
+        <td style="width: 20%;">No, would not give present</td>
+        <td style="width: 10%;">The present worth 10 U.S. dollars</td>
+        <td style="width: 10%;">The present worth 20 U.S. dollars</td>
+        <td style="width: 10%;">The present worth 30 U.S. dollars</td>
+        <td style="width: 10%;">The present worth 40 U.S. dollars</td>
+        <td style="width: 10%;">The present worth 50 U.S. dollars</td>
+        <td style="width: 10%;">The present worth 60 U.S. dollars</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+{{next_button}}
+
+
+{{ endblock }}

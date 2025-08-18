@@ -1,0 +1,72 @@
+{{ block content }}
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-12" style="background-color: #f8f9fa;">
+        <div class="card-body">
+          <h2 class="card-title text-center"></h2>
+          <p class="card-text text-center">
+              <b>Satisfaction with own appearance.</b><br>
+<table class="table" style="text-align: center;  vertical-align: middle;">
+   <tr>
+        <td style="width: 26%;"></td>
+        <td style="width: 9%;">completely dissatisfied</td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 6.22%;"></td>
+        <td style="width: 9%;">completely satisfied</td>
+    </tr>
+    <tr>
+        <td style="width: 26%;"></td>
+        <td style="width: 9%;">0</td>
+        <td style="width: 6.22%;">1</td>
+        <td style="width: 6.22%;">2</td>
+        <td style="width: 6.22%;">3</td>
+        <td style="width: 6.22%;">4</td>
+        <td style="width: 6.22%;">5</td>
+        <td style="width: 6.22%;">6</td>
+        <td style="width: 6.22%;">7</td>
+        <td style="width: 6.22%;">8</td>
+        <td style="width: 6.22%;">9</td>
+        <td style="width: 9%;">10</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            <td style="text-align: left;">{{ field.label }}</td>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+</table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+
+{{next_button}}
+
+
+{{ endblock }}

@@ -1,0 +1,171 @@
+{{ block title }}
+    Decision - Round {{ round_num }}
+{{ endblock }}
+
+{{ block styles }}
+<style>
+    .slider {
+        appearance: none;
+        width: 100%;
+        background: #d3d3d3;
+        border-radius: 5px;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        width: 25px;
+        height: 25px;
+        background: #0d6efd;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #0d6efd;
+        cursor: pointer;
+        border-radius: 25px;
+    }
+
+    .slider::-ms-thumb {
+        width: 25px;
+        height: 25px;
+        background: #0d6efd;
+        cursor: pointer;
+        border-radius: 25px;
+    }
+
+    .btn-primary {
+        float: left;
+        display: none;
+    }
+
+    datalist {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .selected:not(:first-child) {
+        background-color: #0d6efd;
+        font-weight: bolder;
+        color: white !important;
+    }
+     .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+</style>
+{{ endblock }}
+
+{{ block content }}
+    <div class="my-box">
+    <br>
+    <label for="ownDecision">
+        <p><b>Please now decide how many hours you would like to work on Project A. The remaining hours will be allocated to your individual Project B.</b></p>
+    </label>
+    <br>
+    {{ include_sibling 'PayoffTable.html' }}
+    <br>
+ <form>
+    <fieldset>
+        <legend>Please choose one</legend>
+        <label>
+            <input type="radio" name="ownDecision" value="0"> 0
+        </label>
+        <label>
+            <input type="radio" name="ownDecision" value="10"> 10
+        </label>
+        <label>
+            <input type="radio" name="ownDecision" value="20"> 20
+        </label>
+        <label>
+            <input type="radio" name="ownDecision" value="30"> 30
+        </label>
+        <label>
+            <input type="radio" name="ownDecision" value="40"> 40
+        </label>
+    </fieldset>
+</form>
+
+
+    <br>
+    </div>
+    <br>
+    <br>
+
+{{ next_button }}
+{{ endblock }}
+
+{{ block scripts }}
+    <script>
+        const slider = document.getElementById("ownDecision")
+        const nextBtn = document.querySelector(".btn-primary")
+        //default config
+        let row = document.querySelector("tbody").children[3]
+        let rowA = Array.from(row.children)
+        rowA.shift()
+
+        slider.addEventListener("input", function() {
+            const val = slider.value
+            switch (val) {
+                case "0":
+                    rowA.forEach(el => el.classList.remove("selected"))
+                    row = document.querySelector("tbody").children[1]
+                    rowA = Array.from(row.children)
+                    rowA.shift()
+                    rowA.forEach(el => el.classList.add("selected"))
+                    nextBtn.style.display = "block"
+                    break
+                case "10":
+                    rowA.forEach(el => el.classList.remove("selected"))
+                    row = document.querySelector("tbody").children[2]
+                    rowA = Array.from(row.children)
+                    rowA.shift()
+                    rowA.forEach(el => el.classList.add("selected"))
+                    nextBtn.style.display = "block"
+                    break
+                case "20":
+                    rowA.forEach(el => el.classList.remove("selected"))
+                    row = document.querySelector("tbody").children[3]
+                    rowA = Array.from(row.children)
+                    rowA.shift()
+                    rowA.forEach(el => el.classList.add("selected"))
+                    nextBtn.style.display = "block"
+                    break
+                case "30":
+                    rowA.forEach(el => el.classList.remove("selected"))
+                    row = document.querySelector("tbody").children[4]
+                    rowA = Array.from(row.children)
+                    rowA.shift()
+                    rowA.forEach(el => el.classList.add("selected"))
+                    nextBtn.style.display = "block"
+                    break
+                case "40":
+                    rowA.forEach(el => el.classList.remove("selected"))
+                    row = document.querySelector("tbody").children[5]
+                    rowA = Array.from(row.children)
+                    rowA.shift()
+                    rowA.forEach(el => el.classList.add("selected"))
+                    nextBtn.style.display = "block"
+                    break
+                default:
+                    nextBtn.style.display = "none"
+            }
+        })
+
+        document.onsubmit = () => {
+            liveSend({
+                "ownDecision" : parseInt(slider.value)
+            })
+        }
+    </script>
+{{ endblock }}

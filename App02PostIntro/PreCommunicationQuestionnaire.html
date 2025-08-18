@@ -1,0 +1,30 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Pre-Communication Questionnaire{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+    
+Example Intervention:
+
+How do you see yourself: are you a person who is generally willing to take risks, or do you try to avoid taking risks? 
+
+<br/><br/>
+{{ formfield "riskAversion"}}
+<br/><br/>
+</div>
+
+
+<br/> <br/>
+
+{{ next_button }}
+
+{{ endblock }}

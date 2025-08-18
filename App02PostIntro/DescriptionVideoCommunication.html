@@ -1,0 +1,95 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Stage 2: Instructions{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    <br/>
+     <p class="card-text text-center"> In this stage, you will have the chance to <b>get to know the other team members</b> in a virtual team meeting.<br/>
+         The virtual team meeting will last <b>7 minutes </b> and will end automatically. <br/><br/>
+
+         To give you some input for starting the conversation, we ask each of you to evaluate different types of vacation before the meeting starts.
+         Please feel free to discuss your evaluation with the others during the meeting. You are of course welcome to chat about other topics as well.
+
+     </p>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card border-0 shadow-sm mt-5" style="background-color: #f8f9fa;">
+        <div class="card-body">
+           <p class="card-text text-center">
+              <b>Please indicate how much you would enjoy the following types of vacation. <br/>
+                  </b>
+    <table class="table" style="text-align: center;  vertical-align: middle;">
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">Not at all</td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;"></td>
+        <td style="width: 10%;">Totally</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;"></td>
+        <td style="width: 10%;">- - -</td>
+        <td style="width: 10%;">- -</td>
+        <td style="width: 10%;">-</td>
+        <td style="width: 10%;">o</td>
+        <td style="width: 10%;">+</td>
+        <td style="width: 10%;">+ +</td>
+        <td style="width: 10%;">+ + +</td>
+    </tr>
+    {{ for field in form }}
+
+    <tr>
+            <td style="text-align: left;">{{ field.label }}</td>
+            {{ for choice in field }}
+                <td>{{ choice }}</td>
+            {{ endfor }}
+        </tr>
+    {{ endfor }}
+   </table>
+          <br>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br/>
+    <!-- Commented out, because this line has been removed.
+   <p> Once you have made your selection, please click “Next” to start the video meeting.</p>
+   -->
+
+</div>
+
+<br/>
+
+{{ next_button }}
+
+
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+
+{{ endblock }}

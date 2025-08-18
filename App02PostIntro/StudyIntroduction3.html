@@ -1,0 +1,37 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Procedure of a round{{ endblock }}
+
+{{ block content }}
+
+    <style>
+        .my-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+
+<div class="my-box">
+    In each of the 10 rounds, you will decide how many hours you contribute to the Team Project A. The other two team members will make the same decision.
+    </br></br>
+    <b>Note that the payoff structure is the same for all of you.</b>
+    </br></br>
+    Note that, when making your decision, you will not know what decision the other team members have made in this round. We will not reveal the choices of individual team members. <b>At the end of each round</b>, we will inform you about your payoff and the <b>minimum number of hours contributed to Project A among the team members</b>.
+    </br></br>
+    <b>Your payoff for Stage 3:</b> The computer will <b>randomly select one of the 10 rounds. This round will determine the payoff you will receive for taking part in Stage 3 of this study</b>.
+
+</div>
+
+  <br/>
+{{next_button }}
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+
+{{ endblock }}

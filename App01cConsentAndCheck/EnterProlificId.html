@@ -1,0 +1,23 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Prolific ID{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+<div class="my-box">
+
+    <p> If you have given your consent on the last page, the study will start after you entered your Prolific ID. </p>
+    <br/>
+    {{ formfields }}
+    <br/>
+</div>
+<br/>
+{{ next_button }}
+
+{{ endblock }}

@@ -1,0 +1,131 @@
+
+{{ block content }}
+{% block css %}
+<link rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+    <p><strong>Bitte schätzen Sie Ihre eigene Attraktivität ein. Geben Sie dafür an, ob Sie sich im Vergleich zu der unten dargestellten Person unattraktiver oder attraktiver finden (Referenzbild in Abhängigkeit des angegebenen Geschlechts). </strong></p>
+
+    <br>
+
+    {{ if self.age < 36 }}
+
+            {{ if self.gender == 2 }}
+            <div style="text-align: center;">
+            </div>
+
+            <p style="text-align: center;">You are male below 36.</p>
+            {{ else }}
+                    {{ if self.gender == 1}}
+                        <div style="text-align: center;">
+                            <p style="text-align: center;">You are female below 36.</p>
+                        </div>
+
+                        {{ else }}
+
+                        <div style="text-align: center;">
+                            <p style="text-align: center;">You are diverse below 36.</p>
+                        </div>
+                        {{ endif }}
+            {{ endif }}
+
+    {{ else }}
+
+            {{ if self.gender == 2 }}
+            <div style="text-align: center;">
+
+            </div>
+            <img src="{{ static 'img/teamco4.png' }}" width="200px" alt="My Image">
+            <p style="text-align: center;">You are male above 36.</p>
+            {{ else }}
+                    {{ if self.gender == 1 }}
+                        <div style="text-align: center;">
+                            <img src="{{ static 'img/teamco5.png' }}" width="200px" alt="My Image">
+                            <p style="text-align: center;">You are female above 36.</p>
+                        </div>
+
+                        {{ else }}
+
+                        <div style="text-align: center;">
+                            <img src="{{ static 'img/teamco6.png' }}" width="200px" alt="My Image">
+                            <p style="text-align: center;">You are diverse above 36.</p>
+                        </div>
+                        {{ endif }}
+            {{ endif }}
+
+    {{ endif }}
+
+
+
+    <br>
+
+
+
+        </label>
+
+
+    <table class="table" style="text-align: center;  vertical-align: middle;">
+
+        <tr>
+
+            {{ for choice in form.attricativenessrating }}
+            <td>
+            {{ choice }} </td>
+    {{ endfor }}
+
+        </tr>
+
+
+        <tr>
+
+            <td style="width: 9%;">-5</td>
+            <td style="width: 9%;">-4</td>
+            <td style="width: 9%;">-3</td>
+            <td style="width: 9%;">-2</td>
+            <td style="width: 9%;">-1</td>
+            <td style="width: 9%;">0</td>
+            <td style="width: 9%;">1</td>
+            <td style="width: 9%;">2</td>
+            <td style="width: 9%;">3</td>
+            <td style="width: 9%;">4</td>
+            <td style="width: 9%;">5</td>
+        </tr>
+
+        <tr>
+
+            <td style="width: 9%;">viel unattraktiver</td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;">gleich attraktiv</td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;"></td>
+            <td style="width: 9%;">viel attraktiver</td>
+        </tr>
+
+
+
+
+
+    </table>
+
+
+    {{ formfield_errors 'attricativenessrating' }}
+
+    <br>
+    {{ next_button }}
+
+<script>
+    const errorDiv = document.querySelector('.form-control-errors');
+
+    if (errorDiv) {
+        errorDiv.textContent = 'Bitte wählen Sie einen Wert auf der Skala aus, um fortzufahren.'
+    }
+</script>
+
+
+{{ endblock }}

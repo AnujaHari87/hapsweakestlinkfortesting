@@ -1,0 +1,300 @@
+{{ extends 'global/Page.html' }}
+{{ block title }} Virtual Team Meeting{{ endblock }}
+{{ block content }}
+
+<style>
+    .column {
+        float: left;
+        height: 80vh; /* Responsive height */
+        box-sizing: border-box;
+    }
+    .left {
+        width: 80%;
+    }
+    .right {
+        width: 20%;
+        vertical-align: middle;
+        border: 1px solid #000;
+    }
+    /* Row style with maximum width and responsive adjustments */
+    .row {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto; /* Center align the row */
+    }
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    #meet {
+        width: 100%;
+        height: 80vh; /* Set the height to 100% of the viewport height */
+    }
+    /* Table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+        position: relative;
+    }
+    th:not(:last-child), td:not(:last-child) {
+        border-right: 1px solid grey;
+    }
+    th, td {
+        border-bottom: 1px solid grey;
+    }
+    /* Center checkboxes */
+    input[type="checkbox"] {
+        display: block;
+        margin: 0 auto;
+    }
+    /* Responsive layout */
+    @media (max-width: 1200px) {
+        .row {
+            max-width: 1000px;
+        }
+    }
+    @media (max-width: 1000px) {
+        .row {
+            max-width: 800px;
+        }
+    }
+    @media (max-width: 800px) {
+        .row {
+            max-width: 600px;
+        }
+    }
+    @media (max-width: 600px) {
+        .row {
+            max-width: 100%;
+        }
+        .column {
+            float: none;
+            width: 100%;
+            height: auto; /* Adjust height to auto for small screens */
+        }
+        .left, .right {
+            width: 100%;
+        }
+        .right {
+            margin-top: 20px;
+            border: none;
+        }
+    }
+	containerbox {
+		width: 300px;
+		padding: 20px;
+		border: 2px solid #ccc;
+		margin: 0 auto; /* Center the div horizontally */
+		display: flex;
+		justify-content: center; /* Center the text box horizontally */
+		align-items: center; /* Center the text box vertically */
+		height: 100px; /* Set a fixed height for the container */
+	}
+</style>
+
+<!-- PART 1 OF PAGE -->
+<div id="message">
+The virtual team meeting has started and you have a total of <b>7 minutes to discuss vacation types. In the Jitsi meeting, you can see a timer at the top center.</b> The virtual team meeting then ends automatically and you will proceed to the next page.
+<br/><br/>
+
+    <div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+        <b>Note:</b>
+        <ul>
+            <li>You can click on <b>^ above the "Mute / Unmute" (microphone) icon </b>to select the microphone and speaker you want to use. This might help if your <b>currently selected microphone or speaker do not work</b>.
+            <br/>"Mute / Unmute" (microphone) icon:
+                <img src="{{static 'images/Picture_Microphone.jpg'}}" alt="microphone-icon"/></li>
+            <br/>
+            <li>If you have several cameras, you can choose which camera is used by clicking on <b>^ above the "Start/Stop camera" icon</b>. It is mandatory to keep the camera turned on during the meeting.
+            <br/>"Start/Stop camera" icon:
+                <img src="{{static 'images/Picture_Camera.jpg'}}" alt="camera-icon"/></li>
+            <br/>
+            <li>Optionally, you can click on the "Select background" icon and select one of the <b>gray images (they are all the same)</b> as your virtual background.
+            <br/>"Select background" icon:
+                <img src="{{static 'images/Picture_Background.jpg'}}" alt="background-icon"/></li>
+        </ul>
+        <p>
+            Each team member is given the name "O" during <b>Stage 2 and Stage 3</b>.
+            <br/>
+            There is <b>no hierarchy</b> based on the names. In the Jitsi meeting, you can see the names of each team member in the <b>bottom left corner of each screen</b>.
+        </p>
+    </div>
+
+<!-- PART 2 OF PAGE -->
+<!-- This part is only displayed once the 7 minutes of the video call have elapsed. This Part 2 replaces Part 1. -->
+
+<div style="background-color: #FFCCCC; padding: 10px; margin: 0;">
+    <p style="color: #C9224A;">
+        Uploading recording...
+        <br/><br/>
+        Please wait until the upload is finished. While uploading, you can start reading the instructions of Stage 3 below.
+        <br/><br/>
+        Once the upload is finished, you will automatically proceed to the next page.
+        <br/><br/>
+        <b>If the upload takes too long, you will automatically proceed to the next page after <b>two minutes at  most</b>.
+    </p>
+</div>
+
+<div style="background-color: #F2F2F2; padding: 10px;  border: 2px solid gray;  margin: 0;">
+    <div class="my-box">
+        <b>Stage 3: Instructions</b>
+        <br/><br/>
+        The decision-making task consists of <b>10 identical, consecutive rounds</b>.
+        <br/><br/>
+        Imagine that you and the other two members of your group belong to a virtual team of a firm. You can think of a round as being a workweek. In each week, each of the virtual team members spends 40 hours working for the firm. You must choose how to allocate your time between two projects, Project A and Project B.
+        <br/><br/>
+        <b>Project A:</b> This project is a <b>team project</b>. The success of this project depends on all members in your virtual team and is determined by the contribution of the team member who contributes the least.
+        <br/><br/>
+        <b>Project B:</b> Think of this project as your <b>individual project</b>. It has been assigned to you by the firm and you are solely responsible for its success.
+        <br/><br/>
+        <b>In each round, we will ask you how many hours you contribute to the Team Project A.</b> The available choices are <b>0 hours, 10 hours, 20 hours, 30 hours, and 40 hours</b>. <b>Your remaining hours will be put towards Project B.</b> For example, if you contribute 30 hours to Project A, this means that 10 hours will be put towards Project B.
+        <br/><br/>
+        <b>For your decision, you have to consider the following conditions:</b> Working on the Team Project A generates higher costs for you than working on your Individual Project B. Specifically, each hour that you contribute to Project A instead of Project B generates additional costs of 5 ECU, which will be deducted from your personal payoff in the respective round. Note further, that we will also ask the other two members of your virtual team how they allocate their time to your Team Project A and their own Individual Project B.
+        <br/> <br/>
+        You will find detailed information on individual payoff on the next page.
+    </div>
+</div>
+<br/><br/>
+<div id="message"></div>
+    <div style="background-color: #FFF3CD; padding: 10px; margin: 0;">
+        <p style="color: #614E1B">
+            Time left to complete this page: <b>[timer]</b>
+        </p>
+    </div>
+During the virtual meeting, could you <b>hear and see both of the other two team members</b>?
+<br/>
+<!-- The following two lines are beside radio buttons for the participants to select. -->
+    <p>Yes, I could hear and see both of the other two team members.</p>
+    <p>No, I could not hear and see both of the other two team members.</p>
+</div>
+
+<script>
+    const domain = "haps-meeting.k8s.iism.kit.edu"; // Here goes your domain where the meeting takes place.
+    const TN_name = "P" + {{ player.id_in_group }}; // Adjust information to display
+
+    const options = {
+        roomName: "Video Meeting" + {{ player.group_id }}, // This is the name of the room, with player's group ID
+        parentNode: document.querySelector('#meet'), // Now, you declare here which element should parent your stream.
+        configOverwrite: {
+            prejoinConfig: {
+                enabled: false
+            },
+            disableSelfView: false,
+            startWithAudioMuted: false,
+            startWithVideoMuted: false,
+            filmstrip: {
+                disableResizable: true,
+            },
+            participantsPane: {
+                hideModeratorSettingsTab: true,
+                hideMoreActionsButton: true,
+                hideMuteAllButton: true
+            },
+            resolution: 480,
+	    disableAEC: false, // Acoustic Echo Cancellation
+            disableNS: false,  // Noise Suppression
+            constraints: {
+                video: {
+                    height: {
+                        ideal: 480,
+                        max: 480,
+                        min: 240
+                    }
+                }
+            },
+            disableSimulcast: false,
+            enableLayerSuspension: true
+        }, // You can turn on or off config elements with this prop.
+        interfaceConfigOverwrite: {
+            TOOLBAR_BUTTONS: ['microphone', 'camera', 'fodeviceselection'],
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_MEETING_NAME: false,
+            SHOW_MEETING_TIMER: false,
+            TILE_VIEW_MAX_COLUMNS: 2,
+            TILE_VIEW_ENABLED: true,
+            PARTICIPANT_MENU_BUTTONS: []
+        },
+        userInfo: {
+            displayName: TN_name,
+        }
+    }
+     {% if is_dropout == False %}
+    const api = new JitsiMeetExternalAPI(domain, options); // This is where the iframe is actually constructed
+    // The function below turns on the Tile View every time a participant joins. Practically it makes Tile View the default mode
+    // Set the virtual background
+    api.addEventListener('videoConferenceJoined', () => {
+        api.executeCommand('setTileView', true);
+        setTimeout(() => {
+                   <!-- HTML content to display if participant is a dropout -->
+
+                    api.executeCommand('toggleVirtualBackgroundDialog');
+
+        }, 1000);
+    });
+      {% endif %}
+
+    // Insert 'myself' text in the correct column
+    const playerId = {{ player.id_in_group }};
+    console.debug (playerId);
+    console.debug(playerId === 1);
+    if (playerId === 1) {
+        document.getElementById('myselfP1').innerText = " (myself, without echo)";
+    } else if (playerId === 2) {
+        document.getElementById('myselfP2').innerText = " (myself, without echo)";
+    } else if (playerId === 3) {
+        document.getElementById('myselfP3').innerText = " (myself, without echo)";
+    } else if (playerId === 4) {
+        document.getElementById('myselfP4').innerText = " (myself, without echo)";
+    }
+
+      {% if is_dropout1 == True %}
+      hideColumnByDivId('myselfP1');
+     {% endif %}
+
+     {% if is_dropout2 == True %}
+      hideColumnByDivId('myselfP2');
+     {% endif %}
+
+     {% if is_dropout3 == True %}
+      hideColumnByDivId('myselfP3');
+     {% endif %}
+
+     {% if is_dropout4 == True %}
+      hideColumnByDivId('myselfP4');
+     {% endif %}
+
+       document.addEventListener('DOMContentLoaded', function() {
+                console.debug("Comes here 1")
+                   {% if is_dropout == True %}
+                    console.debug("Comes here 2")
+                    const nextBtn = document.querySelector(".otree-btn-next btn btn-primary");
+                     document.querySelector(".otree-form").submit();
+                  {% endif %}
+           });
+
+    function hideColumnByDivId(divId) {
+    // Find the div by ID
+    const div = document.getElementById(divId);
+
+    // Get the parent th element
+    const th = div.closest('th');
+
+    // Find the index of the th element
+    const thIndex = Array.from(th.parentNode.children).indexOf(th);
+
+    // Hide all cells in this column
+    document.querySelectorAll(`table tr`).forEach(row => {
+        row.children[thIndex].style.display = 'none';
+    });
+}
+
+</script>
+
+
+{{ endblock }}

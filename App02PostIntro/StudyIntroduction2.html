@@ -1,0 +1,52 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Your Payoff{{ endblock }}
+
+{{ block content }}
+
+<style>
+    .my-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="my-box">
+
+    In each of the 10 rounds, you will receive an individual payoff that consists of a <b>fixed wage</b>, a <b>bonus</b>, and <b>individual costs</b> for allocating working hours to Project A.
+    </br></br>
+    <b>Fixed Wage:</b>
+    </br>
+    The Fixed Wage is 200 ECU which you will receive each time you start a new round.
+    </br></br>
+    <b>Bonus:</b>
+    The bonus increases your fixed wage and depends on the “success” of Project A. The success is determined by the minimum number of hours contributed to Project A <b><u>by any team member</u></b> (denoted by <b>h<sub>min</sub></b>). In other words, the project's success is determined by the team member who contributes the least amount of time to the project. To calculate your bonus, we will multiply the minimum number of hours contributed to Project A by 8 ECU, i.e., <b>Bonus = 10 ECU × h<sub>min</sub></b>.
+    </br></br>
+    <b>Individual Costs:</b>
+    Since working on the Team Project A generates higher costs than working on your own individual Project B, we will deduct 5 ECU for <b>each hour <u>you</u> contribute to Project A</b> (denoted by <b>h<sub>A</sub></b>) from your payoff, i.e., <b>Costs = 5 ECU × h<sub>A</sub></b>.
+    <p style="text-align: center">
+        <b>Payoff = 200 ECU + (10 ECU × h<sub>min</sub>) - (5 ECU × h<sub>A</sub>)</b>
+    </p>
+    </br>
+    Overall, your individual payoff consists of the <b>fixed wage</b> plus the <b>bonus</b> minus the <b>individual costs</b> from working on the Team Project A. You do not need to memorize this formula – the computer program will give you payoff tables at any point in the rounds where you need to make a decision.
+    <br/><br/>
+    This yields the following payoff table:
+    <br/><br/>
+    {{ include_sibling 'PayoffTable.html'}}
+    <br/><br/>
+
+</div>
+<br/>
+
+{{ next_button }}
+    <script>
+
+          document.addEventListener('DOMContentLoaded', function() {
+                   {% if is_dropout == True %}
+                     const nextBtn = document.querySelector(".otree-btn-next.btn.btn-primary");
+                     nextBtn.submit();
+                  {% endif %}
+           });
+    </script>
+
+{{ endblock }}
