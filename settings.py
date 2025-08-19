@@ -12,7 +12,7 @@ LANGUAGE_CODE = 'en'
 REAL_WORLD_CURRENCY_CODE = ''
 USE_POINTS = False
 DEMO_PAGE_INTRO_HTML = ''
-PARTICIPANT_FIELDS = ['optInConsent', 'consent',  'numberVideo', 'colorVideo','payoff_ppg', 'payoff_round', 'past_group_id', 'arrival_time', 'wait_page_arrival','is_dropout', 'dropout_count']
+PARTICIPANT_FIELDS = ['optInConsent', 'consent',  'numberVideo', 'colorVideo','payoff_ppg', 'payoff_round', 'past_group_id', 'arrival_time', 'wait_page_arrival','is_dropout','dropout_count']
 SESSION_FIELDS = ['group_matrix']
 ROOMS = [
     dict(

@@ -11,4 +11,7 @@ __pycache__/
 *.py[cod]
 .DS_Store
 *.otreezip
+db.*
+logs.txt
+output.log
 .venv

@@ -40,6 +40,7 @@ class Player(BasePlayer):
         blank=True
     )
 
+
 def ProlificId_error_message(player: Player, value):
     if not re.fullmatch(r'^[A-Za-z0-9]{24}$', value):
         return "Prolific ID must be exactly 24 alphanumeric characters (letters and numbers only)."
@@ -89,7 +90,6 @@ class AudioVideoCheck2(Page):
             print( data['internet_speed'])
             print("internet speed for player " + str(player.id_in_group))
 
-
 class AudioVideoCheck3(Page):
     form_model = 'player'
     form_fields = ['colorVideo', 'numberVideo']
@@ -100,12 +100,10 @@ class AudioVideoCheck3(Page):
             player.participant.vars['numberVideo'] = player.numberVideo
             player.participant.vars['wait_page_arrival'] = time.time()
 
-
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
         if player.numberVideo != 2 or player.colorVideo != 3:
             return 'App06ThankYou'
-
 
 
 
