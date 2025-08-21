@@ -1,5 +1,24 @@
+import os
 import pandas as pd
 import argparse
+from pathlib import Path
+from sys import platform
+
+
+
+def start_file(path: str):
+    """Opens file with default app
+
+    Usage:
+    >>> start_file("my_file.xslx")
+    """
+    if platform.startswith(("cywin", "win32")):
+        os.startfile(path)
+    elif platform.startswith("linux"):
+        os.system(f"xgd-open {os.path.abspath(path)}")
+    elif platform.startswith("darwin"):
+        os.system(f"open {os.path.abspath(path)}")
+
 
 if __name__ == '__main__':
 
@@ -10,7 +29,7 @@ if __name__ == '__main__':
 
     filepath = args.file
     print(f"Reading data from {filepath}")
-    data = pd.read_excel(filepath)
+    data = pd.read_csv(filepath, sep=',')
 
     page_column = 'participant._current_page_name'
     date_column = 'participant.time_started_utc'
@@ -51,8 +70,9 @@ if __name__ == '__main__':
 
     data_of_interest['In GBP'] = data_of_interest['participant.payoff'] * 0.02
 
-    data_of_interest[target_columns + ['In GBP']].to_excel('tmp.xlsx', index=False)
-    
-    print(data_of_interest[target_columns + ['In GBP']])
+    payoff_data_file = Path(args.file).parent / f'{args.date}_payoff.xlsx'
+    data_of_interest[target_columns + ['In GBP']].to_excel(payoff_data_file)
+
+    start_file(str(payoff_data_file))
 
 
