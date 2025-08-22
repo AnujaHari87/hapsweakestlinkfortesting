@@ -19,6 +19,13 @@ def start_file(path: str):
     elif platform.startswith("darwin"):
         os.system(f"open {os.path.abspath(path)}")
 
+def custom_id(row: pd.Series) -> str:
+
+    num = row["CappedGBP"]
+    num_formatted = f"{num:.2f}"
+
+    return row['App01cConsentAndCheck.1.player.ProlificId'] + "," + num_formatted
+
 
 if __name__ == '__main__':
 
@@ -69,10 +76,15 @@ if __name__ == '__main__':
     data_of_interest = pd.concat(data_of_interest)
 
     data_of_interest['In GBP'] = data_of_interest['participant.payoff'] * 0.02
+    data_of_interest['CappedGBP'] = data_of_interest['In GBP'].apply(lambda x: x if x <= 6 else x - 6)
+    data_of_interest['CustomID'] = [custom_id(row) for _, row in data_of_interest.iterrows()]
+
+
+    # update target columns
+    target_columns.extend(['In GBP', 'CappedGBP', "CustomID"])
 
     payoff_data_file = Path(args.file).parent / f'{args.date}_payoff.xlsx'
-    data_of_interest[target_columns + ['In GBP']].to_excel(payoff_data_file)
+    data_of_interest[target_columns].to_excel(payoff_data_file, index=False)
 
     start_file(str(payoff_data_file))
-
 
