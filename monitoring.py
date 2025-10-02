@@ -1,9 +1,13 @@
 import os
 import pandas as pd
 import argparse
+import webbrowser
+import urllib.parse
+import mlx_whisper
+
 from pathlib import Path
 from sys import platform
-
+from tqdm import tqdm
 
 
 def start_file(path: str):
@@ -78,6 +82,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--file', type=str, required=True)
     parser.add_argument('--date', type=str, required=True)
+    parser.add_argument('--email', type=str, required=True)
     args = parser.parse_args()
 
     filepath = args.file
@@ -141,9 +146,69 @@ if __name__ == '__main__':
 
     data_of_interest[annotation_payout_zero] = data_of_interest[payout_column] == 0
 
+    # add transcription to data_of_interest
+    audio_folder = Path(__file__).parent / os.path.join('data', 'audio')
 
+    audio_file_prefixes = "audio_" + data_of_interest["App02PostIntro.1.group.id_in_subsession"].astype(str) + "_" + data_of_interest["App02PostIntro.1.player.id_in_group"].astype(str)
+
+    transcripts = []
+    unique_words = []
+
+    for audio_file_prefix in tqdm(audio_file_prefixes):
+        audio_file = list(audio_folder.rglob(f"*{audio_file_prefix}*{args.date.replace('-','')}*.webm"))
+
+        if len(audio_file) > 1:
+            raise ValueError(f"Multiple audio files found for prefix")
+        
+        if len(audio_file) == 0:
+            transcripts.append("No audio file found")
+            unique_words.append(None)
+            continue
+
+        audio_file = audio_file[0]
+
+        try:
+            # Save to text file with same name
+            output_file = audio_file.with_suffix('.txt')
+
+            if output_file.exists():
+                with open(output_file, 'r', encoding='utf-8') as f:
+                    text = f.read()
+            else:
+
+                # Transcribe with timestamps
+                result = mlx_whisper.transcribe(
+                    str(audio_file),
+                    path_or_hf_repo="mlx-community/whisper-large-v3-turbo",
+                    word_timestamps=True
+                )
+                
+
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    
+                    for segment in result["segments"]:
+                        text = segment["text"].strip()
+                        f.write(f"{text}\n")
+
+                text = result['text']
+                
+            transcripts.append(text)
+            unique_words.append(len(set(text.split())))
+            
+            
+        except Exception as e:
+            transcripts.append("Error transcribing")
+            unique_words.append(None)
+            
+            continue
+
+    transcripts_column = "transcript"
+    transcript_unique_words = "transcript_unique_words"
+    data_of_interest[transcripts_column] = transcripts
+    data_of_interest[transcript_unique_words] = unique_words
+    
     # update target columns
-    target_columns.extend(['In GBP', payout_column, "CustomID"])
+    target_columns.extend(['In GBP', payout_column, "CustomID", transcripts_column, transcript_unique_words])
     
     # Apply styling
     data_of_interest = data_of_interest[target_columns]
@@ -159,3 +224,19 @@ if __name__ == '__main__':
 
     start_file(str(payoff_data_file))
 
+    to = args.email.split(';')
+    cc = []
+    bcc = []
+    subject = f"HAPS Main Study: {args.date} Payout"
+    body = "Dear all,\n\nplease find attached the payout information\n\nBest,\nAlex"
+
+    params = {
+        "subject": subject,
+        "body": body,
+        "cc": ",".join(cc),
+        "bcc": ",".join(bcc),
+    }
+    query = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+    mailto = f"mailto:{','.join(to)}?{query}"
+
+    webbrowser.open(mailto)
